@@ -1,33 +1,61 @@
 #include "Headers/chessboard.h"
 #include <SFML/Graphics.hpp>
-
-
-
-
+#include <iostream>
+#include <map>
+#include <string>
 
 ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size)
-    : windowSize(windowWidth, windowHeight), 
-      boardSize(size), 
-      LIGHT_COLOR(255, 165, 0), 
+    : windowSize(windowWidth, windowHeight),
+      boardSize(size),
+      LIGHT_COLOR(255, 165, 0),
       DARK_COLOR(0, 0, 0) {
-          squareSize = windowWidth / boardSize; 
+
+    squareSize = windowWidth / boardSize;
+
+ 
+    loadTextures();
+}
+
+void ChessBoard::loadTextures() {
+
+    std::map<std::string, std::string> textureFiles = {
+        {"attaque", "images/attaque.png"},
+        {"attaque_2", "images/attaque_2.png"},
+        {"cavalier", "images/cavalier.png"},
+        {"cavalier_b", "images/cavalier_b.png"},
+        {"fou", "images/fou.png"},
+        {"fou_b", "images/fou_b.png"},
+        {"pion", "images/pion.png"},
+        {"pion_b", "images/pion_b.png"},
+        {"reine", "images/reine.png"},
+        {"reine_b", "images/reine_b.png"},
+        {"roi", "images/roi.png"},
+        {"roi_b", "images/roi_b.png"},
+        {"tour", "images/tour.png"},
+        {"tour_b", "images/tour_b.png"},
+        {"plateau", "images/plateau.jpg"}
+    };
+
+    for (const auto& pair : textureFiles) {
+        sf::Texture texture;
+        if (!texture.loadFromFile(pair.second)) {
+            std::cerr << "Error: Unable to load" << pair.second << std::endl;
+        } else {
+            textures[pair.first] = texture;
+        }
+    }
+
+
+    
 }
 
 void ChessBoard::draw(sf::RenderWindow& window) {
-    for (int row = 0; row < boardSize; ++row) {    // boardSize = 8 (by default)
+    for (int row = 0; row < boardSize; ++row) {
         for (int col = 0; col < boardSize; ++col) {
             sf::RectangleShape square(sf::Vector2f(squareSize, squareSize));
             square.setPosition(col * squareSize, row * squareSize);
-            
-
             square.setFillColor((row + col) % 2 == 0 ? LIGHT_COLOR : DARK_COLOR);
             window.draw(square);
         }
     }
 }
-
-
-
-
-
-

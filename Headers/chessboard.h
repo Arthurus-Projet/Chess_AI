@@ -5,15 +5,17 @@
 class ChessBoard {
 
 private:
-    int boardSize;      // Nombre de cases (8)
-    int squareSize;     // Taille d'une case en pixels
-    sf::Vector2u windowSize; // Taille de la fenêtre
+    int boardSize;      
+         // Size of a box in pixels
+    sf::Vector2u windowSize; // Window size
     sf::Color LIGHT_COLOR;
     sf::Color DARK_COLOR;
 public:
     ChessBoard(int windowWidth, int windowHeight, int size = 8);
-
+    void loadTextures();
     void draw(sf::RenderWindow& window);
+    std::map<std::string, sf::Texture> textures;
+    int squareSize;
 };
 
 
