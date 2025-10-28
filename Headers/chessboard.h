@@ -17,6 +17,18 @@ public:
     void drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::Sprite & sprite);
     std::map<std::string, sf::Texture> textures;
     int squareSize;
+    sf::Sprite whitePawnSprite;
+    sf::Sprite blackPawnSprite;
+    sf::Sprite whiteTowerSprite;
+    sf::Sprite blackTowerSprite;
+    sf::Sprite whiteBishopSprite;
+    sf::Sprite blackBishopSprite;
+    sf::Sprite whiteKnightSprite;
+    sf::Sprite blackKnightSprite;
+    sf::Sprite whiteKingSprite;
+    sf::Sprite blackKingSprite;
+    sf::Sprite whiteQueenSprite;
+    sf::Sprite blackQueenSprite;
 };
 
 

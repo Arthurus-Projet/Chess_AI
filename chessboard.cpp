@@ -12,7 +12,6 @@ ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size)
 
     squareSize = windowWidth / boardSize;
 
- 
     loadTextures();
 }
 
@@ -45,6 +44,18 @@ void ChessBoard::loadTextures() {
         }
     }
 
+    whitePawnSprite.setTexture(textures["pion_b"]);
+    blackPawnSprite.setTexture(textures["pion"]);
+    whiteTowerSprite.setTexture(textures["tour_b"]);
+    blackTowerSprite.setTexture(textures["tour"]);
+    whiteBishopSprite.setTexture(textures["fou_b"]);
+    blackBishopSprite.setTexture(textures["fou"]);
+    whiteKnightSprite.setTexture(textures["cavalier_b"]);
+    blackKnightSprite.setTexture(textures["cavalier"]);
+    whiteKingSprite.setTexture(textures["roi_b"]);
+    blackKingSprite.setTexture(textures["roi"]);
+    whiteQueenSprite.setTexture(textures["reine_b"]);
+    blackQueenSprite.setTexture(textures["reine"]);
 
     
 }
