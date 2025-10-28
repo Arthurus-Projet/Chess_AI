@@ -14,6 +14,7 @@ public:
     ChessBoard(int windowWidth, int windowHeight, int size = 8);
     void loadTextures();
     void draw(sf::RenderWindow& window);
+    void drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::Sprite & sprite);
     std::map<std::string, sf::Texture> textures;
     int squareSize;
 };

@@ -7,7 +7,7 @@
 ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size)
     : windowSize(windowWidth, windowHeight),
       boardSize(size),
-      LIGHT_COLOR(255, 165, 0),
+      LIGHT_COLOR(255, 255, 255),
       DARK_COLOR(0, 0, 0) {
 
     squareSize = windowWidth / boardSize;
@@ -59,3 +59,21 @@ void ChessBoard::draw(sf::RenderWindow& window) {
         }
     }
 }
+
+
+void ChessBoard::drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::Sprite & sprite) {
+
+    std::vector<int> positions;
+    uint64_t copyPawns = piece;
+    while (copyPawns) {
+        int square = __builtin_ctzll(copyPawns); 
+        positions.push_back(square);
+        copyPawns &= copyPawns - 1; 
+    }
+
+    for (int n : positions) {
+        sprite.setPosition( (n % 8) * squareSize  , (squareSize * 7) - (n / 8) * squareSize);
+        window.draw(sprite); 
+        }
+}
+
