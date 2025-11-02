@@ -39,8 +39,17 @@ int main()
                     //std::cout << "Mouse clicked at: (" << ", " << ")\n";
 
                     uint64_t piece = board.whitePieceSelected(position);
-                    if (piece == board.piece.whitePawns)
+                    if (piece == board.piece.whitePawns) {
                         std::cout << "Pawn selected" << std::endl; 
+                        int moves[4];
+                        int nMoves = board.possibilityWhitePawn(position, moves);
+
+                        for (int i = 0; i < nMoves; i++)
+                            std::cout << "Pawn white : " << moves[i] << std::endl;
+
+
+                    }
+                        
                     else if (piece == board.piece.whiteRooks)
                         std::cout << "Rook selected" << std::endl; 
                     else if (piece == board.piece.whiteBishops)

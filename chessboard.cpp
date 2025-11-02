@@ -136,12 +136,65 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
  }
 
 
- /*
- std::vector<int> ChessBoard(int& position, uint64_t whitePawns) {
-
-
+ bool ChessBoard::isThereAWhitePieceAt(int& position) {
+    if ((piece.whitePawns >> position) & 1ULL)
+        return true;
+    if ((piece.whiteRooks >> position) & 1ULL)
+        return true;
+    if ((piece.whiteBishops >> position) & 1ULL)
+        return true;
+    if ((piece.whiteKing >> position) & 1ULL)
+        return true;
+    if ((piece.whiteQueen >> position) & 1ULL)
+        return true;
+    if ((piece.whiteKnights >> position) & 1ULL)
+        return true;
+    return false; 
  }
- */
+
+ bool ChessBoard::isThereABlackPieceAt(int position) {
+    if ((piece.blackPawns >> position) & 1ULL)
+        return true;
+    if ((piece.blackRooks >> position) & 1ULL)
+        return true;
+    if ((piece.blackBishops >> position) & 1ULL)
+        return true;
+    if ((piece.blackKing >> position) & 1ULL)
+        return true;
+    if ((piece.blackQueen >> position) & 1ULL)
+        return true;
+    if ((piece.blackKnights >> position) & 1ULL)
+        return true;
+    return false; 
+ }
+ 
+
+bool ChessBoard::isThereAPieceAt(int position) {
+    return isThereAWhitePieceAt(position) || isThereABlackPieceAt(position);
+}
+
+
+int ChessBoard::possibilityWhitePawn(int& position, int* moves) {
+   
+    int count = 0;
+    if (!isThereAPieceAt(position + 8))
+        moves[count++] = position + 8;
+
+    if (position < 16 && position > 7) 
+        if (!isThereAPieceAt(position + 16))
+            moves[count++] = position + 16;
+
+    if (position % 8 != 0) // left part of the board
+        if (isThereABlackPieceAt(position + 7))
+            moves[count++] = position + 7;
+
+    if (position % 8 != 7) // right part of the board
+        if (isThereABlackPieceAt(position + 9))
+            moves[count++] = position + 9;
+
+    return count;
+ }
+ 
 
 
 

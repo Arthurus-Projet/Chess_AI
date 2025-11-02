@@ -66,6 +66,12 @@ public:
     sf::Sprite blackQueenSprite;
     uint64_t whitePieceSelected(int &position);
     void drawAllPieces(sf::RenderWindow& window);
+
+    bool isThereAWhitePieceAt(int& position);
+    bool isThereABlackPieceAt(int position);
+    bool isThereAPieceAt(int position);
+
+    int possibilityWhitePawn(int& position, int* moves);
 };
 
 
