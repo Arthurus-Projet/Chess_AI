@@ -89,24 +89,60 @@ void ChessBoard::drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::S
 }
 
 
- uint64_t ChessBoard::whitePieceSelected(int& position, uint64_t whitePawns, uint64_t whiteRooks, uint64_t whiteBishops, uint64_t whiteKing, uint64_t whiteQueen, uint64_t whiteKnights) {
-    if ((whitePawns >> position) & 1ULL)
-        return whitePawns;
-    if ((whiteRooks >> position) & 1ULL)
-        return whiteRooks;
-    if ((whiteBishops >> position) & 1ULL)
-        return whiteBishops;
-    if ((whiteKing >> position) & 1ULL)
-        return whiteKing;
-    if ((whiteQueen >> position) & 1ULL)
-        return whiteQueen;
-    if ((whiteKnights >> position) & 1ULL)
-        return whiteKnights;
+void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
+
+    // Pawns :
+    drawChessPieces(window, piece.whitePawns, whitePawnSprite);
+    drawChessPieces(window, piece.blackPawns, blackPawnSprite);
+
+    // Rooks:
+    drawChessPieces(window, piece.whiteRooks, whiteTowerSprite);
+    drawChessPieces(window, piece.blackRooks, blackTowerSprite);
+
+    // Bishops:
+    drawChessPieces(window, piece.whiteBishops, whiteBishopSprite);
+    drawChessPieces(window, piece.blackBishops, blackBishopSprite);
+
+    // Knights:
+    drawChessPieces(window, piece.whiteKnights, whiteKnightSprite);
+    drawChessPieces(window, piece.blackKnights, blackKnightSprite);
+
+    //Kings:
+    drawChessPieces(window, piece.whiteKing, whiteKingSprite);
+    drawChessPieces(window, piece.blackKing, blackKingSprite);
+
+    //Queens:
+    drawChessPieces(window, piece.whiteQueen, whiteQueenSprite);
+    drawChessPieces(window, piece.blackQueen, blackQueenSprite);
+
+}
+
+
+
+ uint64_t ChessBoard::whitePieceSelected(int& position) {
+    if ((piece.whitePawns >> position) & 1ULL)
+        return piece.whitePawns;
+    if ((piece.whiteRooks >> position) & 1ULL)
+        return piece.whiteRooks;
+    if ((piece.whiteBishops >> position) & 1ULL)
+        return piece.whiteBishops;
+    if ((piece.whiteKing >> position) & 1ULL)
+        return piece.whiteKing;
+    if ((piece.whiteQueen >> position) & 1ULL)
+        return piece.whiteQueen;
+    if ((piece.whiteKnights >> position) & 1ULL)
+        return piece.whiteKnights;
     return 0x0ULL; 
+ }
 
 
-
+ /*
+ std::vector<int> ChessBoard(int& position, uint64_t whitePawns) {
 
 
  }
+ */
+
+
+
 

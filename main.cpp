@@ -12,23 +12,7 @@ int main()
 
     ChessBoard board(windowSize, windowSize);  // creation of the class to display the board
 
-    uint64_t whitePawns = 0xFF00ULL; 
-    uint64_t blackPawns = 0x00FF000000000000ULL;
-
-    uint64_t whiteRooks = 0x0000000000000081ULL;
-    uint64_t blackRooks = 0x8100000000000000ULL;
-
-    uint64_t whiteBishops = 0x0000000000000024ULL;
-    uint64_t blackBishops = 0x2400000000000000ULL;
-
-    uint64_t whiteKnights = 0x0000000000000042ULL;
-    uint64_t blackKnights = 0x4200000000000000ULL;
-
-    uint64_t whiteKing = 0x0000000000000010ULL;
-    uint64_t blackKing = 0x1000000000000000ULL;
-
-    uint64_t whiteQueen = 0x0000000000000008ULL;
-    uint64_t blackQueen = 0x0800000000000000ULL;
+    
 
     while (window.isOpen())
     {
@@ -54,18 +38,18 @@ int main()
                     std::cout << y_ << " " << position << std::endl;
                     //std::cout << "Mouse clicked at: (" << ", " << ")\n";
 
-                    uint64_t piece = board.whitePieceSelected(position, whitePawns, whiteRooks, whiteBishops, whiteKing, whiteQueen, whiteKnights);
-                    if (piece == whitePawns)
+                    uint64_t piece = board.whitePieceSelected(position);
+                    if (piece == board.piece.whitePawns)
                         std::cout << "Pawn selected" << std::endl; 
-                    if (piece == whiteRooks)
+                    else if (piece == board.piece.whiteRooks)
                         std::cout << "Rook selected" << std::endl; 
-                    if (piece == whiteBishops)
+                    else if (piece == board.piece.whiteBishops)
                         std::cout << "Bishop selected" << std::endl; 
-                    if (piece == whiteKing)
+                    else if (piece == board.piece.whiteKing)
                         std::cout << "King selected" << std::endl; 
-                    if (piece == whiteQueen)
+                    else if (piece == board.piece.whiteQueen)
                         std::cout << "Queen selected" << std::endl; 
-                    if (piece == whiteKnights)
+                    else if (piece == board.piece.whiteKnights)
                         std::cout << "Knight selected" << std::endl; 
 
                 }
@@ -77,34 +61,11 @@ int main()
         board.draw(window); // draw the chessboard
 
         
-
+        board.drawAllPieces(window);
         //std::cout << "White pawns:\n" << std::bitset<64>(whitePawns) << "\n\n";
 
     
-        // Pawns :
-        board.drawChessPieces(window, whitePawns, board.whitePawnSprite);
-        board.drawChessPieces(window, blackPawns, board.blackPawnSprite);
-
-        // Rooks:
-        board.drawChessPieces(window, whiteRooks, board.whiteTowerSprite);
-        board.drawChessPieces(window, blackRooks, board.blackTowerSprite);
-
-        // Bishops:
-        board.drawChessPieces(window, whiteBishops, board.whiteBishopSprite);
-        board.drawChessPieces(window, blackBishops, board.blackBishopSprite);
-
-        // Knights:
-        board.drawChessPieces(window, whiteKnights, board.whiteKnightSprite);
-        board.drawChessPieces(window, blackKnights, board.blackKnightSprite);
-
-        //Kings:
-        board.drawChessPieces(window, whiteKing, board.whiteKingSprite);
-        board.drawChessPieces(window, blackKing, board.blackKingSprite);
-
-        //Queens:
-        board.drawChessPieces(window, whiteQueen, board.whiteQueenSprite);
-        board.drawChessPieces(window, blackQueen, board.blackQueenSprite);
-
+        
 
 
         window.display();
