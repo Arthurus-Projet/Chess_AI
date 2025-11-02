@@ -48,11 +48,26 @@ int main()
 
                     int y_ = 7 - (static_cast<int>(y / square_y) );
 
-                    
+            
                     int position =  y_ * 8 +  static_cast<int>(x / square_x);
                     std::cout << static_cast<int>(x / square_x)  << " " << static_cast<int>(y / square_y) << std::endl;
                     std::cout << y_ << " " << position << std::endl;
                     //std::cout << "Mouse clicked at: (" << ", " << ")\n";
+
+                    uint64_t piece = board.whitePieceSelected(position, whitePawns, whiteRooks, whiteBishops, whiteKing, whiteQueen, whiteKnights);
+                    if (piece == whitePawns)
+                        std::cout << "Pawn selected" << std::endl; 
+                    if (piece == whiteRooks)
+                        std::cout << "Rook selected" << std::endl; 
+                    if (piece == whiteBishops)
+                        std::cout << "Bishop selected" << std::endl; 
+                    if (piece == whiteKing)
+                        std::cout << "King selected" << std::endl; 
+                    if (piece == whiteQueen)
+                        std::cout << "Queen selected" << std::endl; 
+                    if (piece == whiteKnights)
+                        std::cout << "Knight selected" << std::endl; 
+
                 }
             }
         }

@@ -88,3 +88,25 @@ void ChessBoard::drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::S
         }
 }
 
+
+ uint64_t ChessBoard::whitePieceSelected(int& position, uint64_t whitePawns, uint64_t whiteRooks, uint64_t whiteBishops, uint64_t whiteKing, uint64_t whiteQueen, uint64_t whiteKnights) {
+    if ((whitePawns >> position) & 1ULL)
+        return whitePawns;
+    if ((whiteRooks >> position) & 1ULL)
+        return whiteRooks;
+    if ((whiteBishops >> position) & 1ULL)
+        return whiteBishops;
+    if ((whiteKing >> position) & 1ULL)
+        return whiteKing;
+    if ((whiteQueen >> position) & 1ULL)
+        return whiteQueen;
+    if ((whiteKnights >> position) & 1ULL)
+        return whiteKnights;
+    return 0x0ULL; 
+
+
+
+
+
+ }
+
