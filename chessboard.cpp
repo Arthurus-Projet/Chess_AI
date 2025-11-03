@@ -136,61 +136,47 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
  }
 
 
- bool ChessBoard::isThereAWhitePieceAt(int& position) {
-    if ((piece.whitePawns >> position) & 1ULL)
-        return true;
-    if ((piece.whiteRooks >> position) & 1ULL)
-        return true;
-    if ((piece.whiteBishops >> position) & 1ULL)
-        return true;
-    if ((piece.whiteKing >> position) & 1ULL)
-        return true;
-    if ((piece.whiteQueen >> position) & 1ULL)
-        return true;
-    if ((piece.whiteKnights >> position) & 1ULL)
-        return true;
-    return false; 
+ inline bool ChessBoard::isThereAWhitePieceAt(int position) {
+    uint64_t mask = 1ULL << position;
+    return mask & (piece.whiteBishops | piece.whiteKing |
+                   piece.whiteKnights | piece.whitePawns |
+                   piece.whiteQueen | piece.whiteRooks);
  }
 
- bool ChessBoard::isThereABlackPieceAt(int position) {
-    if ((piece.blackPawns >> position) & 1ULL)
-        return true;
-    if ((piece.blackRooks >> position) & 1ULL)
-        return true;
-    if ((piece.blackBishops >> position) & 1ULL)
-        return true;
-    if ((piece.blackKing >> position) & 1ULL)
-        return true;
-    if ((piece.blackQueen >> position) & 1ULL)
-        return true;
-    if ((piece.blackKnights >> position) & 1ULL)
-        return true;
-    return false; 
+ inline bool ChessBoard::isThereABlackPieceAt(int position) {
+    uint64_t mask = 1ULL << position;
+    return mask & (piece.blackBishops | piece.blackKing |
+                   piece.blackKnights | piece.blackPawns |
+                   piece.blackQueen | piece.blackRooks);
  }
  
 
-bool ChessBoard::isThereAPieceAt(int position) {
-    return isThereAWhitePieceAt(position) || isThereABlackPieceAt(position);
+inline bool ChessBoard::isThereAPieceAt(int position) {
+    uint64_t mask = 1ULL << position;
+    return mask & (piece.whitePawns | piece.whiteRooks | piece.whiteBishops |
+                   piece.whiteKnights | piece.whiteQueen | piece.whiteKing |
+                   piece.blackPawns | piece.blackRooks | piece.blackBishops |
+                   piece.blackKnights | piece.blackQueen | piece.blackKing);
 }
 
 
-int ChessBoard::possibilityWhitePawn(int& position, int* moves) {
+int ChessBoard::possibilityWhitePawn(int position, int* moves) {
    
     int count = 0;
-    if (!isThereAPieceAt(position + 8))
+    if (!isThereAPieceAt(position + 8)) {
         moves[count++] = position + 8;
 
-    if (position < 16 && position > 7) 
-        if (!isThereAPieceAt(position + 16))
+        if ((position < 16 && position > 7) && !isThereAPieceAt(position + 16))
             moves[count++] = position + 16;
+    }
 
-    if (position % 8 != 0) // left part of the board
-        if (isThereABlackPieceAt(position + 7))
-            moves[count++] = position + 7;
+    // left part of the board
+    if ((position % 8 != 0) && isThereABlackPieceAt(position + 7))
+        moves[count++] = position + 7;
 
-    if (position % 8 != 7) // right part of the board
-        if (isThereABlackPieceAt(position + 9))
-            moves[count++] = position + 9;
+    // right part of the board
+    if ((position % 8 != 7) && isThereABlackPieceAt(position + 9))
+        moves[count++] = position + 9;
 
     return count;
  }
