@@ -11,6 +11,9 @@ int main()
     sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), "Chess AI");
 
     ChessBoard board(windowSize, windowSize);  // creation of the class to display the board
+    bool rightClic = false;
+    int positionRightClic;
+    int positionRightClic2;
 
     while (window.isOpen())
     {
@@ -57,11 +60,17 @@ int main()
                 }
 
                 if (event.mouseButton.button == sf::Mouse::Right ) {
-                     std::cout << "RIGHT click" << std::endl;
+                    std::cout << "RIGHT click" << std::endl;
                     int x = event.mouseButton.x;
                     int y = event.mouseButton.y;
+                    sf::Vector2u size = window.getSize(); // size.x size.y
 
-                    std::cout << x << " " << y << std::endl;
+                    if (!rightClic)
+                        positionRightClic = board.mouseToPosition(x, y, size);
+                    else
+                        positionRightClic2 = board.mouseToPosition(x, y, size);
+
+                    rightClic = !rightClic;
 
                 }
             }
