@@ -65,6 +65,7 @@ public:
     sf::Sprite whiteQueenSprite;
     sf::Sprite blackQueenSprite;
     uint64_t whitePieceSelected(int &position);
+    uint64_t PieceSelected(int& position);
     void drawAllPieces(sf::RenderWindow& window);
 
     inline bool isThereAWhitePieceAt(int position);

@@ -136,6 +136,36 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
  }
 
 
+  uint64_t ChessBoard::PieceSelected(int& position) {
+    if ((piece.whitePawns >> position) & 1ULL)
+        return piece.whitePawns;
+    if ((piece.whiteRooks >> position) & 1ULL)
+        return piece.whiteRooks;
+    if ((piece.whiteBishops >> position) & 1ULL)
+        return piece.whiteBishops;
+    if ((piece.whiteKing >> position) & 1ULL)
+        return piece.whiteKing;
+    if ((piece.whiteQueen >> position) & 1ULL)
+        return piece.whiteQueen;
+    if ((piece.whiteKnights >> position) & 1ULL)
+        return piece.whiteKnights;
+    if ((piece.blackPawns >> position) & 1ULL)
+        return piece.blackPawns;
+    if ((piece.blackRooks >> position) & 1ULL)
+        return piece.blackRooks;
+    if ((piece.blackBishops >> position) & 1ULL)
+        return piece.blackBishops;
+    if ((piece.blackKing >> position) & 1ULL)
+        return piece.blackKing;
+    if ((piece.blackQueen >> position) & 1ULL)
+        return piece.blackQueen;
+    if ((piece.blackKnights >> position) & 1ULL)
+        return piece.blackKnights;
+    return 0x0ULL; 
+ }
+
+
+
  inline bool ChessBoard::isThereAWhitePieceAt(int position) {
     uint64_t mask = 1ULL << position;
     return mask & (piece.whiteBishops | piece.whiteKing |
