@@ -12,8 +12,6 @@ int main()
 
     ChessBoard board(windowSize, windowSize);  // creation of the class to display the board
 
-    
-
     while (window.isOpen())
     {
         sf::Event event;
@@ -23,20 +21,15 @@ int main()
                 window.close();
 
             if (event.type == sf::Event::MouseButtonPressed) {
+
                 if (event.mouseButton.button == sf::Mouse::Left) {
                     int x = event.mouseButton.x;
                     int y = event.mouseButton.y;
                     sf::Vector2u size = window.getSize(); // size.x size.y
-                    float square_x = static_cast<float>(size.x) / 8.f;
-                    float square_y = static_cast<float>(size.y) / 8.f;
 
-                    int y_ = 7 - (static_cast<int>(y / square_y) );
-
-            
-                    int position =  y_ * 8 +  static_cast<int>(x / square_x);
-                    std::cout << static_cast<int>(x / square_x)  << " " << static_cast<int>(y / square_y) << std::endl;
-                    std::cout << y_ << " " << position << std::endl;
-                    //std::cout << "Mouse clicked at: (" << ", " << ")\n";
+                    int position = board.mouseToPosition(x, y, size);
+                    
+                    std::cout << "Mouse clicked at: " << position << std::endl;
 
                     uint64_t piece = board.whitePieceSelected(position);
                     if (piece == board.piece.whitePawns) {
@@ -60,6 +53,15 @@ int main()
                         std::cout << "Queen selected" << std::endl; 
                     else if (piece == board.piece.whiteKnights)
                         std::cout << "Knight selected" << std::endl; 
+
+                }
+
+                if (event.mouseButton.button == sf::Mouse::Right ) {
+                     std::cout << "RIGHT click" << std::endl;
+                    int x = event.mouseButton.x;
+                    int y = event.mouseButton.y;
+
+                    std::cout << x << " " << y << std::endl;
 
                 }
             }

@@ -180,6 +180,17 @@ int ChessBoard::possibilityWhitePawn(int position, int* moves) {
 
     return count;
  }
+
+ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
+    float square_x = static_cast<float>(size.x) / 8.f;
+    float square_y = static_cast<float>(size.y) / 8.f;
+
+    int y_ = 7 - (static_cast<int>(y / square_y) );
+
+    int position =  y_ * 8 +  static_cast<int>(x / square_x);
+
+    return position;
+ }
  
 
 
