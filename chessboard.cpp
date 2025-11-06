@@ -136,7 +136,7 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
  }
 
 
-  uint64_t ChessBoard::PieceSelected(int& position) {
+  uint64_t& ChessBoard::PieceSelected(int& position) {
     if ((piece.whitePawns >> position) & 1ULL)
         return piece.whitePawns;
     if ((piece.whiteRooks >> position) & 1ULL)
@@ -161,7 +161,9 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
         return piece.blackQueen;
     if ((piece.blackKnights >> position) & 1ULL)
         return piece.blackKnights;
-    return 0x0ULL; 
+    
+    static uint64_t nullPiece = 0x0ULL;
+    return nullPiece;
  }
 
 

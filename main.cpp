@@ -72,6 +72,14 @@ int main()
 
                     rightClic = !rightClic;
 
+                    if (!rightClic) {
+                        uint64_t& piece = board.PieceSelected(positionRightClic2);
+                        piece &= ~(1ULL << positionRightClic2);
+                        std::cout << "right clic 2" << std::endl;
+
+
+                    }
+
                 }
             }
         }
