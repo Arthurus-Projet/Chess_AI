@@ -65,20 +65,21 @@ int main()
                     int y = event.mouseButton.y;
                     sf::Vector2u size = window.getSize(); // size.x size.y
 
-                    if (!rightClic)
+                    rightClic = !rightClic;
+
+                    if (rightClic)
                         positionRightClic = board.mouseToPosition(x, y, size);
                     else
                         positionRightClic2 = board.mouseToPosition(x, y, size);
-
-                    rightClic = !rightClic;
-
-                    if (!rightClic) {
-                        uint64_t& piece = board.PieceSelected(positionRightClic2);
-                        piece &= ~(1ULL << positionRightClic2);
-                        std::cout << "right clic 2" << std::endl;
-
-
+                    
+                     uint64_t& piece = board.PieceSelected(positionRightClic);
+                    if (rightClic) {
+                        piece &= ~(1ULL << positionRightClic);
+                        std::cout << "Right click delete" << std::endl;
+                    } else {
+                        piece |= (1ULL << positionRightClic2);
                     }
+
 
                 }
             }
