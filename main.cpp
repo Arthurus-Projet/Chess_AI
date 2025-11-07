@@ -2,7 +2,8 @@
 #include "Headers/chessboard.h"
 #include <bitset>
 #include <iostream>
-
+#include <optional>
+#include <functional>
 
 
 int main()
@@ -14,6 +15,7 @@ int main()
     bool rightClic = false;
     int positionRightClic;
     int positionRightClic2;
+    std::optional<std::reference_wrapper<uint64_t>> piece;
 
     while (window.isOpen())
     {
@@ -72,12 +74,14 @@ int main()
                     else
                         positionRightClic2 = board.mouseToPosition(x, y, size);
                     
-                     uint64_t& piece = board.PieceSelected(positionRightClic);
+                     
                     if (rightClic) {
-                        piece &= ~(1ULL << positionRightClic);
+                        piece = board.PieceSelected(positionRightClic);
+                        piece->get() &= ~(1ULL << positionRightClic);
                         std::cout << "Right click delete" << std::endl;
                     } else {
-                        piece |= (1ULL << positionRightClic2);
+                        std::cout << "Put piece here :" << positionRightClic2 << std::endl;
+                        piece->get() |= (1ULL << positionRightClic2);
                     }
 
 
