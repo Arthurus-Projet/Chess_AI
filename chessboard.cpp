@@ -202,8 +202,8 @@ int ChessBoard::possibilityWhitePawn(int position, int* moves) {
             moves[count++] = position + 16;                            // 8 = 1000, 15 = 1111
     }
 
-    std::cout << "Are you in the left part of the board : " << (position & 7) != 0 << std::endl;
-    std::cout << "Are you in the right part of the board :" << ((position & 7) != 7) << std::endl;
+    std::cout << "Are you in the left part of the board : " << ((position & 7) != 0) << std::endl;
+    std::cout << "Are you in the right part of the board : " << ((position & 7) != 7) << std::endl;
     // left part of the board
     if (((position & 7) != 0) && isThereABlackPieceAt(position + 7)) // 7 = 111 [position & 7 != 0] = [position % 8 != 0] 
         moves[count++] = position + 7;

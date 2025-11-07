@@ -15,7 +15,7 @@ int main()
     bool rightClic = false;
     int positionRightClic;
     int positionRightClic2;
-    std::optional<std::reference_wrapper<uint64_t>> piece;
+    uint64_t* piece = nullptr;
 
     while (window.isOpen())
     {
@@ -69,21 +69,17 @@ int main()
 
                     rightClic = !rightClic;
 
-                    if (rightClic)
-                        positionRightClic = board.mouseToPosition(x, y, size);
-                    else
-                        positionRightClic2 = board.mouseToPosition(x, y, size);
-                    
-                     
                     if (rightClic) {
-                        piece = board.PieceSelected(positionRightClic);
-                        piece->get() &= ~(1ULL << positionRightClic);
+                        positionRightClic = board.mouseToPosition(x, y, size);
+                        piece = &board.PieceSelected(positionRightClic);
+                        *piece &= ~(1ULL << positionRightClic);
                         std::cout << "Right click delete" << std::endl;
                     } else {
-                        std::cout << "Put piece here :" << positionRightClic2 << std::endl;
-                        piece->get() |= (1ULL << positionRightClic2);
+                        positionRightClic2 = board.mouseToPosition(x, y, size);
+                        std::cout << "Put piece here : " << positionRightClic2 << std::endl;
+                        *piece |= (1ULL << positionRightClic2);
                     }
-
+                     
 
                 }
             }
