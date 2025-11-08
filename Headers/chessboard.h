@@ -74,6 +74,8 @@ public:
 
     int possibilityWhitePawn(int position, int* moves);
     int mouseToPosition(int x, int y, sf::Vector2u& size);
+
+    void movePiece(uint64_t* pieceFrom, uint64_t* pieceTo, int from, int to);
 };
 
 

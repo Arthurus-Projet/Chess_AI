@@ -18,6 +18,7 @@ int main()
     int position;
     int position2;
     uint64_t* pieceLeftClick;
+    uint64_t* pieceLeftClick2;
     int moves[4];
     int nMoves;
 
@@ -58,7 +59,6 @@ int main()
 
                         if (*pieceLeftClick == board.piece.whitePawns) {
                             std::cout << "Pawn selected" << std::endl; 
-                            moves[4];
                             nMoves = board.possibilityWhitePawn(position, moves);
 
                             for (int i = 0; i < nMoves; i++)
@@ -66,15 +66,13 @@ int main()
                         }
                     } else {
                         position2 = board.mouseToPosition(x, y, size);
-
+                        pieceLeftClick2 = &board.PieceSelected(position2);
                         bool valideMove = false;
 
                         for (int i = 0; i < nMoves; i++) {
                             if (position2 == moves[i]) {
-                                *pieceLeftClick &= ~(1ULL << position); 
-                                *pieceLeftClick |= (1ULL << position2);
-                                int moves[4];
-                                int nMoves;
+                                board.movePiece(pieceLeftClick, pieceLeftClick2, position, position2);
+                             
                                 break;
                             }
 

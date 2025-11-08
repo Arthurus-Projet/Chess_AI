@@ -226,6 +226,15 @@ int ChessBoard::possibilityWhitePawn(int position, int* moves) {
 
     return position;
  }
+
+ void ChessBoard::movePiece(uint64_t* pieceFrom, uint64_t* pieceTo, int from, int to) {
+    *pieceFrom &= ~(1ULL << from); // delete the piece
+
+    *pieceFrom |= (1ULL << to); // add the new position of the piece
+
+    *pieceTo &= ~(1ULL << to); // delete a piece if there is a piece
+
+ }
  
 
 
