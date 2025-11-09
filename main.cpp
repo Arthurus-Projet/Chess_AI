@@ -19,7 +19,7 @@ int main()
     int position2;
     uint64_t* pieceLeftClick;
     uint64_t* pieceLeftClick2;
-    int moves[4];
+    int moves[14];
     int nMoves;
     uint64_t possibilityMove_ = 0x0ULL;
 
@@ -58,20 +58,26 @@ int main()
                         pieceLeftClick = &board.whitePieceSelected(position);
                         std::cout << "piece memory adress : " << piece << std::endl;
 
-                        if (*pieceLeftClick == board.piece.whitePawns) {
-                            std::cout << "Pawn selected" << std::endl; 
-                            nMoves = board.possibilityWhitePawn(position, moves);
-
-                            
+                        // To be sure we select a White Piece :
+                        if (pieceLeftClick != 0x0ULL) { 
+                            if (*pieceLeftClick == board.piece.whitePawns) {
+                                std::cout << "Pawn selected" << std::endl; 
+                                nMoves = board.possibilityWhitePawn(position, moves);
+                            } else if (*pieceLeftClick == board.piece.whiteRooks) {
+                                std::cout << "Tower selected" << std::endl; 
+                                nMoves = board.possibilityWhiteTower(position, moves);
+                            }
+                                
                             possibilityMove_ = 0x0ULL;
                             for (int i = 0; i < nMoves; i++) {
                                 std::cout << "Pawn white : " << moves[i] << std::endl;
                                 possibilityMove_ |= (1ULL << moves[i]);
                             }
+                        }
                             
 
                             
-                        }
+                        
                     } else {
                         possibilityMove_ = 0x0ULL;
                         position2 = board.mouseToPosition(x, y, size);

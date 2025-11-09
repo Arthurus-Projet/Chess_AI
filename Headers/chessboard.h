@@ -73,6 +73,7 @@ public:
     inline bool isThereABlackPieceAt(int position);
     inline bool isThereAPieceAt(int position);
 
+    int possibilityWhiteTower(int position, int* moves);
     int possibilityWhitePawn(int position, int* moves);
     int mouseToPosition(int x, int y, sf::Vector2u& size);
 

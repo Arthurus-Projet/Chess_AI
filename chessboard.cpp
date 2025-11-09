@@ -193,6 +193,46 @@ inline bool ChessBoard::isThereAPieceAt(int position) {
 }
 
 
+int ChessBoard::possibilityWhiteTower(int position, int* moves) {
+
+    int count = 0;
+
+    // Move right (+1)
+    for (int i = 1; ((position + i) & 7) != 0; i++) {
+        if (!isThereAPieceAt(position + i)) {
+            moves[count++] = position + i;
+        } else 
+            break;
+    }
+
+    // Move left (-1)
+    for (int i = -1; ((position + i) & 7) != 7; i--) {
+        if (!isThereAPieceAt(position + i)) {
+            moves[count++] = position + i;
+        } else 
+            break;
+    }
+
+    // Move up (+8)
+    for (int i = 8; (position + i) < 64; i += 8) {
+        if (!isThereAPieceAt(position + i)) {
+            moves[count++] = position + i;
+        } else 
+            break;
+    }
+
+    // Move down (-8)
+    for (int i = -8; (position + i) < 64; i -= 8) {
+        if (!isThereAPieceAt(position + i)) {
+            moves[count++] = position + i;
+        } else 
+            break;
+    }
+
+    return count;
+}
+
+
 int ChessBoard::possibilityWhitePawn(int position, int* moves) {
    
     int count = 0;
