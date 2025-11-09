@@ -43,7 +43,7 @@ void ChessBoard::loadTextures() {
             textures[pair.first] = texture;
         }
     }
-
+    possibilityMove.setTexture(textures["attaque"]);
     whitePawnSprite.setTexture(textures["pion_b"]);
     blackPawnSprite.setTexture(textures["pion"]);
     whiteTowerSprite.setTexture(textures["tour_b"]);
@@ -229,11 +229,8 @@ int ChessBoard::possibilityWhitePawn(int position, int* moves) {
 
  void ChessBoard::movePiece(uint64_t* pieceFrom, uint64_t* pieceTo, int from, int to) {
     *pieceFrom &= ~(1ULL << from); // delete the piece
-
     *pieceFrom |= (1ULL << to); // add the new position of the piece
-
     *pieceTo &= ~(1ULL << to); // delete a piece if there is a piece
-
  }
  
 

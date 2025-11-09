@@ -52,6 +52,7 @@ public:
     void drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::Sprite& sprite);
     std::map<std::string, sf::Texture> textures;
     int squareSize;
+    sf::Sprite possibilityMove;
     sf::Sprite whitePawnSprite;
     sf::Sprite blackPawnSprite;
     sf::Sprite whiteTowerSprite;

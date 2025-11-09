@@ -21,6 +21,7 @@ int main()
     uint64_t* pieceLeftClick2;
     int moves[4];
     int nMoves;
+    uint64_t possibilityMove_ = 0x0ULL;
 
     // Right Click :
     bool rightClick = false;
@@ -61,10 +62,18 @@ int main()
                             std::cout << "Pawn selected" << std::endl; 
                             nMoves = board.possibilityWhitePawn(position, moves);
 
-                            for (int i = 0; i < nMoves; i++)
+                            
+                            possibilityMove_ = 0x0ULL;
+                            for (int i = 0; i < nMoves; i++) {
                                 std::cout << "Pawn white : " << moves[i] << std::endl;
+                                possibilityMove_ |= (1ULL << moves[i]);
+                            }
+                            
+
+                            
                         }
                     } else {
+                        possibilityMove_ = 0x0ULL;
                         position2 = board.mouseToPosition(x, y, size);
                         pieceLeftClick2 = &board.PieceSelected(position2);
                         bool valideMove = false;
@@ -125,6 +134,8 @@ int main()
         window.clear();
 
         board.draw(window); // draw the chessboard
+
+        board.drawChessPieces(window, possibilityMove_, board.possibilityMove);
 
         
         board.drawAllPieces(window);
