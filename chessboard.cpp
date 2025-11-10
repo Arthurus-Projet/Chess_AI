@@ -199,44 +199,45 @@ int ChessBoard::possibilityWhiteTower(int position, int* moves) {
 
     // Move right (+1)
     for (int i = 1; ((position + i) & 7) != 0; i++) {
-        if (!isThereAPieceAt(position + i)) {
-            moves[count++] = position + i;
-        } else {
-            if (isThereABlackPieceAt(position + i)) 
-                moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
             break;
         }
+
     }
 
     // Move left (-1)
     for (int i = -1; ((position + i) & 7) != 7; i--) {
-        if (!isThereAPieceAt(position + i)) {
-            moves[count++] = position + i;
-       } else {
-            if (isThereABlackPieceAt(position + i)) 
-                moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
             break;
         }
     }
 
     // Move up (+8)
     for (int i = 8; (position + i) < 64; i += 8) {
-        if (!isThereAPieceAt(position + i)) {
-            moves[count++] = position + i;
-        } else {
-            if (isThereABlackPieceAt(position + i)) 
-                moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
             break;
         }
     }
 
     // Move down (-8)
     for (int i = -8; (position + i) >= 0; i -= 8) {
-        if (!isThereAPieceAt(position + i)) {
-            moves[count++] = position + i;
-       } else {
-            if (isThereABlackPieceAt(position + i)) 
-                moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
             break;
         }
     }
