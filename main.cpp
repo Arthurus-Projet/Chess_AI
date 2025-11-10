@@ -66,6 +66,8 @@ int main()
                             } else if (*pieceLeftClick == board.piece.whiteRooks) {
                                 std::cout << "Tower selected" << std::endl; 
                                 nMoves = board.possibilityWhiteTower(position, moves);
+                            } else if (*pieceLeftClick == board.piece.whiteBishops) {
+                                nMoves = board.possibilityWhiteBishop(position, moves);
                             }
                                 
                             possibilityMove_ = 0x0ULL;

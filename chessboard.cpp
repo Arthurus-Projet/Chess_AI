@@ -206,7 +206,6 @@ int ChessBoard::possibilityWhiteTower(int position, int* moves) {
         if (isThereABlackPieceAt(position + i)) { 
             break;
         }
-
     }
 
     // Move left (-1)
@@ -233,6 +232,58 @@ int ChessBoard::possibilityWhiteTower(int position, int* moves) {
 
     // Move down (-8)
     for (int i = -8; (position + i) >= 0; i -= 8) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    return count;
+}
+
+
+int ChessBoard::possibilityWhiteBishop(int position, int* moves) {
+
+    int count = 0;
+
+    // Move up right (+9)
+    for (int i = 9; ((position + i) & 7) != 0; i+= 9) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move up left (+7)
+    for (int i = 7; (((position + i) & 7) != 7) && (position + i) < 64; i+= 7) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down right (-7)
+    for (int i = -7; (((position + i) & 7) != 0) && (position + i) >= 0; i-= 7) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down left (-9)
+    for (int i = -9; (((position + i) & 7) != 7) && (position + i) >= 0; i-= 9) {
         if (isThereAWhitePieceAt(position + i))
             break;
 
