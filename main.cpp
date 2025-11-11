@@ -68,6 +68,8 @@ int main()
                                 nMoves = board.possibilityWhiteTower(position, moves);
                             } else if (*pieceLeftClick == board.piece.whiteBishops) {
                                 nMoves = board.possibilityWhiteBishop(position, moves);
+                            } else if (*pieceLeftClick == board.piece.whiteKnights) {
+                                nMoves = board.possibilityWhiteKnight(position, moves);
                             }
                                 
                             possibilityMove_ = 0x0ULL;
