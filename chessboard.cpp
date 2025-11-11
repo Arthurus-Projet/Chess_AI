@@ -389,6 +389,109 @@ int ChessBoard::possibilityWhitePawn(int position, int* moves) {
     return count;
  }
 
+
+
+ 
+int ChessBoard::possibilityWhiteQueen(int position, int* moves) {
+
+    int count = 0;
+
+    // Like Bishop :
+
+    // Move up right (+9)
+    for (int i = 9; ((position + i) & 7) != 0; i+= 9) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move up left (+7)
+    for (int i = 7; (((position + i) & 7) != 7) && (position + i) < 64; i+= 7) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down right (-7)
+    for (int i = -7; (((position + i) & 7) != 0) && (position + i) >= 0; i-= 7) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down left (-9)
+    for (int i = -9; (((position + i) & 7) != 7) && (position + i) >= 0; i-= 9) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // like Tower :
+    // Move right (+1)
+    for (int i = 1; ((position + i) & 7) != 0; i++) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move left (-1)
+    for (int i = -1; ((position + i) & 7) != 7; i--) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move up (+8)
+    for (int i = 8; (position + i) < 64; i += 8) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down (-8)
+    for (int i = -8; (position + i) >= 0; i -= 8) {
+        if (isThereAWhitePieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereABlackPieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    return count;
+}
+
+ 
+
  int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
     float square_x = static_cast<float>(size.x) / 8.f;
     float square_y = static_cast<float>(size.y) / 8.f;

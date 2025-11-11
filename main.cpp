@@ -19,7 +19,7 @@ int main()
     int position2;
     uint64_t* pieceLeftClick;
     uint64_t* pieceLeftClick2;
-    int moves[14];
+    int moves[27];
     int nMoves;
     uint64_t possibilityMove_ = 0x0ULL;
 
@@ -70,7 +70,10 @@ int main()
                                 nMoves = board.possibilityWhiteBishop(position, moves);
                             } else if (*pieceLeftClick == board.piece.whiteKnights) {
                                 nMoves = board.possibilityWhiteKnight(position, moves);
+                            } else if (*pieceLeftClick == board.piece.whiteQueen) {
+                                nMoves = board.possibilityWhiteQueen(position, moves);
                             }
+
                                 
                             possibilityMove_ = 0x0ULL;
                             for (int i = 0; i < nMoves; i++) {
