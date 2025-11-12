@@ -490,6 +490,48 @@ int ChessBoard::possibilityWhiteQueen(int position, int* moves) {
     return count;
 }
 
+
+int ChessBoard::possibilityWhiteKing(int position, int* moves) {
+
+    int count = 0;
+
+    // Move up right (+9)
+    if (((position & 7) != 7) && (position + 9) < 64 && !isThereAWhitePieceAt(position + 9)) 
+        moves[count++] = position + 9;
+
+
+    // Move up left (+7)
+    if ((position & 7) != 0 && (position + 7) < 64 &&  !isThereAWhitePieceAt(position + 7)) 
+        moves[count++] = position + 7;
+
+    // Move down right (-7)
+    if ((position & 7) != 7 && (position - 7) >= 0 &&  !isThereAWhitePieceAt(position - 7)) 
+        moves[count++] = position - 7;
+
+    // Move down left (-9)
+    if ((position & 7) != 0 && (position - 9) >= 0 &&  !isThereAWhitePieceAt(position - 9)) 
+        moves[count++] = position - 9;
+
+    // Move right (+1)
+    if (((position & 7) != 7) && (position + 1) < 64 && !isThereAWhitePieceAt(position + 1)) 
+        moves[count++] = position + 1;
+    
+    // Move left (-1)
+    if (((position & 7) != 0) && (position - 1) >= 0 && !isThereAWhitePieceAt(position - 1)) 
+        moves[count++] = position - 1;
+    
+    // Move up (+8)
+    if ((position + 8) < 64 && !isThereAWhitePieceAt(position + 8)) 
+        moves[count++] = position + 8;
+    
+    // Move down (-8)
+    if ((position - 8) >= 0 && !isThereAWhitePieceAt(position - 8)) 
+        moves[count++] = position - 8;
+   
+
+    return count;
+}
+
  
 
  int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {

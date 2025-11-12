@@ -78,6 +78,7 @@ public:
     int possibilityWhiteBishop(int position, int* moves);
     int possibilityWhiteKnight(int position, int* moves);
     int possibilityWhiteQueen(int position, int* moves);
+    int possibilityWhiteKing(int position, int* moves);
 
     int mouseToPosition(int x, int y, sf::Vector2u& size);
 
