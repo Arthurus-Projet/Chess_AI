@@ -244,6 +244,60 @@ int ChessBoard::possibilityWhiteTower(int position, int* moves) {
     return count;
 }
 
+
+
+int ChessBoard::possibilityBlackTower(int position, int* moves) {
+
+    int count = 0;
+
+    // Move right (+1)
+    for (int i = 1; ((position + i) & 7) != 0; i++) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move left (-1)
+    for (int i = -1; ((position + i) & 7) != 7; i--) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move up (+8)
+    for (int i = 8; (position + i) < 64; i += 8) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down (-8)
+    for (int i = -8; (position + i) >= 0; i -= 8) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    return count;
+}
+
+
 int ChessBoard::possibilityWhiteKnight(int position, int* moves) {
 
     int count = 0;

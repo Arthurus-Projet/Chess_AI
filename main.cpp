@@ -55,7 +55,8 @@ int main()
                     
                         std::cout << "Mouse clicked at: " << position << std::endl;
 
-                        pieceLeftClick = &board.whitePieceSelected(position);
+                        //pieceLeftClick = &board.whitePieceSelected(position);
+                        pieceLeftClick = &board.PieceSelected(position);
                         std::cout << "piece memory adress : " << piece << std::endl;
 
                         // To be sure we select a White Piece :
@@ -74,6 +75,8 @@ int main()
                                 nMoves = board.possibilityWhiteQueen(position, moves);
                             } else if (*pieceLeftClick == board.piece.whiteKing) {
                                 nMoves = board.possibilityWhiteKing(position, moves);
+                            } else if (*pieceLeftClick == board.piece.blackRooks) {
+                                nMoves = board.possibilityBlackTower(position, moves);
                             }
 
                                 

@@ -74,6 +74,8 @@ public:
     inline bool isThereAPieceAt(int position);
 
     int possibilityWhiteTower(int position, int* moves);
+    int possibilityBlackTower(int position, int* moves);
+
     int possibilityWhitePawn(int position, int* moves);
     int possibilityWhiteBishop(int position, int* moves);
     int possibilityWhiteKnight(int position, int* moves);
