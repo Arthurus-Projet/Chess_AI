@@ -420,6 +420,60 @@ int ChessBoard::possibilityWhiteBishop(int position, int* moves) {
 }
 
 
+
+int ChessBoard::possibilityBlackBishop(int position, int* moves) {
+
+    int count = 0;
+    
+    // Move up right (+9)
+    for (int i = 9; (((position + i) & 7) != 0) && (position + i) < 64; i+= 9) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move up left (+7)
+    for (int i = 7; (((position + i) & 7) != 7) && (position + i) < 64; i+= 7) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down right (-7)
+    for (int i = -7; (((position + i) & 7) != 0) && (position + i) >= 0; i-= 7) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down left (-9)
+    for (int i = -9; (((position + i) & 7) != 7) && (position + i) >= 0; i-= 9) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    return count;
+}
+
+
+
 int ChessBoard::possibilityWhitePawn(int position, int* moves) {
    
     int count = 0;
