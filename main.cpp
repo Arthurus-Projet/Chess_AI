@@ -79,6 +79,8 @@ int main()
                                 nMoves = board.possibilityBlackTower(position, moves);
                             } else if (*pieceLeftClick == board.piece.blackBishops) {
                                 nMoves = board.possibilityBlackBishop(position, moves);
+                            } else if (*pieceLeftClick == board.piece.blackKnights) {
+                                nMoves = board.possibilityBlackKnight(position, moves);
                             }
 
                                 

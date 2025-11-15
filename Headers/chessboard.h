@@ -82,6 +82,8 @@ public:
     int possibilityBlackBishop(int position, int* moves);
 
     int possibilityWhiteKnight(int position, int* moves);
+    int possibilityBlackKnight(int position, int* moves);
+    
 
     int possibilityWhiteQueen(int position, int* moves);
 

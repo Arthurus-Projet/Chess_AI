@@ -368,6 +368,76 @@ int ChessBoard::possibilityWhiteKnight(int position, int* moves) {
 
 
 
+int ChessBoard::possibilityBlackKnight(int position, int* moves) {
+
+    int count = 0;
+
+    // 2 Up 1 Right (+17)
+    if (((position + 17) < 64) && (position & 7) != 7) {
+        
+        if (!isThereABlackPieceAt(position + 17)) 
+            moves[count++] = position + 17;
+    }
+
+    // 2 Down 1 Right (-15)
+    if (((position - 15) >= 0) && (position & 7) != 7) {
+        
+        if (!isThereABlackPieceAt(position - 15)) 
+            moves[count++] = position - 15;
+    }
+
+    // 2 Right 1 Up (+10)
+    if (((position + 10) < 64) && (position & 7) < 6) {
+        
+        if (!isThereABlackPieceAt(position + 10)) 
+            moves[count++] = position + 10;
+    }
+
+    // 2 Right 1 Down (-6)
+    if (((position - 6) >= 0) && (position & 7) < 6) {
+        
+        if (!isThereABlackPieceAt(position - 6)) 
+            moves[count++] = position - 6;
+    }
+
+
+    // 2 Left 1 Down (-10)
+    if (((position - 10) >= 0) && (position & 7) > 1) {
+        
+        if (!isThereABlackPieceAt(position - 10)) 
+            moves[count++] = position - 10;
+    }
+
+    // 2 Left 1 Up (+6)
+    if (((position + 6) < 64) && (position & 7) > 1) {
+        
+        if (!isThereABlackPieceAt(position + 6)) 
+            moves[count++] = position + 6;
+    }
+
+
+    // 2 Up 1 Left (+15)
+    if (((position + 15) < 64) && (position & 7) != 0) {
+        
+        if (!isThereABlackPieceAt(position + 15)) 
+            moves[count++] = position + 15;
+    }
+
+
+    // 2 Down 1 Left (-17)
+    if (((position - 17) >= 0) && (position & 7) != 0) {
+        
+        if (!isThereABlackPieceAt(position - 17)) 
+            moves[count++] = position - 17;
+    }
+
+    
+    return count;
+
+}
+
+
+
 int ChessBoard::possibilityWhiteBishop(int position, int* moves) {
 
     int count = 0;
