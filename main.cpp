@@ -73,6 +73,8 @@ int main()
                                 nMoves = board.possibilityWhiteKnight(position, moves);
                             } else if (*pieceLeftClick == board.piece.whiteQueen) {
                                 nMoves = board.possibilityWhiteQueen(position, moves);
+                            } else if (*pieceLeftClick == board.piece.blackQueen) {
+                                nMoves = board.possibilityBlackQueen(position, moves);
                             } else if (*pieceLeftClick == board.piece.whiteKing) {
                                 nMoves = board.possibilityWhiteKing(position, moves);
                             } else if (*pieceLeftClick == board.piece.blackRooks) {

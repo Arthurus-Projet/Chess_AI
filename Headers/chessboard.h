@@ -86,6 +86,7 @@ public:
     
 
     int possibilityWhiteQueen(int position, int* moves);
+    int possibilityBlackQueen(int position, int* moves);
 
     int possibilityWhiteKing(int position, int* moves);
 

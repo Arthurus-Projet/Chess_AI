@@ -669,6 +669,106 @@ int ChessBoard::possibilityWhiteQueen(int position, int* moves) {
 }
 
 
+
+int ChessBoard::possibilityBlackQueen(int position, int* moves) {
+
+    int count = 0;
+
+    // Like Bishop :
+
+    // Move up right (+9)
+    for (int i = 9; ((position + i) & 7) != 0; i+= 9) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move up left (+7)
+    for (int i = 7; (((position + i) & 7) != 7) && (position + i) < 64; i+= 7) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down right (-7)
+    for (int i = -7; (((position + i) & 7) != 0) && (position + i) >= 0; i-= 7) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down left (-9)
+    for (int i = -9; (((position + i) & 7) != 7) && (position + i) >= 0; i-= 9) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // like Tower :
+    // Move right (+1)
+    for (int i = 1; ((position + i) & 7) != 0; i++) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move left (-1)
+    for (int i = -1; ((position + i) & 7) != 7; i--) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move up (+8)
+    for (int i = 8; (position + i) < 64; i += 8) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    // Move down (-8)
+    for (int i = -8; (position + i) >= 0; i -= 8) {
+        if (isThereABlackPieceAt(position + i))
+            break;
+
+        moves[count++] = position + i;
+        if (isThereAWhitePieceAt(position + i)) { 
+            break;
+        }
+    }
+
+    return count;
+}
+
+
 int ChessBoard::possibilityWhiteKing(int position, int* moves) {
 
     int count = 0;
