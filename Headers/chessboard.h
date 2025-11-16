@@ -77,18 +77,19 @@ public:
     int possibilityBlackTower(int position, int* moves);
 
     int possibilityWhitePawn(int position, int* moves);
-
+    int possibilityBlackPawn(int position, int* moves);
+    
     int possibilityWhiteBishop(int position, int* moves);
     int possibilityBlackBishop(int position, int* moves);
 
     int possibilityWhiteKnight(int position, int* moves);
     int possibilityBlackKnight(int position, int* moves);
     
-
     int possibilityWhiteQueen(int position, int* moves);
     int possibilityBlackQueen(int position, int* moves);
 
     int possibilityWhiteKing(int position, int* moves);
+    int possibilityBlackKing(int position, int* moves);
 
     int mouseToPosition(int x, int y, sf::Vector2u& size);
 

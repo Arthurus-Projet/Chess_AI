@@ -62,8 +62,9 @@ int main()
                         // To be sure we select a White Piece :
                         if (pieceLeftClick != 0x0ULL) { 
                             if (*pieceLeftClick == board.piece.whitePawns) {
-                                std::cout << "Pawn selected" << std::endl; 
                                 nMoves = board.possibilityWhitePawn(position, moves);
+                            } else if (*pieceLeftClick == board.piece.blackPawns) {
+                                nMoves = board.possibilityBlackPawn(position, moves);
                             } else if (*pieceLeftClick == board.piece.whiteRooks) {
                                 std::cout << "Tower selected" << std::endl; 
                                 nMoves = board.possibilityWhiteTower(position, moves);
@@ -77,6 +78,8 @@ int main()
                                 nMoves = board.possibilityBlackQueen(position, moves);
                             } else if (*pieceLeftClick == board.piece.whiteKing) {
                                 nMoves = board.possibilityWhiteKing(position, moves);
+                            } else if (*pieceLeftClick == board.piece.blackKing) {
+                                nMoves = board.possibilityBlackKing(position, moves);
                             } else if (*pieceLeftClick == board.piece.blackRooks) {
                                 nMoves = board.possibilityBlackTower(position, moves);
                             } else if (*pieceLeftClick == board.piece.blackBishops) {

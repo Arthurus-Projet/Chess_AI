@@ -554,8 +554,6 @@ int ChessBoard::possibilityWhitePawn(int position, int* moves) {
             moves[count++] = position + 16;                            // 8 = 1000, 15 = 1111
     }
 
-    std::cout << "Are you in the left part of the board : " << ((position & 7) != 0) << std::endl;
-    std::cout << "Are you in the right part of the board : " << ((position & 7) != 7) << std::endl;
     // left part of the board
     if (((position & 7) != 0) && isThereABlackPieceAt(position + 7)) // 7 = 111 [position & 7 != 0] = [position % 8 != 0] 
         moves[count++] = position + 7;
@@ -563,6 +561,29 @@ int ChessBoard::possibilityWhitePawn(int position, int* moves) {
     // right part of the board
     if (((position & 7) != 7) && isThereABlackPieceAt(position + 9))
         moves[count++] = position + 9;
+
+    return count;
+ }
+
+
+ 
+int ChessBoard::possibilityBlackPawn(int position, int* moves) {
+   
+    int count = 0;
+    if (!isThereAPieceAt(position - 8)) {
+        moves[count++] = position - 8;
+
+        if ((position >> 3) == 6 && !isThereAPieceAt(position - 16)) // (position >> 3) == 1  [position < 16 && position > 7]
+            moves[count++] = position - 16;                            // 8 = 1000, 15 = 1111
+    }
+
+    // left part of the board
+    if (((position & 7) != 0) && isThereAWhitePieceAt(position - 7)) 
+        moves[count++] = position - 7;
+
+    // right part of the board
+    if (((position & 7) != 7) && isThereAWhitePieceAt(position - 9))
+        moves[count++] = position - 9;
 
     return count;
  }
@@ -809,6 +830,49 @@ int ChessBoard::possibilityWhiteKing(int position, int* moves) {
 
     return count;
 }
+
+
+int ChessBoard::possibilityBlackKing(int position, int* moves) {
+
+    int count = 0;
+
+    // Move up right (+9)
+    if (((position & 7) != 7) && (position + 9) < 64 && !isThereABlackPieceAt(position + 9)) 
+        moves[count++] = position + 9;
+
+
+    // Move up left (+7)
+    if ((position & 7) != 0 && (position + 7) < 64 && !isThereABlackPieceAt(position + 7)) 
+        moves[count++] = position + 7;
+
+    // Move down right (-7)
+    if ((position & 7) != 7 && (position - 7) >= 0 && !isThereABlackPieceAt(position - 7)) 
+        moves[count++] = position - 7;
+
+    // Move down left (-9)
+    if ((position & 7) != 0 && (position - 9) >= 0 && !isThereABlackPieceAt(position - 9)) 
+        moves[count++] = position - 9;
+
+    // Move right (+1)
+    if (((position & 7) != 7) && (position + 1) < 64 && !isThereABlackPieceAt(position + 1)) 
+        moves[count++] = position + 1;
+    
+    // Move left (-1)
+    if (((position & 7) != 0) && (position - 1) >= 0 && !isThereABlackPieceAt(position - 1)) 
+        moves[count++] = position - 1;
+    
+    // Move up (+8)
+    if ((position + 8) < 64 && !isThereABlackPieceAt(position + 8)) 
+        moves[count++] = position + 8;
+    
+    // Move down (-8)
+    if ((position - 8) >= 0 && !isThereABlackPieceAt(position - 8)) 
+        moves[count++] = position - 8;
+   
+
+    return count;
+}
+
 
  
 
