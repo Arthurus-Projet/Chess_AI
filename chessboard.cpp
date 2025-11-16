@@ -198,7 +198,7 @@ int ChessBoard::possibilityWhiteTower(int position, int* moves) {
     int count = 0;
 
     // Move right (+1)
-    for (int i = 1; ((position + i) & 7) != 0; i++) {
+    for (int i = 1; ((position + i) & 7) != 0 && (position + i) < 64; i++) {
         if (isThereAWhitePieceAt(position + i))
             break;
 
@@ -209,7 +209,7 @@ int ChessBoard::possibilityWhiteTower(int position, int* moves) {
     }
 
     // Move left (-1)
-    for (int i = -1; ((position + i) & 7) != 7; i--) {
+    for (int i = -1; ((position + i) & 7) != 7 && (position + i) >= 0; i--) {
         if (isThereAWhitePieceAt(position + i))
             break;
 
@@ -251,7 +251,7 @@ int ChessBoard::possibilityBlackTower(int position, int* moves) {
     int count = 0;
 
     // Move right (+1)
-    for (int i = 1; ((position + i) & 7) != 0; i++) {
+    for (int i = 1; ((position + i) & 7) != 0 && (position + i) < 64; i++) {
         if (isThereABlackPieceAt(position + i))
             break;
 
@@ -262,7 +262,7 @@ int ChessBoard::possibilityBlackTower(int position, int* moves) {
     }
 
     // Move left (-1)
-    for (int i = -1; ((position + i) & 7) != 7; i--) {
+    for (int i = -1; ((position + i) & 7) != 7 && (position + i) >= 0; i--) {
         if (isThereABlackPieceAt(position + i))
             break;
 
@@ -443,7 +443,7 @@ int ChessBoard::possibilityWhiteBishop(int position, int* moves) {
     int count = 0;
 
     // Move up right (+9)
-    for (int i = 9; ((position + i) & 7) != 0; i+= 9) {
+    for (int i = 9; ((position + i) & 7) != 0 && (position + i) < 64; i+= 9) {
         if (isThereAWhitePieceAt(position + i))
             break;
 
@@ -577,7 +577,7 @@ int ChessBoard::possibilityWhiteQueen(int position, int* moves) {
     // Like Bishop :
 
     // Move up right (+9)
-    for (int i = 9; ((position + i) & 7) != 0; i+= 9) {
+    for (int i = 9; ((position + i) & 7) != 0 && (position + i) < 64; i+= 9) {
         if (isThereAWhitePieceAt(position + i))
             break;
 
@@ -622,7 +622,7 @@ int ChessBoard::possibilityWhiteQueen(int position, int* moves) {
 
     // like Tower :
     // Move right (+1)
-    for (int i = 1; ((position + i) & 7) != 0; i++) {
+    for (int i = 1; ((position + i) & 7) != 0 && (position + i) < 64; i++) {
         if (isThereAWhitePieceAt(position + i))
             break;
 
@@ -633,7 +633,7 @@ int ChessBoard::possibilityWhiteQueen(int position, int* moves) {
     }
 
     // Move left (-1)
-    for (int i = -1; ((position + i) & 7) != 7; i--) {
+    for (int i = -1; ((position + i) & 7) != 7 && (position + i) >= 0; i--) {
         if (isThereAWhitePieceAt(position + i))
             break;
 
@@ -677,7 +677,7 @@ int ChessBoard::possibilityBlackQueen(int position, int* moves) {
     // Like Bishop :
 
     // Move up right (+9)
-    for (int i = 9; ((position + i) & 7) != 0; i+= 9) {
+    for (int i = 9; (((position + i) & 7) != 0) && (position + i) < 64; i+= 9) {
         if (isThereABlackPieceAt(position + i))
             break;
 
@@ -722,7 +722,7 @@ int ChessBoard::possibilityBlackQueen(int position, int* moves) {
 
     // like Tower :
     // Move right (+1)
-    for (int i = 1; ((position + i) & 7) != 0; i++) {
+    for (int i = 1; ((position + i) & 7) != 0 && (position + i) < 64; i++) {
         if (isThereABlackPieceAt(position + i))
             break;
 
@@ -733,7 +733,7 @@ int ChessBoard::possibilityBlackQueen(int position, int* moves) {
     }
 
     // Move left (-1)
-    for (int i = -1; ((position + i) & 7) != 7; i--) {
+    for (int i = -1; ((position + i) & 7) != 7  && (position + i) >= 0; i--) {
         if (isThereABlackPieceAt(position + i))
             break;
 
