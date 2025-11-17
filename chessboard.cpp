@@ -873,10 +873,15 @@ int ChessBoard::possibilityBlackKing(int position, int* moves) {
     return count;
 }
 
-
+void ChessBoard::undo(int positionFrom, int positionTo, uint64_t* piece, uint64_t* pieceCaptured) {
+    *piece &= ~(1ULL << positionTo); // delete the piece
+    *piece |= (1ULL << positionFrom); // add the old position of the piece
+    if (*pieceCaptured != 0x0ULL)
+        *pieceCaptured |= (1ULL << positionTo); // add a piece if there is a piece
+}
  
 
- int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
+int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
     float square_x = static_cast<float>(size.x) / 8.f;
     float square_y = static_cast<float>(size.y) / 8.f;
 

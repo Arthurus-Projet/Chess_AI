@@ -94,6 +94,7 @@ public:
     int mouseToPosition(int x, int y, sf::Vector2u& size);
 
     void movePiece(uint64_t* pieceFrom, uint64_t* pieceTo, int from, int to);
+    void undo(int positionFrom, int positionTo, uint64_t* piece, uint64_t* pieceCaptured);
 };
 
 
