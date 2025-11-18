@@ -874,10 +874,30 @@ int ChessBoard::possibilityBlackKing(int position, int* moves) {
 }
 
 void ChessBoard::undo(int positionFrom, int positionTo, uint64_t* piece, uint64_t* pieceCaptured) {
-    *piece &= ~(1ULL << positionTo); // delete the piece
+    *piece &= ~(1ULL << positionTo); // delete the old position of the piece
     *piece |= (1ULL << positionFrom); // add the old position of the piece
     if (*pieceCaptured != 0x0ULL)
         *pieceCaptured |= (1ULL << positionTo); // add a piece if there is a piece
+}
+
+int ChessBoard::evaluate() {
+    int score = 0;
+
+    score += __builtin_popcountll(piece.whitePawns);
+    score += __builtin_popcountll(piece.whiteBishops) * 3;
+    score += __builtin_popcountll(piece.whiteKnights) * 3;
+    score += __builtin_popcountll(piece.whiteRooks) * 5;
+    score += __builtin_popcountll(piece.whiteQueen) * 9;
+    score += __builtin_popcountll(piece.whiteKing) * 20;
+
+    score -= __builtin_popcountll(piece.blackPawns);
+    score -= __builtin_popcountll(piece.blackBishops) * 3;
+    score -= __builtin_popcountll(piece.blackKnights) * 3;
+    score -= __builtin_popcountll(piece.blackRooks) * 5;
+    score -= __builtin_popcountll(piece.blackQueen) * 9;
+    score -= __builtin_popcountll(piece.blackKing) * 20;
+
+    return score;
 }
  
 
