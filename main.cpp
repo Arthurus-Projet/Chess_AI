@@ -61,30 +61,30 @@ int main()
 
                         // To be sure we select a White Piece :
                         if (pieceLeftClick != 0x0ULL) { 
-                            if (*pieceLeftClick == board.piece.whitePawns) {
+                            if (*pieceLeftClick == board.piece.bitboards[WHITE_PAWN]) {
                                 nMoves = board.possibilityWhitePawn(position, moves);
-                            } else if (*pieceLeftClick == board.piece.blackPawns) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[BLACK_PAWN]) {
                                 nMoves = board.possibilityBlackPawn(position, moves);
-                            } else if (*pieceLeftClick == board.piece.whiteRooks) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[WHITE_ROOK]) {
                                 std::cout << "Tower selected" << std::endl; 
                                 nMoves = board.possibilityWhiteTower(position, moves);
-                            } else if (*pieceLeftClick == board.piece.whiteBishops) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[WHITE_BISHOP]) {
                                 nMoves = board.possibilityWhiteBishop(position, moves);
-                            } else if (*pieceLeftClick == board.piece.whiteKnights) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[WHITE_KNIGHT]) {
                                 nMoves = board.possibilityWhiteKnight(position, moves);
-                            } else if (*pieceLeftClick == board.piece.whiteQueen) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[WHITE_QUEEN]) {
                                 nMoves = board.possibilityWhiteQueen(position, moves);
-                            } else if (*pieceLeftClick == board.piece.blackQueen) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[BLACK_QUEEN]) {
                                 nMoves = board.possibilityBlackQueen(position, moves);
-                            } else if (*pieceLeftClick == board.piece.whiteKing) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[WHITE_KING]) {
                                 nMoves = board.possibilityWhiteKing(position, moves);
-                            } else if (*pieceLeftClick == board.piece.blackKing) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[BLACK_KING]) {
                                 nMoves = board.possibilityBlackKing(position, moves);
-                            } else if (*pieceLeftClick == board.piece.blackRooks) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[BLACK_ROOK]) {
                                 nMoves = board.possibilityBlackTower(position, moves);
-                            } else if (*pieceLeftClick == board.piece.blackBishops) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[BLACK_BISHOP]) {
                                 nMoves = board.possibilityBlackBishop(position, moves);
-                            } else if (*pieceLeftClick == board.piece.blackKnights) {
+                            } else if (*pieceLeftClick == board.piece.bitboards[BLACK_KNIGHT]) {
                                 nMoves = board.possibilityBlackKnight(position, moves);
                             }
 
@@ -119,15 +119,15 @@ int main()
 
                     }
                         
-                    /*else if (piece == board.piece.whiteRooks)
+                    /*else if (piece == board.piece.bitboards[WHITE_ROOK])
                         std::cout << "Rook selected" << std::endl; 
-                    else if (piece == board.piece.whiteBishops)
+                    else if (piece == board.piece.bitboards[WHITE_BISHOP])
                         std::cout << "Bishop selected" << std::endl; 
-                    else if (piece == board.piece.whiteKing)
+                    else if (piece == board.piece.bitboards[WHITE_KING])
                         std::cout << "King selected" << std::endl; 
-                    else if (piece == board.piece.whiteQueen)
+                    else if (piece == board.piece.bitboards[WHITE_QUEEN])
                         std::cout << "Queen selected" << std::endl; 
-                    else if (piece == board.piece.whiteKnights)
+                    else if (piece == board.piece.bitboards[WHITE_KNIGHT])
                         std::cout << "Knight selected" << std::endl; 
                         */
 

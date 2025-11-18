@@ -1,9 +1,23 @@
 #ifndef CHESSEBOARD_H
 #include <SFML/Graphics.hpp>
 
+enum PieceType { 
+    WHITE_PAWN,     // = 0
+    WHITE_KNIGHT,   // = 1
+    WHITE_BISHOP,   // = 2
+    WHITE_ROOK,     // = 3
+    WHITE_QUEEN,    // = 4
+    WHITE_KING,     // = 5
+    BLACK_PAWN,     // = 6
+    BLACK_KNIGHT,   // = 7
+    BLACK_BISHOP,   // = 8
+    BLACK_ROOK,     // = 9
+    BLACK_QUEEN,    // = 10
+    BLACK_KING      // = 11
+};
 
 struct Piece {
-    uint64_t whitePawns;
+    /*uint64_t whitePawns;
     uint64_t blackPawns;
 
     uint64_t whiteRooks;
@@ -35,6 +49,27 @@ struct Piece {
           whiteKing(0x0000000000000010ULL),
           blackKing(0x1000000000000000ULL)
     {}
+          */
+
+    uint64_t bitboards[12];
+
+    Piece() {
+        bitboards[WHITE_PAWN] = 0x000000000000FF00ULL;
+        bitboards[WHITE_KNIGHT] = 0x0000000000000042ULL;
+        bitboards[WHITE_BISHOP] = 0x0000000000000024ULL;
+        bitboards[WHITE_ROOK] = 0x0000000000000081ULL;
+        bitboards[WHITE_QUEEN] = 0x0000000000000008ULL;
+        bitboards[WHITE_KING] = 0x0000000000000010ULL;
+
+        bitboards[BLACK_PAWN] = 0x00FF000000000000ULL;
+        bitboards[BLACK_KNIGHT] = 0x4200000000000000ULL;
+        bitboards[BLACK_BISHOP] = 0x2400000000000000ULL;
+        bitboards[BLACK_ROOK] = 0x8100000000000000ULL;
+        bitboards[BLACK_QUEEN] = 0x0800000000000000ULL;
+        bitboards[BLACK_KING] = 0x1000000000000000ULL;
+    
+
+    }
 };
 
 class ChessBoard {

@@ -98,76 +98,76 @@ void ChessBoard::drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::S
 void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
 
     // Pawns :
-    drawChessPieces(window, piece.whitePawns, whitePawnSprite);
-    drawChessPieces(window, piece.blackPawns, blackPawnSprite);
+    drawChessPieces(window, piece.bitboards[WHITE_PAWN], whitePawnSprite);
+    drawChessPieces(window, piece.bitboards[BLACK_PAWN], blackPawnSprite);
 
     // Rooks:
-    drawChessPieces(window, piece.whiteRooks, whiteTowerSprite);
-    drawChessPieces(window, piece.blackRooks, blackTowerSprite);
+    drawChessPieces(window, piece.bitboards[WHITE_ROOK], whiteTowerSprite);
+    drawChessPieces(window, piece.bitboards[BLACK_ROOK], blackTowerSprite);
 
     // Bishops:
-    drawChessPieces(window, piece.whiteBishops, whiteBishopSprite);
-    drawChessPieces(window, piece.blackBishops, blackBishopSprite);
+    drawChessPieces(window, piece.bitboards[WHITE_BISHOP], whiteBishopSprite);
+    drawChessPieces(window, piece.bitboards[BLACK_BISHOP], blackBishopSprite);
 
     // Knights:
-    drawChessPieces(window, piece.whiteKnights, whiteKnightSprite);
-    drawChessPieces(window, piece.blackKnights, blackKnightSprite);
+    drawChessPieces(window, piece.bitboards[WHITE_KNIGHT], whiteKnightSprite);
+    drawChessPieces(window, piece.bitboards[BLACK_KNIGHT], blackKnightSprite);
 
     //Kings:
-    drawChessPieces(window, piece.whiteKing, whiteKingSprite);
-    drawChessPieces(window, piece.blackKing, blackKingSprite);
+    drawChessPieces(window, piece.bitboards[WHITE_KING], whiteKingSprite);
+    drawChessPieces(window, piece.bitboards[BLACK_KING], blackKingSprite);
 
     //Queens:
-    drawChessPieces(window, piece.whiteQueen, whiteQueenSprite);
-    drawChessPieces(window, piece.blackQueen, blackQueenSprite);
+    drawChessPieces(window, piece.bitboards[WHITE_QUEEN], whiteQueenSprite);
+    drawChessPieces(window, piece.bitboards[BLACK_QUEEN], blackQueenSprite);
 
 }
 
 
 
  uint64_t& ChessBoard::whitePieceSelected(int& position) {
-    if ((piece.whitePawns >> position) & 1ULL)
-        return piece.whitePawns;
-    if ((piece.whiteRooks >> position) & 1ULL)
-        return piece.whiteRooks;
-    if ((piece.whiteBishops >> position) & 1ULL)
-        return piece.whiteBishops;
-    if ((piece.whiteKing >> position) & 1ULL)
-        return piece.whiteKing;
-    if ((piece.whiteQueen >> position) & 1ULL)
-        return piece.whiteQueen;
-    if ((piece.whiteKnights >> position) & 1ULL)
-        return piece.whiteKnights;
+    if ((piece.bitboards[WHITE_PAWN] >> position) & 1ULL)
+        return piece.bitboards[WHITE_PAWN];
+    if ((piece.bitboards[WHITE_ROOK] >> position) & 1ULL)
+        return piece.bitboards[WHITE_ROOK];
+    if ((piece.bitboards[WHITE_BISHOP] >> position) & 1ULL)
+        return piece.bitboards[WHITE_BISHOP];
+    if ((piece.bitboards[WHITE_KING] >> position) & 1ULL)
+        return piece.bitboards[WHITE_KING];
+    if ((piece.bitboards[WHITE_QUEEN] >> position) & 1ULL)
+        return piece.bitboards[WHITE_QUEEN];
+    if ((piece.bitboards[WHITE_KNIGHT] >> position) & 1ULL)
+        return piece.bitboards[WHITE_KNIGHT];
     static uint64_t nullPiece = 0x0ULL;
     return nullPiece; 
  }
 
 
   uint64_t& ChessBoard::PieceSelected(int& position) {
-    if ((piece.whitePawns >> position) & 1ULL)
-        return piece.whitePawns;
-    if ((piece.whiteRooks >> position) & 1ULL)
-        return piece.whiteRooks;
-    if ((piece.whiteBishops >> position) & 1ULL)
-        return piece.whiteBishops;
-    if ((piece.whiteKing >> position) & 1ULL)
-        return piece.whiteKing;
-    if ((piece.whiteQueen >> position) & 1ULL)
-        return piece.whiteQueen;
-    if ((piece.whiteKnights >> position) & 1ULL)
-        return piece.whiteKnights;
-    if ((piece.blackPawns >> position) & 1ULL)
-        return piece.blackPawns;
-    if ((piece.blackRooks >> position) & 1ULL)
-        return piece.blackRooks;
-    if ((piece.blackBishops >> position) & 1ULL)
-        return piece.blackBishops;
-    if ((piece.blackKing >> position) & 1ULL)
-        return piece.blackKing;
-    if ((piece.blackQueen >> position) & 1ULL)
-        return piece.blackQueen;
-    if ((piece.blackKnights >> position) & 1ULL)
-        return piece.blackKnights;
+    if ((piece.bitboards[WHITE_PAWN] >> position) & 1ULL)
+        return piece.bitboards[WHITE_PAWN];
+    if ((piece.bitboards[WHITE_ROOK] >> position) & 1ULL)
+        return piece.bitboards[WHITE_ROOK];
+    if ((piece.bitboards[WHITE_BISHOP] >> position) & 1ULL)
+        return piece.bitboards[WHITE_BISHOP];
+    if ((piece.bitboards[WHITE_KING] >> position) & 1ULL)
+        return piece.bitboards[WHITE_KING];
+    if ((piece.bitboards[WHITE_QUEEN] >> position) & 1ULL)
+        return piece.bitboards[WHITE_QUEEN];
+    if ((piece.bitboards[WHITE_KNIGHT] >> position) & 1ULL)
+        return piece.bitboards[WHITE_KNIGHT];
+    if ((piece.bitboards[BLACK_PAWN] >> position) & 1ULL)
+        return piece.bitboards[BLACK_PAWN];
+    if ((piece.bitboards[BLACK_ROOK] >> position) & 1ULL)
+        return piece.bitboards[BLACK_ROOK];
+    if ((piece.bitboards[BLACK_BISHOP] >> position) & 1ULL)
+        return piece.bitboards[BLACK_BISHOP];
+    if ((piece.bitboards[BLACK_KING] >> position) & 1ULL)
+        return piece.bitboards[BLACK_KING];
+    if ((piece.bitboards[BLACK_QUEEN] >> position) & 1ULL)
+        return piece.bitboards[BLACK_QUEEN];
+    if ((piece.bitboards[BLACK_KNIGHT] >> position) & 1ULL)
+        return piece.bitboards[BLACK_KNIGHT];
     
     static uint64_t nullPiece = 0x0ULL;
     return nullPiece;
@@ -177,25 +177,25 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
 
  inline bool ChessBoard::isThereAWhitePieceAt(int position) {
     uint64_t mask = 1ULL << position;
-    return mask & (piece.whiteBishops | piece.whiteKing |
-                   piece.whiteKnights | piece.whitePawns |
-                   piece.whiteQueen | piece.whiteRooks);
+    return mask & (piece.bitboards[WHITE_BISHOP] | piece.bitboards[WHITE_KING] |
+                   piece.bitboards[WHITE_KNIGHT] | piece.bitboards[WHITE_PAWN] |
+                   piece.bitboards[WHITE_QUEEN] | piece.bitboards[WHITE_ROOK]);
  }
 
  inline bool ChessBoard::isThereABlackPieceAt(int position) {
     uint64_t mask = 1ULL << position;
-    return mask & (piece.blackBishops | piece.blackKing |
-                   piece.blackKnights | piece.blackPawns |
-                   piece.blackQueen | piece.blackRooks);
+    return mask & (piece.bitboards[BLACK_BISHOP] | piece.bitboards[BLACK_KING] |
+                   piece.bitboards[BLACK_KNIGHT] | piece.bitboards[BLACK_PAWN] |
+                   piece.bitboards[BLACK_QUEEN] | piece.bitboards[BLACK_ROOK]);
  }
  
 
 inline bool ChessBoard::isThereAPieceAt(int position) {
     uint64_t mask = 1ULL << position;
-    return mask & (piece.whitePawns | piece.whiteRooks | piece.whiteBishops |
-                   piece.whiteKnights | piece.whiteQueen | piece.whiteKing |
-                   piece.blackPawns | piece.blackRooks | piece.blackBishops |
-                   piece.blackKnights | piece.blackQueen | piece.blackKing);
+    return mask & (piece.bitboards[WHITE_PAWN] | piece.bitboards[WHITE_ROOK] | piece.bitboards[WHITE_BISHOP] |
+                   piece.bitboards[WHITE_KNIGHT] | piece.bitboards[WHITE_QUEEN] | piece.bitboards[WHITE_KING] |
+                   piece.bitboards[BLACK_PAWN] | piece.bitboards[BLACK_ROOK] | piece.bitboards[BLACK_BISHOP] |
+                   piece.bitboards[BLACK_KNIGHT] | piece.bitboards[BLACK_QUEEN] | piece.bitboards[BLACK_KING]);
 }
 
 
@@ -889,19 +889,19 @@ void ChessBoard::undo(int positionFrom, int positionTo, uint64_t* piece, uint64_
 int ChessBoard::evaluate() {
     int score = 0;
 
-    score += __builtin_popcountll(piece.whitePawns);
-    score += __builtin_popcountll(piece.whiteBishops) * 3;
-    score += __builtin_popcountll(piece.whiteKnights) * 3;
-    score += __builtin_popcountll(piece.whiteRooks) * 5;
-    score += __builtin_popcountll(piece.whiteQueen) * 9;
-    score += __builtin_popcountll(piece.whiteKing) * 20;
+    score += __builtin_popcountll(piece.bitboards[WHITE_PAWN]);
+    score += __builtin_popcountll(piece.bitboards[WHITE_BISHOP]) * 3;
+    score += __builtin_popcountll(piece.bitboards[WHITE_KNIGHT]) * 3;
+    score += __builtin_popcountll(piece.bitboards[WHITE_ROOK]) * 5;
+    score += __builtin_popcountll(piece.bitboards[WHITE_QUEEN]) * 9;
+    score += __builtin_popcountll(piece.bitboards[WHITE_KING]) * 20;
 
-    score -= __builtin_popcountll(piece.blackPawns);
-    score -= __builtin_popcountll(piece.blackBishops) * 3;
-    score -= __builtin_popcountll(piece.blackKnights) * 3;
-    score -= __builtin_popcountll(piece.blackRooks) * 5;
-    score -= __builtin_popcountll(piece.blackQueen) * 9;
-    score -= __builtin_popcountll(piece.blackKing) * 20;
+    score -= __builtin_popcountll(piece.bitboards[BLACK_PAWN]);
+    score -= __builtin_popcountll(piece.bitboards[BLACK_BISHOP]) * 3;
+    score -= __builtin_popcountll(piece.bitboards[BLACK_KNIGHT]) * 3;
+    score -= __builtin_popcountll(piece.bitboards[BLACK_ROOK]) * 5;
+    score -= __builtin_popcountll(piece.bitboards[BLACK_QUEEN]) * 9;
+    score -= __builtin_popcountll(piece.bitboards[BLACK_KING]) * 20;
 
     return score;
 }
