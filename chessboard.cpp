@@ -72,15 +72,21 @@ void ChessBoard::draw(sf::RenderWindow& window) {
 }
 
 
+std::vector<int> ChessBoard::getPositionsPiece(uint64_t piece) {
+    std::vector<int> positions;
+
+    while (piece) {
+        int position = __builtin_ctzll(piece);
+        positions.push_back(position);
+        piece &= piece - 1;
+    }
+
+    return positions;
+}
+
 void ChessBoard::drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::Sprite & sprite) {
 
-    std::vector<int> positions;
-    uint64_t copyPawns = piece;
-    while (copyPawns) {
-        int square = __builtin_ctzll(copyPawns); 
-        positions.push_back(square);
-        copyPawns &= copyPawns - 1; 
-    }
+    std::vector<int> positions = getPositionsPiece(piece);
 
     for (int n : positions) {
         sprite.setPosition( (n % 8) * squareSize  , (squareSize * 7) - (n / 8) * squareSize);
@@ -916,6 +922,26 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
     *pieceFrom &= ~(1ULL << from); // delete the piece
     *pieceFrom |= (1ULL << to); // add the new position of the piece
     *pieceTo &= ~(1ULL << to); // delete a piece if there is a piece
+ }
+
+
+int ChessBoard::minMax(int depth, bool isWhite) {
+    if (depth == 0)
+        return evaluate();
+
+    if (isWhite) {
+        int max_ = 1000;
+
+        //possibilityWhitePawn
+
+
+
+        return max_;
+    } else {
+        int min_ = -1000;
+
+        return min_;
+    }
  }
  
 

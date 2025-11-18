@@ -73,6 +73,8 @@ public:
     inline bool isThereABlackPieceAt(int position);
     inline bool isThereAPieceAt(int position);
 
+    std::vector<int> getPositionsPiece(uint64_t piece);
+
     int possibilityWhiteTower(int position, int* moves);
     int possibilityBlackTower(int position, int* moves);
 
@@ -96,6 +98,8 @@ public:
     void movePiece(uint64_t* pieceFrom, uint64_t* pieceTo, int from, int to);
     void undo(int positionFrom, int positionTo, uint64_t* piece, uint64_t* pieceCaptured);
     int evaluate();
+
+    int minMax(int depth, bool isWhite);
 };
 
 
