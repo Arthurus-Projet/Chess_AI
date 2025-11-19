@@ -13,7 +13,15 @@ enum PieceType {
     BLACK_BISHOP,   // = 8
     BLACK_ROOK,     // = 9
     BLACK_QUEEN,    // = 10
-    BLACK_KING      // = 11
+    BLACK_KING,      // = 11
+    NONE            // = 12 (No piece)
+};
+
+struct Move {
+    uint8_t from;
+    uint8_t to;
+    PieceType piece;          
+    PieceType capturedType;   
 };
 
 struct Piece {
