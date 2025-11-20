@@ -18,8 +18,8 @@ enum PieceType {
 };
 
 struct Move {
-    uint8_t from;
-    uint8_t to;
+    int from;
+    int to;
     PieceType piece;          
     PieceType capturedType;   
 };
@@ -109,7 +109,8 @@ public:
     void undo(int positionFrom, int positionTo, uint64_t* piece, uint64_t* pieceCaptured);
     int evaluate();
     std::vector<Move> allMovesForWhite();
-    inline PieceType getPieceTypeisThereABlackPieceAt(int position);
+    inline PieceType getPieceTypeIfThereIsABlackPieceAt(int position);
+    Move getMoveForAPosition(int position, int to, PieceType pieceType);
 
     int minMax(int depth, bool isWhite);
 };

@@ -105,6 +105,8 @@ int main()
                         pieceLeftClick2 = &board.PieceSelected(position2);
                         bool valideMove = false;
 
+                        board.allMovesForWhite();
+
                         for (int i = 0; i < nMoves; i++) {
                             if (position2 == moves[i]) {
                                 board.movePiece(pieceLeftClick, pieceLeftClick2, position, position2);
