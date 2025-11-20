@@ -13,7 +13,7 @@ enum PieceType {
     BLACK_BISHOP,   // = 8
     BLACK_ROOK,     // = 9
     BLACK_QUEEN,    // = 10
-    BLACK_KING,      // = 11
+    BLACK_KING,     // = 11
     NONE            // = 12 (No piece)
 };
 
@@ -108,6 +108,8 @@ public:
     void movePiece(uint64_t* pieceFrom, uint64_t* pieceTo, int from, int to);
     void undo(int positionFrom, int positionTo, uint64_t* piece, uint64_t* pieceCaptured);
     int evaluate();
+    std::vector<Move> allMovesForWhite();
+    inline PieceType getPieceTypeisThereABlackPieceAt(int position);
 
     int minMax(int depth, bool isWhite);
 };

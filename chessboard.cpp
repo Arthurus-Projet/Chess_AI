@@ -188,6 +188,28 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
                    piece.bitboards[BLACK_KNIGHT] | piece.bitboards[BLACK_PAWN] |
                    piece.bitboards[BLACK_QUEEN] | piece.bitboards[BLACK_ROOK]);
  }
+
+
+  inline PieceType ChessBoard::getPieceTypeisThereABlackPieceAt(int position) {
+    uint64_t mask = 1ULL << position;
+
+    if (mask & (piece.bitboards[BLACK_PAWN])) 
+        return BLACK_PAWN;
+    if (mask & (piece.bitboards[BLACK_BISHOP])) 
+        return BLACK_BISHOP;
+    if (mask & (piece.bitboards[BLACK_KNIGHT])) 
+        return BLACK_KNIGHT;
+    if (mask & (piece.bitboards[BLACK_ROOK])) 
+        return BLACK_ROOK;
+    if (mask & (piece.bitboards[BLACK_QUEEN])) 
+        return BLACK_QUEEN;
+    if (mask & (piece.bitboards[BLACK_KING])) 
+        return BLACK_KING;
+
+    return NONE;
+ }
+ 
+ 
  
 
 inline bool ChessBoard::isThereAPieceAt(int position) {
@@ -922,6 +944,34 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
     *pieceFrom &= ~(1ULL << from); // delete the piece
     *pieceFrom |= (1ULL << to); // add the new position of the piece
     *pieceTo &= ~(1ULL << to); // delete a piece if there is a piece
+ }
+
+
+ std::vector<Move> ChessBoard::allMovesForWhite() {
+    std::vector<Move> moves;
+
+    std::vector<int> positions = getPositionsPiece(piece.bitboards[WHITE_PAWN]);
+
+    for (int position : positions) {
+
+        int moves[4];
+        int counts = possibilityWhitePawn(position, moves);
+
+        for (int i = 0; i < counts; ++i) {
+            Move move;
+            move.from = (uint8_t) position;
+            move.to = (uint8_t) moves[i];
+            move.piece = WHITE_PAWN;
+            //if ()
+        }
+
+    }
+
+    return moves;
+
+    
+
+
  }
 
 
