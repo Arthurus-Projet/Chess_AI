@@ -1043,17 +1043,24 @@ int ChessBoard::minMax(int depth, bool isWhite) {
         return evaluate();
 
     if (isWhite) {
-        int max_ = 1000;
+        int max_ = -1000;
 
         std::vector<Move> moves = allMovesForWhite();
 
         for (const Move& move : moves) {
-            piece.bitboards[move.piece] &= ~(move.from << 1ULL);
-            piece.bitboards[move.piece] |= (move.to << 1ULL);
+            piece.bitboards[move.piece] &= ~(1ULL << move.from);
+            piece.bitboards[move.piece] |= (1ULL << move.to) ;
             if (move.capturedType != NONE)
-                piece.bitboards[move.capturedType] &= ~(move.to << 1ULL);
+                piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
+
             int eval = minMax(depth -1, false);
-            
+            max_ = std::max(max_, eval);
+            // Undo
+            piece.bitboards[move.piece] |= (1ULL << move.from) ;
+            piece.bitboards[move.piece] &= ~(1ULL << move.to);
+            if (move.capturedType != NONE) 
+                piece.bitboards[move.capturedType] |= (1ULL << move.to);
+
             
         }
 
@@ -1061,7 +1068,7 @@ int ChessBoard::minMax(int depth, bool isWhite) {
 
         return max_;
     } else {
-        int min_ = -1000;
+        int min_ = 1000;
 
         return min_;
     }
