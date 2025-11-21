@@ -109,6 +109,7 @@ public:
     void undo(int positionFrom, int positionTo, uint64_t* piece, uint64_t* pieceCaptured);
     int evaluate();
     std::vector<Move> allMovesForWhite();
+    std::vector<Move> allMovesForBlack();
     inline PieceType getPieceTypeIfThereIsABlackPieceAt(int position);
     Move getMoveForAPosition(int position, int to, PieceType pieceType);
 
