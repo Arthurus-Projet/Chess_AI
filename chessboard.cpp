@@ -952,14 +952,13 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
     move.to =  to;
     move.piece = pieceType;
     move.capturedType = getPieceTypeIfThereIsABlackPieceAt(to);
-    //std::cout << "-> " << move.to << " " << to <<std::endl;
+    
     return move;
  }
 
 
  std::vector<Move> ChessBoard::allMovesForWhite() {
     std::vector<Move> movesList;
-
 
     // WHITE_PAWN
     std::vector<int> positions = getPositionsPiece(piece.bitboards[WHITE_PAWN]);
@@ -1046,7 +1045,17 @@ int ChessBoard::minMax(int depth, bool isWhite) {
     if (isWhite) {
         int max_ = 1000;
 
-        //possibilityWhitePawn
+        std::vector<Move> moves = allMovesForWhite();
+
+        for (const Move& move : moves) {
+            piece.bitboards[move.piece] &= ~(move.from << 1ULL);
+            piece.bitboards[move.piece] |= (move.to << 1ULL);
+            if (move.capturedType != NONE)
+                piece.bitboards[move.capturedType] &= ~(move.to << 1ULL);
+            int eval = minMax(depth -1, false);
+            
+            
+        }
 
 
 
