@@ -190,6 +190,29 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
  }
 
 
+
+ 
+
+  inline PieceType ChessBoard::getPieceTypeIfThereIsAWhitePieceAt(int position) {
+    uint64_t mask = 1ULL << position;
+
+    if (mask & (piece.bitboards[WHITE_PAWN])) 
+        return WHITE_PAWN;
+    if (mask & (piece.bitboards[WHITE_BISHOP])) 
+        return WHITE_BISHOP;
+    if (mask & (piece.bitboards[WHITE_KNIGHT])) 
+        return WHITE_KNIGHT;
+    if (mask & (piece.bitboards[WHITE_ROOK])) 
+        return WHITE_ROOK;
+    if (mask & (piece.bitboards[WHITE_QUEEN])) 
+        return WHITE_QUEEN;
+    if (mask & (piece.bitboards[WHITE_KING])) 
+        return WHITE_KING;
+
+    return NONE;
+
+  }
+
   inline PieceType ChessBoard::getPieceTypeIfThereIsABlackPieceAt(int position) {
     uint64_t mask = 1ULL << position;
 
