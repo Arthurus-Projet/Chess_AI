@@ -115,6 +115,7 @@ public:
     Move getMoveForAPosition(int position, int to, PieceType pieceType, bool white);
 
     int minMax(int depth, bool isWhite);
+    void AI_chess();
 };
 
 

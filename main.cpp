@@ -110,7 +110,7 @@ int main()
                         for (int i = 0; i < nMoves; i++) {
                             if (position2 == moves[i]) {
                                 board.movePiece(pieceLeftClick, pieceLeftClick2, position, position2);
-                             
+                                board.AI_chess();
                                 break;
                             }
 

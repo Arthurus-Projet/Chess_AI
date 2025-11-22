@@ -1053,13 +1053,10 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
             movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_KING, true));
     }
 
+    //for (Move move_ : movesList)
+    //    std::cout << move_.to << " <-" << std::endl;
 
-    std::cout << "[Debug start]" << std::endl;
 
-    for (Move move_ : movesList)
-        std::cout << move_.to << " <-" << std::endl;
-
-    std::cout << "[Debug end]" << std::endl;
 
     return movesList;
  }
@@ -1135,13 +1132,8 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
             movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_KING, false));
     }
 
-
-    std::cout << "[Debug start]" << std::endl;
-
-    for (Move move_ : movesList)
-        std::cout << move_.to << " <-" << std::endl;
-
-    std::cout << "[Debug end]" << std::endl;
+    //for (Move move_ : movesList)
+    //    std::cout << move_.to << " <-" << std::endl;
 
     return movesList;
  }
@@ -1198,6 +1190,42 @@ int ChessBoard::minMax(int depth, bool isWhite) {
         return min_;
     }
  }
+
+
+void ChessBoard::AI_chess() {
+
+    std::vector<Move> moves = allMovesForBlack();
+    int max_ = 1000;
+    Move move_;
+    for (const Move& move : moves) {
+
+        piece.bitboards[move.piece] &= ~(1ULL << move.from);
+        piece.bitboards[move.piece] |= (1ULL << move.to) ;
+        if (move.capturedType != NONE)
+            piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
+
+
+        int eval = minMax(3, true);
+        if (eval < max_) {
+            move_ = move;
+            max_ = eval;
+            }
+
+        // Undo
+        piece.bitboards[move.piece] |= (1ULL << move.from) ;
+        piece.bitboards[move.piece] &= ~(1ULL << move.to);
+        if (move.capturedType != NONE) 
+            piece.bitboards[move.capturedType] |= (1ULL << move.to);
+
+    }
+
+    // DO THE BEST MOVE
+    piece.bitboards[move_.piece] &= ~(1ULL << move_.from);
+    piece.bitboards[move_.piece] |= (1ULL << move_.to) ;
+    if (move_.capturedType != NONE)
+        piece.bitboards[move_.capturedType] &= ~( 1ULL << move_.to);
+
+}
  
 
 
