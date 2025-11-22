@@ -946,15 +946,19 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
     *pieceTo &= ~(1ULL << to); // delete a piece if there is a piece
  }
 
- Move ChessBoard::getMoveForAPosition(int position, int to, PieceType pieceType) {
+ Move ChessBoard::getMoveForAPosition(int position, int to, PieceType pieceType, bool white) {
     Move move;
     move.from = position;
     move.to =  to;
     move.piece = pieceType;
-    move.capturedType = getPieceTypeIfThereIsABlackPieceAt(to);
+    if (white)
+        move.capturedType = getPieceTypeIfThereIsABlackPieceAt(to);
+    else
+        move.capturedType = getPieceTypeIfThereIsAWhitePieceAt(to);
     
     return move;
  }
+
 
 
  std::vector<Move> ChessBoard::allMovesForWhite() {

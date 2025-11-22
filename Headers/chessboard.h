@@ -111,7 +111,7 @@ public:
     std::vector<Move> allMovesForWhite();
     std::vector<Move> allMovesForBlack();
     inline PieceType getPieceTypeIfThereIsABlackPieceAt(int position);
-    Move getMoveForAPosition(int position, int to, PieceType pieceType);
+    Move getMoveForAPosition(int position, int to, PieceType pieceType, bool white);
 
     int minMax(int depth, bool isWhite);
 };
