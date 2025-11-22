@@ -995,7 +995,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityWhitePawn(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_PAWN));
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_PAWN, true));
     }
 
     // WHITE_KNIGHT
@@ -1006,7 +1006,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityWhiteKnight(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_KNIGHT));
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_KNIGHT, true));
     }
 
     // WHITE_BISHOP
@@ -1017,7 +1017,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityWhiteBishop(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_BISHOP));
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_BISHOP, true));
     }
 
     // WHITE_ROOK
@@ -1028,7 +1028,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityWhiteTower(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_ROOK));
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_ROOK, true));
     }
 
     // WHITE_QUEEN
@@ -1039,7 +1039,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityWhiteQueen(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_QUEEN));
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_QUEEN, true));
     }
 
     // WHITE_KING
@@ -1050,7 +1050,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityWhiteKing(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_KING));
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_KING, true));
     }
 
 
@@ -1077,7 +1077,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityBlackPawn(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_PAWN));
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_PAWN, false));
     }
 
     // BLACK_KNIGHT
@@ -1088,7 +1088,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityBlackKnight(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_KNIGHT));
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_KNIGHT, false));
     }
 
     // BLACK_BISHOP
@@ -1099,7 +1099,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityBlackBishop(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_BISHOP));
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_BISHOP, false));
     }
 
     // BLACK_ROOK
@@ -1110,7 +1110,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityBlackTower(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_ROOK));
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_ROOK, false));
     }
 
     // BLACK_QUEEN
@@ -1121,7 +1121,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityBlackQueen(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_QUEEN));
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_QUEEN, false));
     }
 
     // BLACK_KING
@@ -1132,7 +1132,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
         int counts = possibilityBlackKing(position, moves);
 
         for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_KING));
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_KING, false));
     }
 
 
@@ -1173,11 +1173,27 @@ int ChessBoard::minMax(int depth, bool isWhite) {
 
         }
 
-
-
         return max_;
     } else {
         int min_ = 1000;
+
+        std::vector<Move> moves = allMovesForBlack();
+
+        for (const Move& move : moves) {
+            piece.bitboards[move.piece] &= ~(1ULL << move.from);
+            piece.bitboards[move.piece] |= (1ULL << move.to) ;
+            if (move.capturedType != NONE)
+                piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
+
+            int eval = minMax(depth -1, true);
+            min_ = std::min(min_, eval);
+            // Undo
+            piece.bitboards[move.piece] |= (1ULL << move.from) ;
+            piece.bitboards[move.piece] &= ~(1ULL << move.to);
+            if (move.capturedType != NONE) 
+                piece.bitboards[move.capturedType] |= (1ULL << move.to);
+
+        }
 
         return min_;
     }
