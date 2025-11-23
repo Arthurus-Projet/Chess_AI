@@ -624,22 +624,20 @@ int ChessBoard::possibilityBlackPawn(int position, int* moves) {
     if (!isThereAPieceAt(position - 8)) {
         moves[count++] = position - 8;
 
-        if ((position >> 3) == 6 && !isThereAPieceAt(position - 16)) // (position >> 3) == 1  [position < 16 && position > 7]
+        if ((position >> 3) == 6 && !isThereAPieceAt(position - 16)) // (position >> 3) == 6  [position < 16 && position > 7]
             moves[count++] = position - 16;                            // 8 = 1000, 15 = 1111
     }
 
-    // left part of the board
-    if (((position & 7) != 0) && isThereAWhitePieceAt(position - 7)) 
+    // right part of the board
+    if (((position & 7) != 7) && isThereAWhitePieceAt(position - 7)) 
         moves[count++] = position - 7;
 
-    // right part of the board
-    if (((position & 7) != 7) && isThereAWhitePieceAt(position - 9))
+    // left part of the board
+    if (((position & 7) != 0) && isThereAWhitePieceAt(position - 9))
         moves[count++] = position - 9;
 
     return count;
  }
-
-
 
 
 
