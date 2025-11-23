@@ -4,3 +4,4 @@
 *.out
 *.json
 .vscode/*.json
+chess

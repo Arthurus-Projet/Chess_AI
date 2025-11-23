@@ -108,6 +108,7 @@ public:
     void movePiece(uint64_t* pieceFrom, uint64_t* pieceTo, int from, int to);
     void undo(int positionFrom, int positionTo, uint64_t* piece, uint64_t* pieceCaptured);
     int evaluate();
+    int evaluatePawnPower();
     std::vector<Move> allMovesForWhite();
     std::vector<Move> allMovesForBlack();
     inline PieceType getPieceTypeIfThereIsABlackPieceAt(int position);

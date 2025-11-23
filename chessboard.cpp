@@ -641,6 +641,8 @@ int ChessBoard::possibilityBlackPawn(int position, int* moves) {
 
 
 
+
+
  
 int ChessBoard::possibilityWhiteQueen(int position, int* moves) {
 
@@ -950,6 +952,50 @@ int ChessBoard::evaluate() {
 
     return score;
 }
+
+int ChessBoard::evaluatePawnPower() {
+    int score = 0;
+    int coef = 1;
+
+
+    uint64_t pawnWhiteBitboard = piece.bitboards[WHITE_PAWN];
+
+    while (pawnWhiteBitboard) {
+        int position = __builtin_ctzll(pawnWhiteBitboard);
+
+        score += (position >> 3);  // = /8    
+        // pawn = 3, then 4 when he move then 5 ...
+   
+        pawnWhiteBitboard &= pawnWhiteBitboard - 1;
+    }
+    //score += __builtin_popcountll(piece.bitboards[WHITE_PAWN]);
+
+
+    score += __builtin_popcountll(piece.bitboards[WHITE_BISHOP]) * 3 * coef;
+    score += __builtin_popcountll(piece.bitboards[WHITE_KNIGHT]) * 3 * coef;
+    score += __builtin_popcountll(piece.bitboards[WHITE_ROOK]) * 5 * coef;
+    score += __builtin_popcountll(piece.bitboards[WHITE_QUEEN]) * 9 * coef;
+    score += __builtin_popcountll(piece.bitboards[WHITE_KING]) * 20 * coef;
+
+    //score -= __builtin_popcountll(piece.bitboards[BLACK_PAWN]);
+    score -= __builtin_popcountll(piece.bitboards[BLACK_BISHOP]) * 3 * coef;
+    score -= __builtin_popcountll(piece.bitboards[BLACK_KNIGHT]) * 3 * coef;
+    score -= __builtin_popcountll(piece.bitboards[BLACK_ROOK]) * 5 * coef;
+    score -= __builtin_popcountll(piece.bitboards[BLACK_QUEEN]) * 9 * coef;
+    score -= __builtin_popcountll(piece.bitboards[BLACK_KING]) * 20 * coef;
+
+    uint64_t pawnBlackBitboard = piece.bitboards[BLACK_PAWN];
+
+    while (pawnBlackBitboard) {
+        int position = __builtin_ctzll(pawnBlackBitboard);
+
+        score -= 7 - (position >> 3);      
+
+        pawnBlackBitboard &= pawnBlackBitboard - 1;
+    }
+
+    return score;
+}
  
 
 int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
@@ -1142,7 +1188,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
 
 int ChessBoard::minMax(int depth, bool isWhite) {
     if (depth == 0)
-        return evaluate();
+        return evaluatePawnPower();
 
     if (isWhite) {
         int max_ = -1000;
