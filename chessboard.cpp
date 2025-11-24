@@ -1250,6 +1250,7 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
         max_ = -1000;
         moves = allMovesForWhite();
         }
+
     Move move_;
     for (const Move& move : moves) {
 
@@ -1259,7 +1260,12 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
             piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
 
 
-        int eval = minMax(3, true);
+        int eval;
+        if (AIplaysBlack) {
+            eval = minMax(3, true); 
+        } else {
+            eval = minMax(3, false); 
+        }
 
         if (AIplaysBlack) {
             if (eval < min_) {
