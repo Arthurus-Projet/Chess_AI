@@ -1236,10 +1236,20 @@ int ChessBoard::minMax(int depth, bool isWhite) {
  }
 
 
-void ChessBoard::AI_chess() {
+void ChessBoard::AI_chess(bool AIplaysBlack) {
 
-    std::vector<Move> moves = allMovesForBlack();
-    int max_ = 1000;
+    
+    std::vector<Move> moves;
+    int max_;
+    int min_;
+
+    if (AIplaysBlack) {
+        min_ = 1000;
+        moves = allMovesForBlack();
+    } else {
+        max_ = -1000;
+        moves = allMovesForWhite();
+        }
     Move move_;
     for (const Move& move : moves) {
 
@@ -1250,10 +1260,18 @@ void ChessBoard::AI_chess() {
 
 
         int eval = minMax(3, true);
-        if (eval < max_) {
-            move_ = move;
-            max_ = eval;
-            }
+
+        if (AIplaysBlack) {
+            if (eval < min_) {
+                move_ = move;
+                min_ = eval;
+                }
+        } else {
+            if (eval > max_) {
+                move_ = move;
+                max_ = eval;
+                }
+        }
 
         // Undo
         piece.bitboards[move.piece] |= (1ULL << move.from) ;
