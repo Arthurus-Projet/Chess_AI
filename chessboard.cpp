@@ -1308,7 +1308,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     for (int i = 1; ((position + i) & 7) != 0 && (position + i) < 64; i++) { 
         if (isThereAPieceAt(position + i)) { 
             mask = 1ULL << (position + i); 
-            if (mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) 
+            if ((mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
                 return true; 
             break; 
         }
@@ -1318,7 +1318,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     for (int i = -1; ((position + i) & 7) != 7 && (position + i) >= 0; i--) {
         if (isThereAPieceAt(position + i)) { 
             mask = 1ULL << (position + i); 
-            if (mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) 
+            if ((mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
                 return true; 
             break; 
         }
@@ -1328,7 +1328,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     for (int i = 8; (position + i) < 64; i += 8) {
         if (isThereAPieceAt(position + i)) { 
             mask = 1ULL << (position + i); 
-            if (mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) 
+            if ((mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
                 return true; 
             break; 
         }
@@ -1338,7 +1338,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     for (int i = -8; (position + i) >= 0; i -= 8) {
         if (isThereAPieceAt(position + i)) { 
             mask = 1ULL << (position + i); 
-            if (mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) 
+            if ((mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
                 return true; 
             break; 
         }
@@ -1351,7 +1351,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     for (int i = 9; ((position + i) & 7) != 0 && (position + i) < 64; i+= 9) {
         if (isThereAPieceAt(position + i)) { 
             mask = 1ULL << (position + i); 
-            if (mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) 
+            if ((mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
                 return true; 
             break; 
         }
@@ -1361,7 +1361,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     for (int i = 7; (((position + i) & 7) != 7) && (position + i) < 64; i+= 7) {
        if (isThereAPieceAt(position + i)) { 
             mask = 1ULL << (position + i); 
-            if (mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) 
+            if ((mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
                 return true; 
             break; 
         }
@@ -1371,7 +1371,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     for (int i = -7; (((position + i) & 7) != 0) && (position + i) >= 0; i-= 7) {
         if (isThereAPieceAt(position + i)) { 
             mask = 1ULL << (position + i); 
-            if (mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) 
+            if ((mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
                 return true; 
             break; 
         }
@@ -1381,7 +1381,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     for (int i = -9; (((position + i) & 7) != 7) && (position + i) >= 0; i-= 9) {
         if (isThereAPieceAt(position + i)) { 
             mask = 1ULL << (position + i); 
-            if (mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) 
+            if ((mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
                 return true; 
             break; 
         }
@@ -1393,7 +1393,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     if (((position + 17) < 64) && (position & 7) != 7) {
         if (isThereAPieceAt(position + 17)) { 
             mask = 1ULL << (position + 17); 
-            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT]) 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
                 return true; 
     
         }
@@ -1413,7 +1413,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     if (((position + 10) < 64) && (position & 7) < 6) {
         if (isThereAPieceAt(position + 10)) { 
             mask = 1ULL << (position + 10); 
-            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT]) 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
                 return true; 
        
         }
@@ -1423,7 +1423,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     if (((position - 6) >= 0) && (position & 7) < 6) {
         if (isThereAPieceAt(position - 6)) { 
             mask = 1ULL << (position - 6); 
-            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT]) 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
                 return true; 
     
         }
@@ -1434,7 +1434,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     if (((position - 10) >= 0) && (position & 7) > 1) {
         if (isThereAPieceAt(position - 10)) { 
             mask = 1ULL << (position - 10); 
-            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT]) 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
                 return true; 
        
         }
@@ -1455,7 +1455,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     if (((position + 15) < 64) && (position & 7) != 0) {
         if (isThereAPieceAt(position + 15)) { 
             mask = 1ULL << (position + 15); 
-            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT]) 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
                 return true; 
         
         }
@@ -1466,7 +1466,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
     if (((position - 17) >= 0) && (position & 7) != 0) {
         if (isThereAPieceAt(position - 17)) { 
             mask = 1ULL << (position - 17); 
-            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT]) 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
                 return true; 
             
         }
@@ -1475,7 +1475,7 @@ bool ChessBoard::isInCheck(bool isWhite) {
 
     //  Pawn
 
-    if (!isWhite) {
+    if (isWhite) {
 
         // left part of the board
         if (((position & 7) != 0) && isThereABlackPieceAt(position + 7)) {
