@@ -91,8 +91,15 @@ int main()
                                 
                             possibilityMove_ = 0x0ULL;
                             for (int i = 0; i < nMoves; i++) {
-                                std::cout << "Pawn white : " << moves[i] << std::endl;
-                                possibilityMove_ |= (1ULL << moves[i]);
+
+                                uint64_t *pieceTo = &board.PieceSelected(moves[i]);
+                                board.movePiece(pieceLeftClick, &board.PieceSelected(moves[i]), position, moves[i]);
+                                
+                                std::cout << "is in check  " << board.isInCheck(false) << std::endl;
+                                if (!board.isInCheck(true))
+                                    possibilityMove_ |= (1ULL << moves[i]);
+                                board.unMovePiece(pieceLeftClick, pieceTo, position, moves[i]);
+
                             }
                         }
                             

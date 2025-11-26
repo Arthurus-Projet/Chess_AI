@@ -1016,7 +1016,8 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
  void ChessBoard::unMovePiece(uint64_t* pieceFrom, uint64_t* pieceTo, int from, int to) {
     *pieceFrom |= (1ULL << from); // get back the old piece
     *pieceFrom &= ~(1ULL << to); // delete the new position of the piece
-    //*pieceTo |= (1ULL << to); // add a piece if there is a piece
+    //if ((*pieceTo != 0x0ULL) && (*pieceFrom != *pieceTo))
+        *pieceTo |= (1ULL << to); // add a piece if there is a piece
  }
 
  Move ChessBoard::getMoveForAPosition(int position, int to, PieceType pieceType, bool white) {
