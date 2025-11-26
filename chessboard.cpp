@@ -1038,19 +1038,10 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
  std::vector<Move> ChessBoard::allMovesForWhite() {
     std::vector<Move> movesList;
 
-    // WHITE_PAWN
-    std::vector<int> positions = getPositionsPiece(piece.bitboards[WHITE_PAWN]);
-
-    for (int position : positions) {
-        int moves[4];
-        int counts = possibilityWhitePawn(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_PAWN, true));
-    }
+    
 
     // WHITE_KNIGHT
-    positions = getPositionsPiece(piece.bitboards[WHITE_KNIGHT]);
+    std::vector<int> positions = getPositionsPiece(piece.bitboards[WHITE_KNIGHT]);
 
     for (int position : positions) {
         int moves[8];
@@ -1104,6 +1095,17 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
             movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_KING, true));
     }
 
+    // WHITE_PAWN
+    positions = getPositionsPiece(piece.bitboards[WHITE_PAWN]);
+
+    for (int position : positions) {
+        int moves[4];
+        int counts = possibilityWhitePawn(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_PAWN, true));
+    }
+
     //for (Move move_ : movesList)
     //    std::cout << move_.to << " <-" << std::endl;
 
@@ -1117,19 +1119,10 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
  std::vector<Move> ChessBoard::allMovesForBlack() {
     std::vector<Move> movesList;
 
-    // BLACK_PAWN
-    std::vector<int> positions = getPositionsPiece(piece.bitboards[BLACK_PAWN]);
-
-    for (int position : positions) {
-        int moves[4];
-        int counts = possibilityBlackPawn(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_PAWN, false));
-    }
+    
 
     // BLACK_KNIGHT
-    positions = getPositionsPiece(piece.bitboards[BLACK_KNIGHT]);
+    std::vector<int> positions = getPositionsPiece(piece.bitboards[BLACK_KNIGHT]);
 
     for (int position : positions) {
         int moves[8];
@@ -1183,22 +1176,46 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
             movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_KING, false));
     }
 
+    // BLACK_PAWN
+    positions = getPositionsPiece(piece.bitboards[BLACK_PAWN]);
+
+    for (int position : positions) {
+        int moves[4];
+        int counts = possibilityBlackPawn(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_PAWN, false));
+    }
+
     //for (Move move_ : movesList)
     //    std::cout << move_.to << " <-" << std::endl;
 
     return movesList;
  }
 
+void ChessBoard::moveOrdering(std::vector<Move>* moves) {
+
+    int index = 0;
+    for (int i = 0; i < moves->size(); ++i) {
+
+        if ((*moves)[i].capturedType != NONE) {
+            std::swap((*moves)[index], (*moves)[i]);
+            ++index;
+            }
+    }
+ }
+
 
 
 int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
     if (depth == 0)
-        return evaluatePawnPower();
+        return evaluate();
 
     if (isWhite) {
         int max_ = -1000;
 
         std::vector<Move> moves = allMovesForWhite();
+        moveOrdering(&moves);
 
         for (const Move& move : moves) {
             piece.bitboards[move.piece] &= ~(1ULL << move.from);
@@ -1229,6 +1246,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
         int min_ = 1000;
 
         std::vector<Move> moves = allMovesForBlack();
+        moveOrdering(&moves);
 
         for (const Move& move : moves) {
             piece.bitboards[move.piece] &= ~(1ULL << move.from);
@@ -1259,7 +1277,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
 
 
 void ChessBoard::AI_chess(bool AIplaysBlack) {
-
+    int depth = 5;
     
     std::vector<Move> moves;
     int max_;
@@ -1284,9 +1302,9 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
 
         int eval;
         if (AIplaysBlack) {
-            eval = alphaBeta(4, true, -1000, 1000); 
+            eval = alphaBeta(depth, true, -1000, 1000); 
         } else {
-            eval = alphaBeta(4, false, -1000, 1000); 
+            eval = alphaBeta(depth, false, -1000, 1000); 
         }
 
         if (AIplaysBlack) {

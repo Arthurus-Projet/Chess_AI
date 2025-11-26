@@ -119,6 +119,7 @@ public:
     int alphaBeta(int depth, bool isWhite, int alpha, int beta);
     void AI_chess(bool AIplaysBlack);
     bool isInCheck(bool isWhite);
+    void moveOrdering(std::vector<Move>* moves);
 };
 
 
