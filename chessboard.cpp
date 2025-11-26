@@ -1013,6 +1013,12 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
     *pieceTo &= ~(1ULL << to); // delete a piece if there is a piece
  }
 
+ void ChessBoard::unMovePiece(uint64_t* pieceFrom, uint64_t* pieceTo, int from, int to) {
+    *pieceFrom |= (1ULL << from); // get back the old piece
+    *pieceFrom &= ~(1ULL << to); // delete the new position of the piece
+    //*pieceTo |= (1ULL << to); // add a piece if there is a piece
+ }
+
  Move ChessBoard::getMoveForAPosition(int position, int to, PieceType pieceType, bool white) {
     Move move;
     move.from = position;
@@ -1199,8 +1205,10 @@ int ChessBoard::minMax(int depth, bool isWhite) {
             if (move.capturedType != NONE)
                 piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
 
-            int eval = minMax(depth -1, false);
-            max_ = std::max(max_, eval);
+            if (!isInCheck(true)) {
+                int eval = minMax(depth -1, false);
+                max_ = std::max(max_, eval);
+            }
             // Undo
             piece.bitboards[move.piece] |= (1ULL << move.from) ;
             piece.bitboards[move.piece] &= ~(1ULL << move.to);
@@ -1220,9 +1228,10 @@ int ChessBoard::minMax(int depth, bool isWhite) {
             piece.bitboards[move.piece] |= (1ULL << move.to) ;
             if (move.capturedType != NONE)
                 piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
-
-            int eval = minMax(depth -1, true);
-            min_ = std::min(min_, eval);
+            if (!isInCheck(false)) {
+                int eval = minMax(depth -1, true);
+                min_ = std::min(min_, eval);
+            }
             // Undo
             piece.bitboards[move.piece] |= (1ULL << move.from) ;
             piece.bitboards[move.piece] &= ~(1ULL << move.to);
@@ -1480,28 +1489,28 @@ bool ChessBoard::isInCheck(bool isWhite) {
         // left part of the board
         if (((position & 7) != 0) && isThereABlackPieceAt(position + 7)) {
             mask = 1ULL << (position + 7); 
-            if (mask & piece.bitboards[WHITE_PAWN]) 
+            if (mask & piece.bitboards[BLACK_PAWN]) 
                 return true; 
         }
 
         // right part of the board
         if (((position & 7) != 7) && isThereABlackPieceAt(position + 9)) {
             mask = 1ULL << (position + 9); 
-            if (mask & piece.bitboards[WHITE_PAWN]) 
+            if (mask & piece.bitboards[BLACK_PAWN]) 
                 return true; 
         }
     } else {
         // right part of the board
         if (((position & 7) != 7) && isThereAWhitePieceAt(position - 7)) {
                 mask = 1ULL << (position - 7); 
-                if (mask & piece.bitboards[BLACK_PAWN]) 
+                if (mask & piece.bitboards[WHITE_PAWN]) 
                     return true; 
             }
 
         // left part of the board
         if (((position & 7) != 0) && isThereAWhitePieceAt(position - 9)) {
                 mask = 1ULL << (position - 9); 
-                if (mask & piece.bitboards[BLACK_PAWN]) 
+                if (mask & piece.bitboards[WHITE_PAWN]) 
                     return true; 
             }
 
