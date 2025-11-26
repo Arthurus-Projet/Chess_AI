@@ -1191,7 +1191,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
 
 
 
-int ChessBoard::minMax(int depth, bool isWhite) {
+int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
     if (depth == 0)
         return evaluatePawnPower();
 
@@ -1207,14 +1207,20 @@ int ChessBoard::minMax(int depth, bool isWhite) {
                 piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
 
             if (!isInCheck(true)) {
-                int eval = minMax(depth -1, false);
+                int eval = alphaBeta(depth -1, false, alpha, beta);
+                alpha = std::max(alpha, eval);
                 max_ = std::max(max_, eval);
+
+                
             }
             // Undo
             piece.bitboards[move.piece] |= (1ULL << move.from) ;
             piece.bitboards[move.piece] &= ~(1ULL << move.to);
             if (move.capturedType != NONE) 
                 piece.bitboards[move.capturedType] |= (1ULL << move.to);
+
+            if (beta <= alpha)
+                    break;
 
         }
 
@@ -1230,14 +1236,20 @@ int ChessBoard::minMax(int depth, bool isWhite) {
             if (move.capturedType != NONE)
                 piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
             if (!isInCheck(false)) {
-                int eval = minMax(depth -1, true);
+                int eval = alphaBeta(depth -1, true, alpha, beta);
                 min_ = std::min(min_, eval);
+                beta = std::min(beta, eval);
+
+                
             }
             // Undo
             piece.bitboards[move.piece] |= (1ULL << move.from) ;
             piece.bitboards[move.piece] &= ~(1ULL << move.to);
             if (move.capturedType != NONE) 
                 piece.bitboards[move.capturedType] |= (1ULL << move.to);
+
+            if (beta <= alpha)
+                    break;
 
         }
 
@@ -1272,9 +1284,9 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
 
         int eval;
         if (AIplaysBlack) {
-            eval = minMax(3, true); 
+            eval = alphaBeta(4, true, -1000, 1000); 
         } else {
-            eval = minMax(3, false); 
+            eval = alphaBeta(4, false, -1000, 1000); 
         }
 
         if (AIplaysBlack) {

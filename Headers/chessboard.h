@@ -116,7 +116,7 @@ public:
     inline PieceType getPieceTypeIfThereIsAWhitePieceAt(int position);
     Move getMoveForAPosition(int position, int to, PieceType pieceType, bool white);
 
-    int minMax(int depth, bool isWhite);
+    int alphaBeta(int depth, bool isWhite, int alpha, int beta);
     void AI_chess(bool AIplaysBlack);
     bool isInCheck(bool isWhite);
 };

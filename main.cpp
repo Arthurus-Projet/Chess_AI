@@ -13,6 +13,9 @@ int main()
 
     ChessBoard board(windowSize, windowSize);  // creation of the class to display the board
 
+    // AI
+    bool AIisBlack = true;
+
     // Left Click :
     bool leftClick = false;
     int position;
@@ -96,7 +99,7 @@ int main()
                                 board.movePiece(pieceLeftClick, &board.PieceSelected(moves[i]), position, moves[i]);
                                 
                                 std::cout << "is in check  " << board.isInCheck(false) << std::endl;
-                                if (!board.isInCheck(true))
+                                if (!board.isInCheck(AIisBlack))
                                     possibilityMove_ |= (1ULL << moves[i]);
                                 board.unMovePiece(pieceLeftClick, pieceTo, position, moves[i]);
 
@@ -117,7 +120,7 @@ int main()
                         for (int i = 0; i < nMoves; i++) {
                             if (position2 == moves[i]) {
                                 board.movePiece(pieceLeftClick, pieceLeftClick2, position, position2);
-                                board.AI_chess(true);
+                                board.AI_chess(AIisBlack);
                                 break;
                             }
 
