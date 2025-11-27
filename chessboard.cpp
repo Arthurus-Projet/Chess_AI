@@ -1034,308 +1034,6 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
  }
 
 
-
- std::vector<Move> ChessBoard::allMovesForWhite() {
-    std::vector<Move> movesList;
-
-    
-
-    // WHITE_KNIGHT
-    std::vector<int> positions = getPositionsPiece(piece.bitboards[WHITE_KNIGHT]);
-
-    for (int position : positions) {
-        int moves[8];
-        int counts = possibilityWhiteKnight(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_KNIGHT, true));
-    }
-
-    // WHITE_BISHOP
-    positions = getPositionsPiece(piece.bitboards[WHITE_BISHOP]);
-
-    for (int position : positions) {
-        int moves[14];
-        int counts = possibilityWhiteBishop(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_BISHOP, true));
-    }
-
-    // WHITE_ROOK
-    positions = getPositionsPiece(piece.bitboards[WHITE_ROOK]);
-
-    for (int position : positions) {
-        int moves[16];
-        int counts = possibilityWhiteTower(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_ROOK, true));
-    }
-
-    // WHITE_QUEEN
-    positions = getPositionsPiece(piece.bitboards[WHITE_QUEEN]);
-
-    for (int position : positions) {
-        int moves[27];
-        int counts = possibilityWhiteQueen(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_QUEEN, true));
-    }
-
-    // WHITE_KING
-    positions = getPositionsPiece(piece.bitboards[WHITE_KING]);
-
-    for (int position : positions) {
-        int moves[27];
-        int counts = possibilityWhiteKing(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_KING, true));
-    }
-
-    // WHITE_PAWN
-    positions = getPositionsPiece(piece.bitboards[WHITE_PAWN]);
-
-    for (int position : positions) {
-        int moves[4];
-        int counts = possibilityWhitePawn(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_PAWN, true));
-    }
-
-    //for (Move move_ : movesList)
-    //    std::cout << move_.to << " <-" << std::endl;
-
-
-
-    return movesList;
- }
-
-
-
- std::vector<Move> ChessBoard::allMovesForBlack() {
-    std::vector<Move> movesList;
-
-    
-
-    // BLACK_KNIGHT
-    std::vector<int> positions = getPositionsPiece(piece.bitboards[BLACK_KNIGHT]);
-
-    for (int position : positions) {
-        int moves[8];
-        int counts = possibilityBlackKnight(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_KNIGHT, false));
-    }
-
-    // BLACK_BISHOP
-    positions = getPositionsPiece(piece.bitboards[BLACK_BISHOP]);
-
-    for (int position : positions) {
-        int moves[14];
-        int counts = possibilityBlackBishop(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_BISHOP, false));
-    }
-
-    // BLACK_ROOK
-    positions = getPositionsPiece(piece.bitboards[BLACK_ROOK]);
-
-    for (int position : positions) {
-        int moves[16];
-        int counts = possibilityBlackTower(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_ROOK, false));
-    }
-
-    // BLACK_QUEEN
-    positions = getPositionsPiece(piece.bitboards[BLACK_QUEEN]);
-
-    for (int position : positions) {
-        int moves[27];
-        int counts = possibilityBlackQueen(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_QUEEN, false));
-    }
-
-    // BLACK_KING
-    positions = getPositionsPiece(piece.bitboards[BLACK_KING]);
-
-    for (int position : positions) {
-        int moves[27];
-        int counts = possibilityBlackKing(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_KING, false));
-    }
-
-    // BLACK_PAWN
-    positions = getPositionsPiece(piece.bitboards[BLACK_PAWN]);
-
-    for (int position : positions) {
-        int moves[4];
-        int counts = possibilityBlackPawn(position, moves);
-
-        for (int i = 0; i < counts; ++i) 
-            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_PAWN, false));
-    }
-
-    //for (Move move_ : movesList)
-    //    std::cout << move_.to << " <-" << std::endl;
-
-    return movesList;
- }
-
-void ChessBoard::moveOrdering(std::vector<Move>* moves) {
-
-    int index = 0;
-    for (int i = 0; i < moves->size(); ++i) {
-
-        if ((*moves)[i].capturedType != NONE) {
-            std::swap((*moves)[index], (*moves)[i]);
-            ++index;
-            }
-    }
- }
-
-
-
-int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
-    if (depth == 0)
-        return evaluate();
-
-    if (isWhite) {
-        int max_ = -1000;
-
-        std::vector<Move> moves = allMovesForWhite();
-        moveOrdering(&moves);
-
-        for (const Move& move : moves) {
-            piece.bitboards[move.piece] &= ~(1ULL << move.from);
-            piece.bitboards[move.piece] |= (1ULL << move.to) ;
-            if (move.capturedType != NONE)
-                piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
-
-            if (!isInCheck(true)) {
-                int eval = alphaBeta(depth -1, false, alpha, beta);
-                alpha = std::max(alpha, eval);
-                max_ = std::max(max_, eval);
-
-                
-            }
-            // Undo
-            piece.bitboards[move.piece] |= (1ULL << move.from) ;
-            piece.bitboards[move.piece] &= ~(1ULL << move.to);
-            if (move.capturedType != NONE) 
-                piece.bitboards[move.capturedType] |= (1ULL << move.to);
-
-            if (beta <= alpha)
-                    break;
-
-        }
-
-        return max_;
-    } else {
-        int min_ = 1000;
-
-        std::vector<Move> moves = allMovesForBlack();
-        moveOrdering(&moves);
-
-        for (const Move& move : moves) {
-            piece.bitboards[move.piece] &= ~(1ULL << move.from);
-            piece.bitboards[move.piece] |= (1ULL << move.to) ;
-            if (move.capturedType != NONE)
-                piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
-            if (!isInCheck(false)) {
-                int eval = alphaBeta(depth -1, true, alpha, beta);
-                min_ = std::min(min_, eval);
-                beta = std::min(beta, eval);
-
-                
-            }
-            // Undo
-            piece.bitboards[move.piece] |= (1ULL << move.from) ;
-            piece.bitboards[move.piece] &= ~(1ULL << move.to);
-            if (move.capturedType != NONE) 
-                piece.bitboards[move.capturedType] |= (1ULL << move.to);
-
-            if (beta <= alpha)
-                    break;
-
-        }
-
-        return min_;
-    }
- }
-
-
-void ChessBoard::AI_chess(bool AIplaysBlack) {
-    int depth = 5;
-    
-    std::vector<Move> moves;
-    int max_;
-    int min_;
-
-    if (AIplaysBlack) {
-        min_ = 1000;
-        moves = allMovesForBlack();
-    } else {
-        max_ = -1000;
-        moves = allMovesForWhite();
-        }
-
-    Move move_;
-    for (const Move& move : moves) {
-
-        piece.bitboards[move.piece] &= ~(1ULL << move.from);
-        piece.bitboards[move.piece] |= (1ULL << move.to) ;
-        if (move.capturedType != NONE)
-            piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
-
-
-        int eval;
-        if (AIplaysBlack) {
-            eval = alphaBeta(depth, true, -1000, 1000); 
-        } else {
-            eval = alphaBeta(depth, false, -1000, 1000); 
-        }
-
-        if (AIplaysBlack) {
-            if (eval < min_) {
-                move_ = move;
-                min_ = eval;
-                }
-        } else {
-            if (eval > max_) {
-                move_ = move;
-                max_ = eval;
-                }
-        }
-
-        // Undo
-        piece.bitboards[move.piece] |= (1ULL << move.from) ;
-        piece.bitboards[move.piece] &= ~(1ULL << move.to);
-        if (move.capturedType != NONE) 
-            piece.bitboards[move.capturedType] |= (1ULL << move.to);
-
-    }
-
-    // DO THE BEST MOVE
-    piece.bitboards[move_.piece] &= ~(1ULL << move_.from);
-    piece.bitboards[move_.piece] |= (1ULL << move_.to) ;
-    if (move_.capturedType != NONE)
-        piece.bitboards[move_.capturedType] &= ~( 1ULL << move_.to);
-
-}
-
-
 bool ChessBoard::isInCheck(bool isWhite) { 
     
     // Find position of the King 
@@ -1551,6 +1249,314 @@ bool ChessBoard::isInCheck(bool isWhite) {
 
     return false;
 }
+
+
+ std::vector<Move> ChessBoard::allMovesForWhite() {
+    std::vector<Move> movesList;
+
+    
+
+    // WHITE_KNIGHT
+    std::vector<int> positions = getPositionsPiece(piece.bitboards[WHITE_KNIGHT]);
+
+    for (int position : positions) {
+        int moves[8];
+        int counts = possibilityWhiteKnight(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_KNIGHT, true));
+    }
+
+    // WHITE_BISHOP
+    positions = getPositionsPiece(piece.bitboards[WHITE_BISHOP]);
+
+    for (int position : positions) {
+        int moves[14];
+        int counts = possibilityWhiteBishop(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_BISHOP, true));
+    }
+
+    // WHITE_ROOK
+    positions = getPositionsPiece(piece.bitboards[WHITE_ROOK]);
+
+    for (int position : positions) {
+        int moves[16];
+        int counts = possibilityWhiteTower(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_ROOK, true));
+    }
+
+    // WHITE_QUEEN
+    positions = getPositionsPiece(piece.bitboards[WHITE_QUEEN]);
+
+    for (int position : positions) {
+        int moves[27];
+        int counts = possibilityWhiteQueen(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_QUEEN, true));
+    }
+
+    // WHITE_KING
+    positions = getPositionsPiece(piece.bitboards[WHITE_KING]);
+
+    for (int position : positions) {
+        int moves[27];
+        int counts = possibilityWhiteKing(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_KING, true));
+    }
+
+    // WHITE_PAWN
+    positions = getPositionsPiece(piece.bitboards[WHITE_PAWN]);
+
+    for (int position : positions) {
+        int moves[4];
+        int counts = possibilityWhitePawn(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_PAWN, true));
+    }
+
+    //for (Move move_ : movesList)
+    //    std::cout << move_.to << " <-" << std::endl;
+
+
+
+    return movesList;
+ }
+
+
+
+ std::vector<Move> ChessBoard::allMovesForBlack() {
+    std::vector<Move> movesList;
+
+    
+
+    // BLACK_KNIGHT
+    std::vector<int> positions = getPositionsPiece(piece.bitboards[BLACK_KNIGHT]);
+
+    for (int position : positions) {
+        int moves[8];
+        int counts = possibilityBlackKnight(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_KNIGHT, false));
+    }
+
+    // BLACK_BISHOP
+    positions = getPositionsPiece(piece.bitboards[BLACK_BISHOP]);
+
+    for (int position : positions) {
+        int moves[14];
+        int counts = possibilityBlackBishop(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_BISHOP, false));
+    }
+
+    // BLACK_ROOK
+    positions = getPositionsPiece(piece.bitboards[BLACK_ROOK]);
+
+    for (int position : positions) {
+        int moves[16];
+        int counts = possibilityBlackTower(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_ROOK, false));
+    }
+
+    // BLACK_QUEEN
+    positions = getPositionsPiece(piece.bitboards[BLACK_QUEEN]);
+
+    for (int position : positions) {
+        int moves[27];
+        int counts = possibilityBlackQueen(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_QUEEN, false));
+    }
+
+    // BLACK_KING
+    positions = getPositionsPiece(piece.bitboards[BLACK_KING]);
+
+    for (int position : positions) {
+        int moves[27];
+        int counts = possibilityBlackKing(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_KING, false));
+    }
+
+    // BLACK_PAWN
+    positions = getPositionsPiece(piece.bitboards[BLACK_PAWN]);
+
+    for (int position : positions) {
+        int moves[4];
+        int counts = possibilityBlackPawn(position, moves);
+
+        for (int i = 0; i < counts; ++i) 
+            movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_PAWN, false));
+    }
+
+    //for (Move move_ : movesList)
+    //    std::cout << move_.to << " <-" << std::endl;
+
+    return movesList;
+ }
+
+void ChessBoard::moveOrdering(std::vector<Move>* moves) {
+
+    int index = 0;
+    for (int i = 1; i < moves->size(); ++i) {
+
+        if ((*moves)[i].capturedType != NONE) {
+
+
+            std::swap((*moves)[index], (*moves)[i]);
+            ++index;
+            }
+    }
+ }
+
+
+
+int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
+    if (depth == 0)
+        return evaluatePawnPower();
+
+    if (isWhite) {
+        int max_ = -1000;
+
+        std::vector<Move> moves = allMovesForWhite();
+        moveOrdering(&moves);
+
+        for (const Move& move : moves) {
+            piece.bitboards[move.piece] &= ~(1ULL << move.from);
+            //if ((move.piece == WHITE_PAWN) && (move.to >> 3) == 7)
+                piece.bitboards[move.piece] |= (1ULL << move.to);
+            //else 
+                piece.bitboards[move.piece] |= (1ULL << move.to);
+
+            if (move.capturedType != NONE)
+                piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
+
+            if (!isInCheck(true)) {
+                int eval = alphaBeta(depth -1, false, alpha, beta);
+                alpha = std::max(alpha, eval);
+                max_ = std::max(max_, eval);
+
+                
+            }
+            // Undo
+            piece.bitboards[move.piece] |= (1ULL << move.from) ;
+            piece.bitboards[move.piece] &= ~(1ULL << move.to);
+            if (move.capturedType != NONE) 
+                piece.bitboards[move.capturedType] |= (1ULL << move.to);
+
+            if (beta <= alpha)
+                    break;
+
+        }
+
+        return max_;
+    } else {
+        int min_ = 1000;
+
+        std::vector<Move> moves = allMovesForBlack();
+        moveOrdering(&moves);
+
+        for (const Move& move : moves) {
+            piece.bitboards[move.piece] &= ~(1ULL << move.from);
+            piece.bitboards[move.piece] |= (1ULL << move.to) ;
+            if (move.capturedType != NONE)
+                piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
+            if (!isInCheck(false)) {
+                int eval = alphaBeta(depth -1, true, alpha, beta);
+                min_ = std::min(min_, eval);
+                beta = std::min(beta, eval);
+
+                
+            }
+            // Undo
+            piece.bitboards[move.piece] |= (1ULL << move.from) ;
+            piece.bitboards[move.piece] &= ~(1ULL << move.to);
+            if (move.capturedType != NONE) 
+                piece.bitboards[move.capturedType] |= (1ULL << move.to);
+
+            if (beta <= alpha)
+                    break;
+
+        }
+
+        return min_;
+    }
+ }
+
+
+void ChessBoard::AI_chess(bool AIplaysBlack) {
+    int depth = 4;
+    
+    std::vector<Move> moves;
+    int max_;
+    int min_;
+
+    if (AIplaysBlack) {
+        min_ = 1000;
+        moves = allMovesForBlack();
+    } else {
+        max_ = -1000;
+        moves = allMovesForWhite();
+        }
+
+    Move move_;
+    for (const Move& move : moves) {
+
+        piece.bitboards[move.piece] &= ~(1ULL << move.from);
+        piece.bitboards[move.piece] |= (1ULL << move.to) ;
+        if (move.capturedType != NONE)
+            piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
+
+
+        int eval;
+        if (AIplaysBlack) {
+            eval = alphaBeta(depth, true, -1000, 1000); 
+        } else {
+            eval = alphaBeta(depth, false, -1000, 1000); 
+        }
+
+        if (AIplaysBlack) {
+            if (eval < min_) {
+                move_ = move;
+                min_ = eval;
+                }
+        } else {
+            if (eval > max_) {
+                move_ = move;
+                max_ = eval;
+                }
+        }
+
+        // Undo
+        piece.bitboards[move.piece] |= (1ULL << move.from) ;
+        piece.bitboards[move.piece] &= ~(1ULL << move.to);
+        if (move.capturedType != NONE) 
+            piece.bitboards[move.capturedType] |= (1ULL << move.to);
+
+    }
+
+    // DO THE BEST MOVE
+    piece.bitboards[move_.piece] &= ~(1ULL << move_.from);
+    piece.bitboards[move_.piece] |= (1ULL << move_.to) ;
+    if (move_.capturedType != NONE)
+        piece.bitboards[move_.capturedType] &= ~( 1ULL << move_.to);
+
+}
+
 
 
 

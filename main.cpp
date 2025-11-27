@@ -119,7 +119,13 @@ int main()
 
                         for (int i = 0; i < nMoves; i++) {
                             if (position2 == moves[i]) {
-                                board.movePiece(pieceLeftClick, pieceLeftClick2, position, position2);
+                                if ((*pieceLeftClick == board.piece.bitboards[WHITE_PAWN]) && (position2 >> 3) == 7) {
+                                    board.movePiece(pieceLeftClick, pieceLeftClick, position, position2); // Remove the pawn
+                                    board.piece.bitboards[WHITE_QUEEN] |= (1ULL << position2);
+
+                                    }
+                                else
+                                    board.movePiece(pieceLeftClick, pieceLeftClick2, position, position2);
                                 board.AI_chess(AIisBlack);
                                 break;
                             }
