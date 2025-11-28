@@ -120,6 +120,8 @@ public:
     void AI_chess(bool AIplaysBlack);
     bool isInCheck(bool isWhite);
     void moveOrdering(std::vector<Move>* moves);
+    bool makeMove(Move move);
+    void unMakeMove(bool pawnBecomeQueen, Move move);
 };
 
 
