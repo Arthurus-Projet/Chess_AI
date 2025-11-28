@@ -1,6 +1,14 @@
 #ifndef CHESSEBOARD_H
 #include <SFML/Graphics.hpp>
 
+
+enum MoveType {
+    NORMAL_MOVE,
+    PROMOTION, // When a Pawn becomes a Queen
+    CASTLING,
+    EN_PASSANT
+};
+
 enum PieceType { 
     WHITE_PAWN,     // = 0
     WHITE_KNIGHT,   // = 1
@@ -54,6 +62,12 @@ private:
     sf::Vector2u windowSize; // Window size
     sf::Color LIGHT_COLOR;
     sf::Color DARK_COLOR;
+    bool whiteKingSideCastling;
+    bool whiteQueenSideCasling;
+    bool blackKingSideCastling;
+    bool blackQueenSideCasling;
+
+
 public:
     Piece piece;
     ChessBoard(int windowWidth, int windowHeight, int size = 8);
@@ -120,8 +134,8 @@ public:
     void AI_chess(bool AIplaysBlack);
     bool isInCheck(bool isWhite);
     void moveOrdering(std::vector<Move>* moves);
-    bool makeMove(Move move);
-    void unMakeMove(bool pawnBecomeQueen, Move move);
+    bool makeMove(const Move& move);
+    void unMakeMove(bool pawnBecomeQueen, const Move& move);
 };
 
 

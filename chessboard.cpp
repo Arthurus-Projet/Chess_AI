@@ -1423,7 +1423,7 @@ void ChessBoard::moveOrdering(std::vector<Move>* moves) {
     }
  }
 
-bool ChessBoard::makeMove(Move move) {
+bool ChessBoard::makeMove(const Move& move) {
     if (move.capturedType != NONE)
         piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
 
@@ -1438,7 +1438,7 @@ bool ChessBoard::makeMove(Move move) {
     return true; // Pawn Become Queen
 }
 
-void ChessBoard::unMakeMove(bool pawnBecomeQueen, Move move) {
+void ChessBoard::unMakeMove(bool pawnBecomeQueen, const Move& move) {
     if (pawnBecomeQueen) {
         piece.bitboards[(move.piece == WHITE_PAWN ? WHITE_QUEEN : BLACK_QUEEN)] &= ~(1ULL << move.to); // Remove the Queen
         piece.bitboards[move.piece] |= (1ULL << move.from); // Add the Pawn
@@ -1470,8 +1470,6 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
                 int eval = alphaBeta(depth -1, false, alpha, beta);
                 alpha = std::max(alpha, eval);
                 max_ = std::max(max_, eval);
-
-                
             }
             // Undo
             unMakeMove(pawnBecomeQueen, move);
@@ -1494,16 +1492,13 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
             if (!isInCheck(false)) {
                 int eval = alphaBeta(depth -1, true, alpha, beta);
                 min_ = std::min(min_, eval);
-                beta = std::min(beta, eval);
-
-                
+                beta = std::min(beta, eval);   
             }
             // Undo
             unMakeMove(pawnBecomeQueen, move);
 
             if (beta <= alpha)
                     break;
-
         }
 
         return min_;
@@ -1529,11 +1524,7 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
     Move move_;
     for (const Move& move : moves) {
 
-        piece.bitboards[move.piece] &= ~(1ULL << move.from);
-        piece.bitboards[move.piece] |= (1ULL << move.to) ;
-        if (move.capturedType != NONE)
-            piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
-
+        bool pawnBecomeQueen = makeMove(move);
 
         int eval;
         if (AIplaysBlack) {
@@ -1555,10 +1546,7 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
         }
 
         // Undo
-        piece.bitboards[move.piece] |= (1ULL << move.from) ;
-        piece.bitboards[move.piece] &= ~(1ULL << move.to);
-        if (move.capturedType != NONE) 
-            piece.bitboards[move.capturedType] |= (1ULL << move.to);
+        unMakeMove(pawnBecomeQueen, move);
 
     }
 
