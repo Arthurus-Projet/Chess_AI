@@ -25,11 +25,15 @@ enum PieceType {
     NONE            // = 12 (No piece)
 };
 
+enum CastlingType { KINGSIDE, QUEENSIDE };
+
 struct Move {
     int from;
     int to;
     PieceType piece;          
-    PieceType capturedType;   
+    PieceType capturedType;  
+    MoveType moveType = NORMAL_MOVE; 
+    CastlingType castlingType = KINGSIDE;
 };
 
 struct Piece {
@@ -136,6 +140,7 @@ public:
     void moveOrdering(std::vector<Move>* moves);
     bool makeMove(const Move& move);
     void unMakeMove(bool pawnBecomeQueen, const Move& move);
+    bool isAttacked(int position, bool isWhite);
 };
 
 

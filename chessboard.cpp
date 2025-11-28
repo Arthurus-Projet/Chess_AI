@@ -994,6 +994,9 @@ int ChessBoard::evaluatePawnPower() {
 
     return score;
 }
+
+
+
  
 
 int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
@@ -1251,10 +1254,246 @@ bool ChessBoard::isInCheck(bool isWhite) {
 }
 
 
- std::vector<Move> ChessBoard::allMovesForWhite() {
-    std::vector<Move> movesList;
 
+bool ChessBoard::isAttacked(int position, bool isWhite) { 
     
+    uint64_t mask = 1ULL << position; 
+    
+    // Tower 
+    
+    // Move right (+1) 
+    for (int i = 1; ((position + i) & 7) != 0 && (position + i) < 64; i++) { 
+        if (isThereAPieceAt(position + i)) { 
+            mask = 1ULL << (position + i); 
+            if ((mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
+                return true; 
+            break; 
+        }
+    }
+
+    // Move left (-1)
+    for (int i = -1; ((position + i) & 7) != 7 && (position + i) >= 0; i--) {
+        if (isThereAPieceAt(position + i)) { 
+            mask = 1ULL << (position + i); 
+            if ((mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
+                return true; 
+            break; 
+        }
+    }
+
+    // Move up (+8)
+    for (int i = 8; (position + i) < 64; i += 8) {
+        if (isThereAPieceAt(position + i)) { 
+            mask = 1ULL << (position + i); 
+            if ((mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
+                return true; 
+            break; 
+        }
+    }
+
+    // Move down (-8)
+    for (int i = -8; (position + i) >= 0; i -= 8) {
+        if (isThereAPieceAt(position + i)) { 
+            mask = 1ULL << (position + i); 
+            if ((mask & piece.bitboards[isWhite? BLACK_ROOK : WHITE_ROOK]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
+                return true; 
+            break; 
+        }
+    }
+
+
+    // Bishop
+
+    // Move up right (+9)
+    for (int i = 9; ((position + i) & 7) != 0 && (position + i) < 64; i+= 9) {
+        if (isThereAPieceAt(position + i)) { 
+            mask = 1ULL << (position + i); 
+            if ((mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
+                return true; 
+            break; 
+        }
+    }
+
+    // Move up left (+7)
+    for (int i = 7; (((position + i) & 7) != 7) && (position + i) < 64; i+= 7) {
+       if (isThereAPieceAt(position + i)) { 
+            mask = 1ULL << (position + i); 
+            if ((mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
+                return true; 
+            break; 
+        }
+    }
+
+    // Move down right (-7)
+    for (int i = -7; (((position + i) & 7) != 0) && (position + i) >= 0; i-= 7) {
+        if (isThereAPieceAt(position + i)) { 
+            mask = 1ULL << (position + i); 
+            if ((mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
+                return true; 
+            break; 
+        }
+    }
+
+    // Move down left (-9)
+    for (int i = -9; (((position + i) & 7) != 7) && (position + i) >= 0; i-= 9) {
+        if (isThereAPieceAt(position + i)) { 
+            mask = 1ULL << (position + i); 
+            if ((mask & piece.bitboards[isWhite? BLACK_BISHOP : WHITE_BISHOP]) || (mask & piece.bitboards[isWhite? BLACK_QUEEN : WHITE_QUEEN]))
+                return true; 
+            break; 
+        }
+    }
+
+    // Knight
+
+    // 2 Up 1 Right (+17)
+    if (((position + 17) < 64) && (position & 7) != 7) {
+        if (isThereAPieceAt(position + 17)) { 
+            mask = 1ULL << (position + 17); 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
+                return true; 
+    
+        }
+    }
+
+    // 2 Down 1 Right (-15)
+    if (((position - 15) >= 0) && (position & 7) != 7) {
+        if (isThereAPieceAt(position - 15)) { 
+            mask = 1ULL << (position - 15); 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT]) 
+                return true; 
+     
+        }
+    }
+
+    // 2 Right 1 Up (+10)
+    if (((position + 10) < 64) && (position & 7) < 6) {
+        if (isThereAPieceAt(position + 10)) { 
+            mask = 1ULL << (position + 10); 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
+                return true; 
+       
+        }
+    }
+
+    // 2 Right 1 Down (-6)
+    if (((position - 6) >= 0) && (position & 7) < 6) {
+        if (isThereAPieceAt(position - 6)) { 
+            mask = 1ULL << (position - 6); 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
+                return true; 
+    
+        }
+    }
+
+
+    // 2 Left 1 Down (-10)
+    if (((position - 10) >= 0) && (position & 7) > 1) {
+        if (isThereAPieceAt(position - 10)) { 
+            mask = 1ULL << (position - 10); 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
+                return true; 
+       
+        }
+    }
+
+    // 2 Left 1 Up (+6)
+    if (((position + 6) < 64) && (position & 7) > 1) {
+        if (isThereAPieceAt(position + 6)) { 
+            mask = 1ULL << (position + 6); 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT]) 
+                return true; 
+       
+        }
+    }
+
+
+    // 2 Up 1 Left (+15)
+    if (((position + 15) < 64) && (position & 7) != 0) {
+        if (isThereAPieceAt(position + 15)) { 
+            mask = 1ULL << (position + 15); 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
+                return true; 
+        
+        }
+    }
+
+
+    // 2 Down 1 Left (-17)
+    if (((position - 17) >= 0) && (position & 7) != 0) {
+        if (isThereAPieceAt(position - 17)) { 
+            mask = 1ULL << (position - 17); 
+            if (mask & piece.bitboards[isWhite? BLACK_KNIGHT : WHITE_KNIGHT])
+                return true; 
+            
+        }
+    }
+
+
+    //  Pawn
+
+    if (isWhite) {
+
+        // left part of the board
+        if (((position & 7) != 0) && isThereABlackPieceAt(position + 7)) {
+            mask = 1ULL << (position + 7); 
+            if (mask & piece.bitboards[BLACK_PAWN]) 
+                return true; 
+        }
+
+        // right part of the board
+        if (((position & 7) != 7) && isThereABlackPieceAt(position + 9)) {
+            mask = 1ULL << (position + 9); 
+            if (mask & piece.bitboards[BLACK_PAWN]) 
+                return true; 
+        }
+    } else {
+        // right part of the board
+        if (((position & 7) != 7) && isThereAWhitePieceAt(position - 7)) {
+                mask = 1ULL << (position - 7); 
+                if (mask & piece.bitboards[WHITE_PAWN]) 
+                    return true; 
+            }
+
+        // left part of the board
+        if (((position & 7) != 0) && isThereAWhitePieceAt(position - 9)) {
+                mask = 1ULL << (position - 9); 
+                if (mask & piece.bitboards[WHITE_PAWN]) 
+                    return true; 
+            }
+
+
+    }
+
+
+    return false;
+}
+
+
+
+void ChessBoard::possibilityCastle(const std::vector<Move>& movesList, bool isWhite) {
+    if (isWhite) {
+        if (whiteKingSideCastling) {
+            if (isThereAPieceAt(6) && isThereAPieceAt(7)) {
+                if (!isInCheck(true) )
+                    piece.bitoards[WHITE_KING] |= (1ULL << 6);
+
+
+            }
+
+        }
+
+
+    } else {
+
+
+    }
+
+
+}
+
+std::vector<Move> ChessBoard::allMovesForWhite() {
+    std::vector<Move> movesList;
 
     // WHITE_KNIGHT
     std::vector<int> positions = getPositionsPiece(piece.bitboards[WHITE_KNIGHT]);
