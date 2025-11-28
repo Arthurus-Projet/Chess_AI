@@ -1423,6 +1423,20 @@ void ChessBoard::moveOrdering(std::vector<Move>* moves) {
     }
  }
 
+bool makeMove(Move move) {
+    if (move.capturedType != NONE)
+        piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
+
+    if (!( ( (move.piece == WHITE_PAWN) ^ (move.piece == BLACK_PAWN) ) && ((move.to >> 3) == 7) ^ ((move.to >> 3) == 0) )) {
+        piece.bitboards[move.piece] &= ~(1ULL << move.from);
+        piece.bitboards[move.piece] |= (1ULL << move.to);
+        return false;
+    } 
+
+    piece.bitboards[move.piece] &= ~(1ULL << move.from); // Delete Pawn
+    piece.bitboards[(move.piece == WHITE_PAWN ? WHITE_QUEEN : BLACK_QUEEN)] |= (1ULL << move.to);
+    return true; // Pawn Become Queen
+}
 
 
 int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
@@ -1437,19 +1451,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
         
 
         for (const Move& move : moves) {
-            bool pawnBecomeQueen = false;
-
-            if ((move.piece == WHITE_PAWN) && (move.to >> 3) == 7) {
-                piece.bitboards[move.piece] &= ~(1ULL << move.from); // Delete Pawn
-                piece.bitboards[WHITE_QUEEN] |= (1ULL << move.to);
-                pawnBecomeQueen = true;
-            } else {
-
-                piece.bitboards[move.piece] &= ~(1ULL << move.from);
-                piece.bitboards[move.piece] |= (1ULL << move.to);
-                }
-            if (move.capturedType != NONE)
-                piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
+            bool pawnBecomeQueen = makeMove(move);
 
             if (!isInCheck(true)) {
                 int eval = alphaBeta(depth -1, false, alpha, beta);
