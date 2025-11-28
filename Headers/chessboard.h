@@ -66,13 +66,15 @@ private:
     sf::Vector2u windowSize; // Window size
     sf::Color LIGHT_COLOR;
     sf::Color DARK_COLOR;
-    bool whiteKingSideCastling;
-    bool whiteQueenSideCasling;
-    bool blackKingSideCastling;
-    bool blackQueenSideCasling;
+    
 
 
 public:
+    bool whiteKingSideCastling = true;
+    bool whiteQueenSideCasling = true;
+    bool blackKingSideCastling = true;
+    bool blackQueenSideCasling = true;
+    
     Piece piece;
     ChessBoard(int windowWidth, int windowHeight, int size = 8);
     void loadTextures();
@@ -141,6 +143,7 @@ public:
     bool makeMove(const Move& move);
     void unMakeMove(bool pawnBecomeQueen, const Move& move);
     bool isAttacked(int position, bool isWhite);
+    void possibilityCastle(std::vector<Move>& movesList, bool isWhite);
 };
 
 

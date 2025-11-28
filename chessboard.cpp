@@ -1471,24 +1471,74 @@ bool ChessBoard::isAttacked(int position, bool isWhite) {
 
 
 
-void ChessBoard::possibilityCastle(const std::vector<Move>& movesList, bool isWhite) {
+void ChessBoard::possibilityCastle(std::vector<Move>& movesList, bool isWhite) {
     if (isWhite) {
         if (whiteKingSideCastling) {
-            if (isThereAPieceAt(6) && isThereAPieceAt(7)) {
-                if (!isInCheck(true) )
-                    piece.bitoards[WHITE_KING] |= (1ULL << 6);
-
-
+            if (!isThereAPieceAt(5) && !isThereAPieceAt(6)) {
+                if (!isAttacked(5, true) && !isAttacked(6, true) && !isInCheck(true)) {
+                    Move move;
+                    move.piece = WHITE_KING;
+                    move.moveType = CASTLING;
+                    move.castlingType = KINGSIDE;
+                    move.from = 4; // The king go from 4 to 6
+                    move.to = 6;
+                    move.capturedType = NONE;
+                    movesList.push_back(move);
+                }
             }
+        }
 
+        if (whiteQueenSideCasling) {
+            if (!isThereAPieceAt(1) && !isThereAPieceAt(2) && !isThereAPieceAt(3)) {
+                if (!isAttacked(1, true) && !isAttacked(2, true) && !isAttacked(3, true) && !isInCheck(true)) {
+                    Move move;
+                    move.piece = WHITE_KING;
+                    move.moveType = CASTLING;
+                    move.castlingType = QUEENSIDE;
+                    move.from = 4; // The king go from 4 to 2
+                    move.to = 2;
+                    move.capturedType = NONE;
+                    movesList.push_back(move);
+                    std::cout << "INSIDE FUNCTINO" << std::endl;
+                }
+            }
         }
 
 
     } else {
 
+        if (blackKingSideCastling) {
+            if (!isThereAPieceAt(61) && !isThereAPieceAt(62)) {
+                if (!isAttacked(61, false) && !isAttacked(62, false) && !isInCheck(false)) {
+                    Move move;
+                    move.piece = BLACK_KING;
+                    move.moveType = CASTLING;
+                    move.castlingType = KINGSIDE;
+                    move.from = 60; // The king go from 60 to 62
+                    move.to = 62;
+                    move.capturedType = NONE;
+                    movesList.push_back(move);
+                }
+            }
+        }
+
+        if (blackQueenSideCasling) {
+            if (!isThereAPieceAt(57) && !isThereAPieceAt(58) && !isThereAPieceAt(59)) {
+                if (!isAttacked(57, false) && !isAttacked(58, false) && !isAttacked(59, false) && !isInCheck(false)) {
+                    Move move;
+                    move.piece = BLACK_KING;
+                    move.moveType = CASTLING;
+                    move.castlingType = QUEENSIDE;
+                    move.from = 60; // The king go from 60 to 58
+                    move.to = 58;
+                    move.capturedType = NONE;
+                    movesList.push_back(move);
+                }
+            }
+        }
+
 
     }
-
 
 }
 
@@ -1560,6 +1610,11 @@ std::vector<Move> ChessBoard::allMovesForWhite() {
         for (int i = 0; i < counts; ++i) 
             movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_PAWN, true));
     }
+
+    //std::cout << "SIZE " << movesList.size() << std::endl;
+    possibilityCastle(movesList, true);
+    //std::cout << "SIZE " << movesList.size() << std::endl;
+
 
     //for (Move move_ : movesList)
     //    std::cout << move_.to << " <-" << std::endl;
@@ -1642,6 +1697,8 @@ std::vector<Move> ChessBoard::allMovesForWhite() {
             movesList.push_back(getMoveForAPosition(position, moves[i], BLACK_PAWN, false));
     }
 
+    possibilityCastle(movesList, false);
+
     //for (Move move_ : movesList)
     //    std::cout << move_.to << " <-" << std::endl;
 
@@ -1666,28 +1723,102 @@ bool ChessBoard::makeMove(const Move& move) {
     if (move.capturedType != NONE)
         piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
 
-    if (!( ( (move.piece == WHITE_PAWN) ^ (move.piece == BLACK_PAWN) ) && ((move.to >> 3) == 7) ^ ((move.to >> 3) == 0) )) {
+    if (((move.piece == WHITE_PAWN) ^ (move.piece == BLACK_PAWN) ) && ((move.to >> 3) == 7) ^ ((move.to >> 3) == 0)) {
+       piece.bitboards[move.piece] &= ~(1ULL << move.from); // Delete Pawn
+       piece.bitboards[(move.piece == WHITE_PAWN ? WHITE_QUEEN : BLACK_QUEEN)] |= (1ULL << move.to);
+       return true; // Pawn Become Queen
+    } 
+
+    bool isWhite = move.piece < 6;
+
+    if (move.moveType == CASTLING) {  
+
+        // King Move :
+        piece.bitboards[move.piece] &= ~(1ULL << move.from);
+        piece.bitboards[move.piece] |= (1ULL << move.to);
+
+        if (isWhite) {
+            if (move.castlingType == KINGSIDE) {
+                piece.bitboards[WHITE_ROOK] &= ~(1ULL << 7); // Remove Rook
+                piece.bitboards[WHITE_ROOK] |= (1ULL << 5);
+                whiteKingSideCastling = false;
+            } else {
+                piece.bitboards[WHITE_ROOK] &= ~(1ULL << 0);
+                piece.bitboards[WHITE_ROOK] |= (1ULL << 3);
+                whiteQueenSideCasling = false;
+            }
+        } else {
+            if (move.castlingType == KINGSIDE) {
+                piece.bitboards[BLACK_ROOK] &= ~(1ULL << 63); // Remove Rook
+                piece.bitboards[BLACK_ROOK] |= (1ULL << 61);
+                blackKingSideCastling = false;
+            } else {
+                piece.bitboards[BLACK_ROOK] &= ~(1ULL << 56);
+                piece.bitboards[BLACK_ROOK] |= (1ULL << 58);
+                blackQueenSideCasling = false;
+            }
+
+        }
+
+
+        return false;
+        }
+
+        // Normal Move
         piece.bitboards[move.piece] &= ~(1ULL << move.from);
         piece.bitboards[move.piece] |= (1ULL << move.to);
         return false;
-    } 
-
-    piece.bitboards[move.piece] &= ~(1ULL << move.from); // Delete Pawn
-    piece.bitboards[(move.piece == WHITE_PAWN ? WHITE_QUEEN : BLACK_QUEEN)] |= (1ULL << move.to);
-    return true; // Pawn Become Queen
 }
 
 void ChessBoard::unMakeMove(bool pawnBecomeQueen, const Move& move) {
+    if (move.capturedType != NONE) 
+        piece.bitboards[move.capturedType] |= (1ULL << move.to);
+
+
     if (pawnBecomeQueen) {
         piece.bitboards[(move.piece == WHITE_PAWN ? WHITE_QUEEN : BLACK_QUEEN)] &= ~(1ULL << move.to); // Remove the Queen
         piece.bitboards[move.piece] |= (1ULL << move.from); // Add the Pawn
-    } else {
-    piece.bitboards[move.piece] |= (1ULL << move.from) ;
+        return;
+    } 
+    
+    bool isWhite = move.piece < 6;
+
+    if (move.moveType == CASTLING) {
+        // For the King
+        piece.bitboards[move.piece] |= (1ULL << move.from);
+        piece.bitboards[move.piece] &= ~(1ULL << move.to);
+
+        if (isWhite) {
+            if (move.castlingType == KINGSIDE) {
+                piece.bitboards[WHITE_ROOK] |= (1ULL << 7);
+                piece.bitboards[WHITE_ROOK] &= ~(1ULL << 5);
+                whiteKingSideCastling = true;
+            } else {
+                piece.bitboards[WHITE_ROOK] |= (1ULL << 0);
+                piece.bitboards[WHITE_ROOK] &= ~(1ULL << 3);
+                whiteQueenSideCasling = true;
+            }
+        } else {
+            if (move.castlingType == KINGSIDE) {
+                piece.bitboards[BLACK_ROOK] |= (1ULL << 63);
+                piece.bitboards[BLACK_ROOK] &= ~(1ULL << 61);
+                blackKingSideCastling = true;
+            } else {
+                piece.bitboards[BLACK_ROOK] |= (1ULL << 56);
+                piece.bitboards[BLACK_ROOK] &= ~(1ULL << 59);
+                blackQueenSideCasling = true;
+            }
+        }
+    }
+    
+    
+    
+    else {
+    piece.bitboards[move.piece] |= (1ULL << move.from);
     piece.bitboards[move.piece] &= ~(1ULL << move.to);
     }
     
-    if (move.capturedType != NONE) 
-        piece.bitboards[move.capturedType] |= (1ULL << move.to);
+    
 }
 
 
