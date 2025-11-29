@@ -34,6 +34,11 @@ struct Move {
     PieceType capturedType;  
     MoveType moveType = NORMAL_MOVE; 
     CastlingType castlingType = KINGSIDE;
+
+    bool whiteKingSideCastlingBefore = true;
+    bool whiteQueenSideCastlingBefore = true;
+    bool blackKingSideCastlingBefore = true;
+    bool blackQueenSideCastlingBefore = true;
 };
 
 struct Piece {
