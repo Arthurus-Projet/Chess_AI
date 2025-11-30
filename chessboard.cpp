@@ -56,8 +56,6 @@ void ChessBoard::loadTextures() {
     blackKingSprite.setTexture(textures["roi"]);
     whiteQueenSprite.setTexture(textures["reine_b"]);
     blackQueenSprite.setTexture(textures["reine"]);
-
-    
 }
 
 void ChessBoard::draw(sf::RenderWindow& window) {
@@ -84,7 +82,7 @@ std::vector<int> ChessBoard::getPositionsPiece(uint64_t piece) {
     return positions;
 }
 
-void ChessBoard::drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::Sprite & sprite) {
+void ChessBoard::drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::Sprite& sprite) {
 
     std::vector<int> positions = getPositionsPiece(piece);
 
@@ -96,30 +94,25 @@ void ChessBoard::drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::S
 
 
 void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
+    const std::pair<int, sf::Sprite&> pieces[] = {
+       {WHITE_PAWN, whitePawnSprite}, 
+       {BLACK_PAWN, blackPawnSprite}, 
+       {WHITE_ROOK, whiteTowerSprite}, 
+       {BLACK_ROOK, blackTowerSprite}, 
+       {WHITE_BISHOP, whiteBishopSprite}, 
+       {BLACK_BISHOP, blackBishopSprite}, 
+       {WHITE_KNIGHT, whiteKnightSprite}, 
+       {BLACK_KNIGHT, blackKnightSprite}, 
+       {WHITE_KING, whiteKingSprite}, 
+       {BLACK_KING, blackKingSprite}, 
+       {WHITE_QUEEN, whiteQueenSprite}, 
+       {BLACK_QUEEN, blackQueenSprite}
+  
+    };
 
-    // Pawns :
-    drawChessPieces(window, piece.bitboards[WHITE_PAWN], whitePawnSprite);
-    drawChessPieces(window, piece.bitboards[BLACK_PAWN], blackPawnSprite);
-
-    // Rooks:
-    drawChessPieces(window, piece.bitboards[WHITE_ROOK], whiteTowerSprite);
-    drawChessPieces(window, piece.bitboards[BLACK_ROOK], blackTowerSprite);
-
-    // Bishops:
-    drawChessPieces(window, piece.bitboards[WHITE_BISHOP], whiteBishopSprite);
-    drawChessPieces(window, piece.bitboards[BLACK_BISHOP], blackBishopSprite);
-
-    // Knights:
-    drawChessPieces(window, piece.bitboards[WHITE_KNIGHT], whiteKnightSprite);
-    drawChessPieces(window, piece.bitboards[BLACK_KNIGHT], blackKnightSprite);
-
-    //Kings:
-    drawChessPieces(window, piece.bitboards[WHITE_KING], whiteKingSprite);
-    drawChessPieces(window, piece.bitboards[BLACK_KING], blackKingSprite);
-
-    //Queens:
-    drawChessPieces(window, piece.bitboards[WHITE_QUEEN], whiteQueenSprite);
-    drawChessPieces(window, piece.bitboards[BLACK_QUEEN], blackQueenSprite);
+    for (const auto& [pieceType, sprite] : pieces) {
+        drawChessPieces(window, piece.bitboards[pieceType], sprite);
+    }
 
 }
 
