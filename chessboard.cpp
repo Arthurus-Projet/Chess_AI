@@ -1526,6 +1526,67 @@ bool ChessBoard::isAttacked(int position, bool isWhite) {
     }
 
 
+    // King 
+
+    // Move up right (+9)
+    if (((position & 7) != 7) && (position + 9) < 64 ) {
+        mask = 1ULL << (position + 9); 
+        if (mask & piece.bitboards[isWhite? BLACK_KING : WHITE_KING])
+            return true; 
+        }
+
+
+    // Move up left (+7)
+    if ((position & 7) != 0 && (position + 7) < 64)  {
+        mask = 1ULL << (position + 7); 
+        if (mask & piece.bitboards[isWhite? BLACK_KING : WHITE_KING])
+            return true; 
+        }
+
+    // Move down right (-7)
+    if ((position & 7) != 7 && (position - 7) >= 0)  {
+        mask = 1ULL << (position - 7); 
+        if (mask & piece.bitboards[isWhite? BLACK_KING : WHITE_KING])
+            return true; 
+        }
+
+    // Move down left (-9)
+    if ((position & 7) != 0 && (position - 9) >= 0)  {
+        mask = 1ULL << (position - 9); 
+        if (mask & piece.bitboards[isWhite? BLACK_KING : WHITE_KING])
+            return true; 
+        }
+
+    // Move right (+1)
+    if (((position & 7) != 7) && (position + 1) < 64)  {
+        mask = 1ULL << (position + 1); 
+        if (mask & piece.bitboards[isWhite? BLACK_KING : WHITE_KING])
+            return true; 
+        }
+    
+    // Move left (-1)
+    if (((position & 7) != 0) && (position - 1) >= 0)  {
+        mask = 1ULL << (position - 1); 
+        if (mask & piece.bitboards[isWhite? BLACK_KING : WHITE_KING])
+            return true; 
+        }
+    
+    // Move up (+8)
+    if ((position + 8) < 64)  {
+        mask = 1ULL << (position + 8); 
+        if (mask & piece.bitboards[isWhite? BLACK_KING : WHITE_KING])
+            return true; 
+        }
+    
+    // Move down (-8)
+    if ((position - 8) >= 0)  {
+        mask = 1ULL << (position - 8); 
+        if (mask & piece.bitboards[isWhite? BLACK_KING : WHITE_KING])
+            return true; 
+        }
+
+
+
     return false;
 }
 
