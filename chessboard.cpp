@@ -118,19 +118,13 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
 
 
 
- uint64_t& ChessBoard::whitePieceSelected(int& position) {
-    if ((piece.bitboards[WHITE_PAWN] >> position) & 1ULL)
-        return piece.bitboards[WHITE_PAWN];
-    if ((piece.bitboards[WHITE_ROOK] >> position) & 1ULL)
-        return piece.bitboards[WHITE_ROOK];
-    if ((piece.bitboards[WHITE_BISHOP] >> position) & 1ULL)
-        return piece.bitboards[WHITE_BISHOP];
-    if ((piece.bitboards[WHITE_KING] >> position) & 1ULL)
-        return piece.bitboards[WHITE_KING];
-    if ((piece.bitboards[WHITE_QUEEN] >> position) & 1ULL)
-        return piece.bitboards[WHITE_QUEEN];
-    if ((piece.bitboards[WHITE_KNIGHT] >> position) & 1ULL)
-        return piece.bitboards[WHITE_KNIGHT];
+uint64_t& ChessBoard::whitePieceSelected(int& position) {
+
+    for (int i = 0; i < 6; ++i) {
+        if ((piece.bitboards[i] >> position) & 1ULL)
+        return piece.bitboards[i];
+    }
+
     static uint64_t nullPiece = 0x0ULL;
     return nullPiece; 
  }
