@@ -131,30 +131,11 @@ uint64_t& ChessBoard::whitePieceSelected(int& position) {
 
 
   uint64_t& ChessBoard::PieceSelected(int& position) {
-    if ((piece.bitboards[WHITE_PAWN] >> position) & 1ULL)
-        return piece.bitboards[WHITE_PAWN];
-    if ((piece.bitboards[WHITE_ROOK] >> position) & 1ULL)
-        return piece.bitboards[WHITE_ROOK];
-    if ((piece.bitboards[WHITE_BISHOP] >> position) & 1ULL)
-        return piece.bitboards[WHITE_BISHOP];
-    if ((piece.bitboards[WHITE_KING] >> position) & 1ULL)
-        return piece.bitboards[WHITE_KING];
-    if ((piece.bitboards[WHITE_QUEEN] >> position) & 1ULL)
-        return piece.bitboards[WHITE_QUEEN];
-    if ((piece.bitboards[WHITE_KNIGHT] >> position) & 1ULL)
-        return piece.bitboards[WHITE_KNIGHT];
-    if ((piece.bitboards[BLACK_PAWN] >> position) & 1ULL)
-        return piece.bitboards[BLACK_PAWN];
-    if ((piece.bitboards[BLACK_ROOK] >> position) & 1ULL)
-        return piece.bitboards[BLACK_ROOK];
-    if ((piece.bitboards[BLACK_BISHOP] >> position) & 1ULL)
-        return piece.bitboards[BLACK_BISHOP];
-    if ((piece.bitboards[BLACK_KING] >> position) & 1ULL)
-        return piece.bitboards[BLACK_KING];
-    if ((piece.bitboards[BLACK_QUEEN] >> position) & 1ULL)
-        return piece.bitboards[BLACK_QUEEN];
-    if ((piece.bitboards[BLACK_KNIGHT] >> position) & 1ULL)
-        return piece.bitboards[BLACK_KNIGHT];
+   
+    for (int i = 0; i < 12; ++i) {
+        if ((piece.bitboards[i] >> position) & 1ULL)
+        return piece.bitboards[i];
+    }
     
     static uint64_t nullPiece = 0x0ULL;
     return nullPiece;
