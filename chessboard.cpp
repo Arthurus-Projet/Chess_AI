@@ -190,10 +190,7 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
  }
 
 
-
- 
-
-  inline PieceType ChessBoard::getPieceTypeIfThereIsAWhitePieceAt(int position) {
+inline PieceType ChessBoard::getPieceTypeIfThereIsAWhitePieceAt(int position) {
     uint64_t mask = 1ULL << position;
 
     if (mask & (piece.bitboards[WHITE_PAWN])) 
@@ -231,8 +228,6 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
 
     return NONE;
  }
- 
- 
  
 
 inline bool ChessBoard::isThereAPieceAt(int position) {
@@ -294,7 +289,6 @@ int ChessBoard::possibilityWhiteTower(int position, int* moves) {
 
     return count;
 }
-
 
 
 int ChessBoard::possibilityBlackTower(int position, int* moves) {
@@ -412,9 +406,7 @@ int ChessBoard::possibilityWhiteKnight(int position, int* moves) {
             moves[count++] = position - 17;
     }
 
-    
     return count;
-
 }
 
 
@@ -481,8 +473,6 @@ int ChessBoard::possibilityBlackKnight(int position, int* moves) {
         if (!isThereABlackPieceAt(position - 17)) 
             moves[count++] = position - 17;
     }
-
-    
     return count;
 
 }
@@ -638,8 +628,6 @@ int ChessBoard::possibilityBlackPawn(int position, int* moves) {
 
     return count;
  }
-
-
 
  
 int ChessBoard::possibilityWhiteQueen(int position, int* moves) {
@@ -966,16 +954,13 @@ int ChessBoard::evaluatePawnPower() {
    
         pawnWhiteBitboard &= pawnWhiteBitboard - 1;
     }
-    //score += __builtin_popcountll(piece.bitboards[WHITE_PAWN]);
-
-
+    
     score += __builtin_popcountll(piece.bitboards[WHITE_BISHOP]) * 3 * coef;
     score += __builtin_popcountll(piece.bitboards[WHITE_KNIGHT]) * 3 * coef;
     score += __builtin_popcountll(piece.bitboards[WHITE_ROOK]) * 5 * coef;
     score += __builtin_popcountll(piece.bitboards[WHITE_QUEEN]) * 9 * coef;
     score += __builtin_popcountll(piece.bitboards[WHITE_KING]) * 20 * coef;
 
-    //score -= __builtin_popcountll(piece.bitboards[BLACK_PAWN]);
     score -= __builtin_popcountll(piece.bitboards[BLACK_BISHOP]) * 3 * coef;
     score -= __builtin_popcountll(piece.bitboards[BLACK_KNIGHT]) * 3 * coef;
     score -= __builtin_popcountll(piece.bitboards[BLACK_ROOK]) * 5 * coef;
@@ -995,9 +980,6 @@ int ChessBoard::evaluatePawnPower() {
     return score;
 }
 
-
-
- 
 
 int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
     float square_x = static_cast<float>(size.x) / 8.f;
@@ -1019,8 +1001,7 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
  void ChessBoard::unMovePiece(uint64_t* pieceFrom, uint64_t* pieceTo, int from, int to) {
     *pieceFrom |= (1ULL << from); // get back the old piece
     *pieceFrom &= ~(1ULL << to); // delete the new position of the piece
-    //if ((*pieceTo != 0x0ULL) && (*pieceFrom != *pieceTo))
-        *pieceTo |= (1ULL << to); // add a piece if there is a piece
+    *pieceTo |= (1ULL << to); // add a piece if there is a piece
  }
 
  Move ChessBoard::getMoveForAPosition(int position, int to, PieceType pieceType, bool white) {
@@ -1217,7 +1198,6 @@ bool ChessBoard::isInCheck(bool isWhite) {
 
 
     //  Pawn
-
     if (isWhite) {
 
         // left part of the board
@@ -1489,9 +1469,7 @@ bool ChessBoard::isAttacked(int position, bool isWhite) {
         }
     }
 
-
     //  Pawn
-
     if (isWhite) {
 
         // left part of the board
@@ -1521,7 +1499,6 @@ bool ChessBoard::isAttacked(int position, bool isWhite) {
                 if (mask & piece.bitboards[WHITE_PAWN]) 
                     return true; 
             }
-
 
     }
 
@@ -1584,7 +1561,6 @@ bool ChessBoard::isAttacked(int position, bool isWhite) {
         if (mask & piece.bitboards[isWhite? BLACK_KING : WHITE_KING])
             return true; 
         }
-
 
 
     return false;
@@ -1731,15 +1707,7 @@ std::vector<Move> ChessBoard::allMovesForWhite() {
             movesList.push_back(getMoveForAPosition(position, moves[i], WHITE_PAWN, true));
     }
 
-    //std::cout << "SIZE " << movesList.size() << std::endl;
     possibilityCastle(movesList, true);
-    //std::cout << "SIZE " << movesList.size() << std::endl;
-
-
-    //for (Move move_ : movesList)
-    //    std::cout << move_.to << " <-" << std::endl;
-
-
 
     return movesList;
  }
@@ -1819,9 +1787,6 @@ std::vector<Move> ChessBoard::allMovesForWhite() {
 
     possibilityCastle(movesList, false);
 
-    //for (Move move_ : movesList)
-    //    std::cout << move_.to << " <-" << std::endl;
-
     return movesList;
  }
 
@@ -1829,7 +1794,6 @@ void ChessBoard::moveOrdering(std::vector<Move>* moves) {
 
     int index = 0;
     for (int i = 1; i < moves->size(); ++i) {
-
         if ((*moves)[i].capturedType != NONE) {
 
 
@@ -1858,8 +1822,6 @@ bool ChessBoard::makeMove(const Move& move) {
     } 
 
     bool isWhite = move.piece < 6;
-
-    
 
     if (move.piece == WHITE_KING) {
         whiteKingSideCastling = false;
@@ -1892,31 +1854,24 @@ bool ChessBoard::makeMove(const Move& move) {
             if (move.castlingType == KINGSIDE) {
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 7); // Remove Rook
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 5);
-                //whiteKingSideCastling = false;
             } else {
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 0);
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 3);
-                whiteQueenSideCasling = false;
             }
         } else {
             if (move.castlingType == KINGSIDE) {
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 63); // Remove Rook
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 61);
-                //blackKingSideCastling = false;
             } else {
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 56);
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 59);
-                //blackQueenSideCasling = false;
             }
 
         }
 
-
         return false;
         }
 
-        
-        
 
         // Normal Move
         piece.bitboards[move.piece] &= ~(1ULL << move.from);
@@ -2080,12 +2035,7 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
 
     // DO THE BEST MOVE
     makeMove(move_);
-    /*
-    piece.bitboards[move_.piece] &= ~(1ULL << move_.from);
-    piece.bitboards[move_.piece] |= (1ULL << move_.to) ;
-    if (move_.capturedType != NONE)
-        piece.bitboards[move_.capturedType] &= ~( 1ULL << move_.to);
-    */
+    
 }
 
 

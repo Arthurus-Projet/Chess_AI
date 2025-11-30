@@ -58,7 +58,6 @@ int main()
                     
                         std::cout << "Mouse clicked at: " << position << std::endl;
 
-                        //pieceLeftClick = &board.whitePieceSelected(position);
                         pieceLeftClick = &board.PieceSelected(position);
                         std::cout << "piece memory adress : " << piece << std::endl;
 
@@ -121,11 +120,7 @@ int main()
 
                             }
                               
-                        }
-                            
-
-                            
-                        
+                        }                            
                     } else {
                         possibilityMove_ = 0x0ULL;
                         position2 = board.mouseToPosition(x, y, size);
@@ -146,42 +141,8 @@ int main()
 
                         }
 
-                        /*
-                        for (int i = 0; i < nMoves; i++) {
-                            if (position2 == moves[i]) {
-                                if ((*pieceLeftClick == board.piece.bitboards[WHITE_PAWN]) && (position2 >> 3) == 7) {
-                                    board.movePiece(pieceLeftClick, pieceLeftClick, position, position2); // Remove the pawn
-                                    board.piece.bitboards[WHITE_QUEEN] |= (1ULL << position2);
-
-                                    }
-                                else
-                                    board.movePiece(pieceLeftClick, pieceLeftClick2, position, position2);
-                                    
-
-                                board.AI_chess(AIisBlack);
-                                break;
-                            }
-
-                        }
-                        */
-
-
-
 
                     }
-                        
-                    /*else if (piece == board.piece.bitboards[WHITE_ROOK])
-                        std::cout << "Rook selected" << std::endl; 
-                    else if (piece == board.piece.bitboards[WHITE_BISHOP])
-                        std::cout << "Bishop selected" << std::endl; 
-                    else if (piece == board.piece.bitboards[WHITE_KING])
-                        std::cout << "King selected" << std::endl; 
-                    else if (piece == board.piece.bitboards[WHITE_QUEEN])
-                        std::cout << "Queen selected" << std::endl; 
-                    else if (piece == board.piece.bitboards[WHITE_KNIGHT])
-                        std::cout << "Knight selected" << std::endl; 
-                        */
-
                 }
 
                 // Right Click :
@@ -214,17 +175,11 @@ int main()
         board.draw(window); // draw the chessboard
 
         board.drawChessPieces(window, possibilityMove_, board.possibilityMove);
-
         
         board.drawAllPieces(window);
-        //std::cout << "White pawns:\n" << std::bitset<64>(whitePawns) << "\n\n";
-
-    
-        
-
 
         window.display();
     }
-
+    
     return 0;
 }
