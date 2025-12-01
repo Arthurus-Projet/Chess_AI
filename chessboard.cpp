@@ -7,8 +7,8 @@
 ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size)
     : windowSize(windowWidth, windowHeight),
       boardSize(size),
-      LIGHT_COLOR(255, 255, 255),
-      DARK_COLOR(0, 0, 0) {
+      LIGHT_COLOR(223, 227, 185),
+      DARK_COLOR(156, 125, 94) {
 
     squareSize = windowWidth / boardSize;
 
@@ -143,14 +143,14 @@ uint64_t& ChessBoard::whitePieceSelected(int& position) {
 
 
 
- inline bool ChessBoard::isThereAWhitePieceAt(int position) {
+inline bool ChessBoard::isThereAWhitePieceAt(int position) {
     uint64_t mask = 1ULL << position;
     return mask & (piece.bitboards[WHITE_BISHOP] | piece.bitboards[WHITE_KING] |
                    piece.bitboards[WHITE_KNIGHT] | piece.bitboards[WHITE_PAWN] |
                    piece.bitboards[WHITE_QUEEN] | piece.bitboards[WHITE_ROOK]);
  }
 
- inline bool ChessBoard::isThereABlackPieceAt(int position) {
+inline bool ChessBoard::isThereABlackPieceAt(int position) {
     uint64_t mask = 1ULL << position;
     return mask & (piece.bitboards[BLACK_BISHOP] | piece.bitboards[BLACK_KING] |
                    piece.bitboards[BLACK_KNIGHT] | piece.bitboards[BLACK_PAWN] |
@@ -174,11 +174,16 @@ inline PieceType ChessBoard::getPieceTypeIfThereIsAWhitePieceAt(int position) {
     if (mask & (piece.bitboards[WHITE_KING])) 
         return WHITE_KING;
 
+    for (int i = 0; i < 6; ++i) {
+        if (mask & (piece.bitboards[i])) 
+        return WHITE_KING;
+    }
+
     return NONE;
 
   }
 
-  inline PieceType ChessBoard::getPieceTypeIfThereIsABlackPieceAt(int position) {
+inline PieceType ChessBoard::getPieceTypeIfThereIsABlackPieceAt(int position) {
     uint64_t mask = 1ULL << position;
 
     if (mask & (piece.bitboards[BLACK_PAWN])) 
@@ -211,47 +216,18 @@ int ChessBoard::possibilityWhiteTower(int position, int* moves) {
 
     int count = 0;
 
-    // Move right (+1)
-    for (int i = 1; ((position + i) & 7) != 0 && (position + i) < 64; i++) {
+    std::vector<int> directions = {1, - 1, 8, -8};
+
+    for (int direction : directions) {
+
+        for (int i = direction; ((position + i) & 7) != 0 && (position + i) < 64; i+= direction) {
         if (isThereAWhitePieceAt(position + i))
             break;
 
         moves[count++] = position + i;
         if (isThereABlackPieceAt(position + i)) { 
             break;
-        }
-    }
-
-    // Move left (-1)
-    for (int i = -1; ((position + i) & 7) != 7 && (position + i) >= 0; i--) {
-        if (isThereAWhitePieceAt(position + i))
-            break;
-
-        moves[count++] = position + i;
-        if (isThereABlackPieceAt(position + i)) { 
-            break;
-        }
-    }
-
-    // Move up (+8)
-    for (int i = 8; (position + i) < 64; i += 8) {
-        if (isThereAWhitePieceAt(position + i))
-            break;
-
-        moves[count++] = position + i;
-        if (isThereABlackPieceAt(position + i)) { 
-            break;
-        }
-    }
-
-    // Move down (-8)
-    for (int i = -8; (position + i) >= 0; i -= 8) {
-        if (isThereAWhitePieceAt(position + i))
-            break;
-
-        moves[count++] = position + i;
-        if (isThereABlackPieceAt(position + i)) { 
-            break;
+            }
         }
     }
 
