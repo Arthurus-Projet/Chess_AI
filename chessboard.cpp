@@ -220,14 +220,22 @@ int ChessBoard::possibilityWhiteTower(int position, int* moves) {
 
     for (int direction : directions) {
 
-        for (int i = direction; ((position + i) & 7) != 0 && (position + i) < 64; i+= direction) {
-        if (isThereAWhitePieceAt(position + i))
-            break;
+        for (int i = direction; ; i+= direction) {
 
-        moves[count++] = position + i;
-        if (isThereABlackPieceAt(position + i)) { 
-            break;
-            }
+            if ((position + i) > 63) break; 
+            if ((position + i) < 0) break;
+
+            if ((((position + i) & 7) == 0) && (direction == 1))  break;
+            if ((((position + i) & 7) == 7) && (direction == -1)) break;
+
+            if (isThereAWhitePieceAt(position + i))
+                break;
+
+            moves[count++] = position + i;
+            if (isThereABlackPieceAt(position + i)) { 
+                break;
+                }
+        
         }
     }
 
@@ -238,6 +246,7 @@ int ChessBoard::possibilityWhiteTower(int position, int* moves) {
 int ChessBoard::possibilityBlackTower(int position, int* moves) {
 
     int count = 0;
+    
 
     // Move right (+1)
     for (int i = 1; ((position + i) & 7) != 0 && (position + i) < 64; i++) {
