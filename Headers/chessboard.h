@@ -76,9 +76,9 @@ private:
 
 public:
     bool whiteKingSideCastling = true;
-    bool whiteQueenSideCasling = true;
+    bool whiteQueenSideCastling = true;
     bool blackKingSideCastling = true;
-    bool blackQueenSideCasling = true;
+    bool blackQueenSideCastling = true;
     
     Piece piece;
     ChessBoard(int windowWidth, int windowHeight, int size = 8);

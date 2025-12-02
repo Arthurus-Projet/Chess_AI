@@ -1538,7 +1538,7 @@ void ChessBoard::possibilityCastle(std::vector<Move>& movesList, bool isWhite) {
             }
         }
 
-        if (whiteQueenSideCasling) {
+        if (whiteQueenSideCastling) {
             if (!isThereAPieceAt(1) && !isThereAPieceAt(2) && !isThereAPieceAt(3)) {
                 if (!isAttacked(1, true) && !isAttacked(2, true) && !isAttacked(3, true) && !isInCheck(true)) {
                     Move move;
@@ -1571,7 +1571,7 @@ void ChessBoard::possibilityCastle(std::vector<Move>& movesList, bool isWhite) {
             }
         }
 
-        if (blackQueenSideCasling) {
+        if (blackQueenSideCastling) {
             if (!isThereAPieceAt(57) && !isThereAPieceAt(58) && !isThereAPieceAt(59)) {
                 if (!isAttacked(57, false) && !isAttacked(58, false) && !isAttacked(59, false) && !isInCheck(false)) {
                     Move move;
@@ -1760,9 +1760,9 @@ bool ChessBoard::makeMove(const Move& move) {
 
     // Save before change flags
     const_cast<Move&>(move).whiteKingSideCastlingBefore = whiteKingSideCastling;
-    const_cast<Move&>(move).whiteQueenSideCastlingBefore = whiteQueenSideCasling;
+    const_cast<Move&>(move).whiteQueenSideCastlingBefore = whiteQueenSideCastling;
     const_cast<Move&>(move).blackKingSideCastlingBefore = blackKingSideCastling;
-    const_cast<Move&>(move).blackQueenSideCastlingBefore = blackQueenSideCasling;
+    const_cast<Move&>(move).blackQueenSideCastlingBefore = blackQueenSideCastling;
 
 
     if (move.capturedType != NONE)
@@ -1778,22 +1778,22 @@ bool ChessBoard::makeMove(const Move& move) {
 
     if (move.piece == WHITE_KING) {
         whiteKingSideCastling = false;
-        whiteQueenSideCasling = false;
+        whiteQueenSideCastling = false;
     }
 
     if (move.piece == BLACK_KING) {
         blackKingSideCastling = false;
-        blackQueenSideCasling = false;
+        blackQueenSideCastling = false;
     }
 
     if (move.piece == WHITE_ROOK) {
         if (move.from == 7) whiteKingSideCastling = false;
-        if (move.from == 0) whiteQueenSideCasling = false;
+        if (move.from == 0) whiteQueenSideCastling = false;
     }
 
     if (move.piece == BLACK_ROOK) {
         if (move.from == 63) blackKingSideCastling = false;
-        if (move.from == 56) blackQueenSideCasling = false;
+        if (move.from == 56) blackQueenSideCastling = false;
     }
 
 
@@ -1837,9 +1837,9 @@ void ChessBoard::unMakeMove(bool pawnBecomeQueen, const Move& move) {
         piece.bitboards[move.capturedType] |= (1ULL << move.to);
 
     whiteKingSideCastling = move.whiteKingSideCastlingBefore;
-    whiteQueenSideCasling = move.whiteQueenSideCastlingBefore;
+    whiteQueenSideCastling = move.whiteQueenSideCastlingBefore;
     blackKingSideCastling = move.blackKingSideCastlingBefore;
-    blackQueenSideCasling = move.blackQueenSideCastlingBefore;
+    blackQueenSideCastling = move.blackQueenSideCastlingBefore;
     
     if (pawnBecomeQueen) {
         piece.bitboards[(move.piece == WHITE_PAWN ? WHITE_QUEEN : BLACK_QUEEN)] &= ~(1ULL << move.to); // Remove the Queen
@@ -1862,7 +1862,7 @@ void ChessBoard::unMakeMove(bool pawnBecomeQueen, const Move& move) {
             } else {
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 0);
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 3);
-                whiteQueenSideCasling = true;
+                whiteQueenSideCastling = true;
             }
         } else {
             if (move.castlingType == KINGSIDE) {
@@ -1872,7 +1872,7 @@ void ChessBoard::unMakeMove(bool pawnBecomeQueen, const Move& move) {
             } else {
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 56);
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 59);
-                blackQueenSideCasling = true;
+                blackQueenSideCastling = true;
             }
         }
     }
@@ -1898,7 +1898,6 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
         std::vector<Move> moves = allMovesForWhite();
         moveOrdering(&moves);
         
-
         for (const Move& move : moves) {
             bool pawnBecomeQueen = makeMove(move);
 
