@@ -149,6 +149,7 @@ public:
     void unMakeMove(bool pawnBecomeQueen, const Move& move);
     bool isAttacked(int position, bool isWhite);
     void possibilityCastle(std::vector<Move>& movesList, bool isWhite);
+    void printMove(const Move& move);
 };
 
 

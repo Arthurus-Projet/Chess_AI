@@ -54,10 +54,10 @@ int main()
 
                         position = board.mouseToPosition(x, y, size);
                     
-                        std::cout << "Mouse clicked at: " << position << std::endl;
+                        //std::cout << "Mouse clicked at: " << position << std::endl;
 
                         pieceLeftClick = &board.PieceSelected(position);
-                        std::cout << "piece memory adress : " << piece << std::endl;
+                        //std::cout << "piece memory adress : " << piece << std::endl;
 
                         // To be sure we select a White Piece :
                         if (pieceLeftClick != 0x0ULL) { 
@@ -113,8 +113,8 @@ int main()
 
 
                         for (const Move& move : movesList) {
-                            std::cout << "[DEBUG] " << move.moveType << " " << move.to << " " << position2 << " " << board.piece.bitboards[move.piece] << " " <<*pieceLeftClick  <<  std::endl;
-                            std::cout << "[DEBUG] Move.from :"  << move.from << " move.to " << move.to << " mode type " << move.moveType << " castlingType " << move.castlingType << " move piece "<< move.piece <<std::endl;
+                            //std::cout << "[DEBUG] " << move.moveType << " " << move.to << " " << position2 << " " << board.piece.bitboards[move.piece] << " " <<*pieceLeftClick  <<  std::endl;
+                            //std::cout << "[DEBUG] Move.from :"  << move.from << " move.to " << move.to << " mode type " << move.moveType << " castlingType " << move.castlingType << " move piece "<< move.piece <<std::endl;
                             if ((position2 == move.to) && (position == move.from) ) {
                                 board.makeMove(move);
                                 board.AI_chess(AIisBlack);
@@ -129,7 +129,7 @@ int main()
 
                 // Right Click :
                 if (event.mouseButton.button == sf::Mouse::Right ) {
-                    std::cout << "RIGHT click" << std::endl;
+                    //std::cout << "RIGHT click" << std::endl;
                     int x = event.mouseButton.x;
                     int y = event.mouseButton.y;
                     sf::Vector2u size = window.getSize(); // size.x size.y

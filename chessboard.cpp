@@ -1756,6 +1756,26 @@ void ChessBoard::moveOrdering(std::vector<Move>* moves) {
     }
  }
 
+
+
+void ChessBoard::printMove(const Move& move) {
+    std::cout << "                                                 " << std::endl;
+    std::cout << "------------------------------------------------" << std::endl;
+    std::cout << "Move.from " << Move.from << std::endl;
+    std::cout << "Move.to " << Move.to << std::endl;
+    std::cout << "Move.piece " << Move.piece << std::endl;
+    std::cout << "Move.capturedType " << Move.capturedType << std::endl;
+    std::cout << "Move.moveType " << Move.moveType << std::endl;
+    std::cout << "Move.castlingType " << Move.castlingType << std::endl;
+    std::cout << "Move.whiteKingSideCastlingBefore " << Move.whiteKingSideCastlingBefore << std::endl;
+    std::cout << "Move.whiteQueenSideCastlingBefore " << Move.whiteQueenSideCastlingBefore << std::endl;
+    std::cout << "Move.blackKingSideCastlingBefore " << Move.blackKingSideCastlingBefore << std::endl;
+    std::cout << "Move.blackQueenSideCastlingBefore " << Move.blackQueenSideCastlingBefore << std::endl;
+    std::cout << "------------------------------------------------" << std::endl;
+    std::cout << "                                                 " << std::endl;
+
+}
+
 bool ChessBoard::makeMove(const Move& move) {
 
     // Save before change flags
@@ -1805,9 +1825,11 @@ bool ChessBoard::makeMove(const Move& move) {
 
         if (isWhite) {
             if (move.castlingType == KINGSIDE) {
+                std::cout << "DEBUG 1" << std::endl;
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 7); // Remove Rook
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 5);
             } else {
+                std::cout << "DEBUG 2" << std::endl;
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 0);
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 3);
             }
@@ -1815,9 +1837,11 @@ bool ChessBoard::makeMove(const Move& move) {
             if (move.castlingType == KINGSIDE) {
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 63); // Remove Rook
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 61);
+                std::cout << "DEBUG 3" << std::endl;
             } else {
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 56);
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 59);
+                std::cout << "DEBUG 3" << std::endl;
             }
 
         }
@@ -1858,21 +1882,21 @@ void ChessBoard::unMakeMove(bool pawnBecomeQueen, const Move& move) {
             if (move.castlingType == KINGSIDE) {
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 7);
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 5);
-                whiteKingSideCastling = true;
+                //whiteKingSideCastling = true;
             } else {
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 0);
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 3);
-                whiteQueenSideCastling = true;
+                //whiteQueenSideCastling = true;
             }
         } else {
             if (move.castlingType == KINGSIDE) {
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 63);
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 61);
-                blackKingSideCastling = true;
+                //blackKingSideCastling = true;
             } else {
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 56);
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 59);
-                blackQueenSideCastling = true;
+                //blackQueenSideCastling = true;
             }
         }
     }
@@ -1959,7 +1983,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
 
 
 void ChessBoard::AI_chess(bool AIplaysBlack) {
-    int depth = 4;
+    int depth = 3;
     bool hasLegalMove = false;
     
     std::vector<Move> moves;
@@ -1980,6 +2004,10 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
         bool pawnBecomeQueen = makeMove(move);
 
         if (!isInCheck(!AIplaysBlack)) {
+
+            if (!hasLegalMove) {
+                move_ = move;
+            }
             hasLegalMove = true;
             int eval;
             if (AIplaysBlack) {
@@ -2016,7 +2044,8 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
         }
 
     // DO THE BEST MOVE
-    makeMove(move_);
+    if (hasLegalMove)
+        makeMove(move_);
 
     std::vector<Move> myPossiblesMoves = AIplaysBlack ? allMovesForWhite() : allMovesForBlack();
     hasLegalMove = false;
