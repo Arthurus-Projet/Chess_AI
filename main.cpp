@@ -50,8 +50,6 @@ int main()
 
                     leftClick = !leftClick;
 
-                    
-
                     if (leftClick) {
 
                         position = board.mouseToPosition(x, y, size);
@@ -93,31 +91,15 @@ int main()
                                 
                             possibilityMove_ = 0x0ULL;
                             
-                             if (*pieceLeftClick == board.piece.bitboards[WHITE_KING]) {
-                                std::vector<Move> test;
-                                board.possibilityCastle(test, true);
-
-                                for (const Move& move : test) {
-                                    
-                                    if (move.castlingType == KINGSIDE) {
-                                        possibilityMove_ |= (1ULL << 6);
-                                    } else {
-                                        possibilityMove_ |= (1ULL << 2);
-                                    }
-                                
-                                }
-                             }
                             
-                            for (int i = 0; i < nMoves; i++) {
+                            // Add only authorized movements
+                            std::vector<Move> moves = board.allMovesForWhite();
 
-                                uint64_t *pieceTo = &board.PieceSelected(moves[i]);
-                                board.movePiece(pieceLeftClick, &board.PieceSelected(moves[i]), position, moves[i]);
-                                
-                                std::cout << "is in check  " << board.isInCheck(false) << std::endl;
-                                if (!board.isInCheck(AIisBlack))
-                                    possibilityMove_ |= (1ULL << moves[i]);
-                                board.unMovePiece(pieceLeftClick, pieceTo, position, moves[i]);
-
+                            for (const Move& move : moves) {
+                                bool pawn = board.makeMove(move);
+                                if (board.piece.bitboards[move.piece] == *pieceLeftClick && move.from == position && !board.isInCheck(true))
+                                    possibilityMove_ |= (1ULL << move.to);
+                                board.unMakeMove(pawn, move);
                             }
                               
                         }                            

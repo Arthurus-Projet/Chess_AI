@@ -2021,14 +2021,14 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
     std::vector<Move> myPossiblesMoves = AIplaysBlack ? allMovesForWhite() : allMovesForBlack();
     hasLegalMove = false;
 
-    for (const Move& move : myPossiblesMoves) {
-        bool pawnBecomeQueen = makeMove(move);
+    for (const Move& myMove : myPossiblesMoves) {
+        bool pawnBecomeQueen = makeMove(myMove);
         if (!isInCheck(AIplaysBlack)) {
-            hasLegalMove = true;
-            unMakeMove(pawnBecomeQueen, move);
-            break;
+           hasLegalMove = true;
+            unMakeMove(pawnBecomeQueen, myMove);
+            break;  
         }
-        unMakeMove(pawnBecomeQueen, move);
+        unMakeMove(pawnBecomeQueen, myMove);
     }
 
     if (!hasLegalMove) {
