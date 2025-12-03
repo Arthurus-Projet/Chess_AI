@@ -1761,16 +1761,16 @@ void ChessBoard::moveOrdering(std::vector<Move>* moves) {
 void ChessBoard::printMove(const Move& move) {
     std::cout << "                                                 " << std::endl;
     std::cout << "------------------------------------------------" << std::endl;
-    std::cout << "Move.from " << Move.from << std::endl;
-    std::cout << "Move.to " << Move.to << std::endl;
-    std::cout << "Move.piece " << Move.piece << std::endl;
-    std::cout << "Move.capturedType " << Move.capturedType << std::endl;
-    std::cout << "Move.moveType " << Move.moveType << std::endl;
-    std::cout << "Move.castlingType " << Move.castlingType << std::endl;
-    std::cout << "Move.whiteKingSideCastlingBefore " << Move.whiteKingSideCastlingBefore << std::endl;
-    std::cout << "Move.whiteQueenSideCastlingBefore " << Move.whiteQueenSideCastlingBefore << std::endl;
-    std::cout << "Move.blackKingSideCastlingBefore " << Move.blackKingSideCastlingBefore << std::endl;
-    std::cout << "Move.blackQueenSideCastlingBefore " << Move.blackQueenSideCastlingBefore << std::endl;
+    std::cout << "Move.from " << move.from << std::endl;
+    std::cout << "Move.to " << move.to << std::endl;
+    std::cout << "Move.piece " << move.piece << std::endl;
+    std::cout << "Move.capturedType " << move.capturedType << std::endl;
+    std::cout << "Move.moveType " << move.moveType << std::endl;
+    std::cout << "Move.castlingType " << move.castlingType << std::endl;
+    std::cout << "Move.whiteKingSideCastlingBefore " << move.whiteKingSideCastlingBefore << std::endl;
+    std::cout << "Move.whiteQueenSideCastlingBefore " << move.whiteQueenSideCastlingBefore << std::endl;
+    std::cout << "Move.blackKingSideCastlingBefore " << move.blackKingSideCastlingBefore << std::endl;
+    std::cout << "Move.blackQueenSideCastlingBefore " << move.blackQueenSideCastlingBefore << std::endl;
     std::cout << "------------------------------------------------" << std::endl;
     std::cout << "                                                 " << std::endl;
 
@@ -1785,8 +1785,18 @@ bool ChessBoard::makeMove(const Move& move) {
     const_cast<Move&>(move).blackQueenSideCastlingBefore = blackQueenSideCastling;
 
 
-    if (move.capturedType != NONE)
+    if (move.capturedType != NONE) {
         piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
+
+        if (move.capturedType == WHITE_ROOK && move.to == 7)
+            whiteKingSideCastling = false;
+        if (move.capturedType == WHITE_ROOK && move.to == 0)
+            whiteQueenSideCastling = false;
+        if (move.capturedType == BLACK_ROOK && move.to == 56)
+            blackQueenSideCastling = false;
+        if (move.capturedType == BLACK_ROOK && move.to == 63)
+            blackKingSideCastling = false;
+        }
 
     if (((move.piece == WHITE_PAWN) ^ (move.piece == BLACK_PAWN) ) && ((move.to >> 3) == 7) ^ ((move.to >> 3) == 0)) {
        piece.bitboards[move.piece] &= ~(1ULL << move.from); // Delete Pawn
@@ -1826,6 +1836,7 @@ bool ChessBoard::makeMove(const Move& move) {
         if (isWhite) {
             if (move.castlingType == KINGSIDE) {
                 std::cout << "DEBUG 1" << std::endl;
+                printMove(move);
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 7); // Remove Rook
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 5);
             } else {
