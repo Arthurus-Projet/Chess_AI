@@ -1892,6 +1892,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
     if (depth == 0)
         return evaluatePawnPower();
 
+    bool hasLegalMove = false;
     if (isWhite) {
         int max_ = -1000;
 
@@ -1902,6 +1903,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
             bool pawnBecomeQueen = makeMove(move);
 
             if (!isInCheck(true)) {
+                hasLegalMove = true;
                 int eval = alphaBeta(depth -1, false, alpha, beta);
                 alpha = std::max(alpha, eval);
                 max_ = std::max(max_, eval);
@@ -1912,6 +1914,13 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
             if (beta <= alpha)
                     break;
 
+        }
+
+        if (!hasLegalMove) {
+            if (isInCheck(true))
+                return -10000 - depth; // Mat
+            else
+                return 0; // Pat
         }
 
         return max_;
@@ -1925,6 +1934,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
             bool pawnBecomeQueen = makeMove(move);
 
             if (!isInCheck(false)) {
+                hasLegalMove = true;
                 int eval = alphaBeta(depth -1, true, alpha, beta);
                 min_ = std::min(min_, eval);
                 beta = std::min(beta, eval);   
@@ -1934,6 +1944,13 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
 
             if (beta <= alpha)
                     break;
+        }
+
+        if (!hasLegalMove) {
+            if (isInCheck(false))
+                return 10000 + depth; // Mat
+            else
+                return 0; // Pat
         }
 
         return min_;
