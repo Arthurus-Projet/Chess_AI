@@ -1960,6 +1960,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
 
 void ChessBoard::AI_chess(bool AIplaysBlack) {
     int depth = 4;
+    bool hasLegalMove = false;
     
     std::vector<Move> moves;
     int max_;
@@ -1978,23 +1979,27 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
 
         bool pawnBecomeQueen = makeMove(move);
 
-        int eval;
-        if (AIplaysBlack) {
-            eval = alphaBeta(depth, true, -1000, 1000); 
-        } else {
-            eval = alphaBeta(depth, false, -1000, 1000); 
-        }
+        if (!isInCheck(!AIplaysBlack)) {
+            hasLegalMove = true;
+            int eval;
+            if (AIplaysBlack) {
+                eval = alphaBeta(depth, true, -1000, 1000); 
+            } else {
+                eval = alphaBeta(depth, false, -1000, 1000); 
+            }
 
-        if (AIplaysBlack) {
-            if (eval < min_) {
-                move_ = move;
-                min_ = eval;
-                }
-        } else {
-            if (eval > max_) {
-                move_ = move;
-                max_ = eval;
-                }
+            if (AIplaysBlack) {
+                if (eval < min_) {
+                    move_ = move;
+                    min_ = eval;
+                    }
+            } else {
+                if (eval > max_) {
+                    move_ = move;
+                    max_ = eval;
+                    }
+            }
+
         }
 
         // Undo
@@ -2002,8 +2007,38 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
 
     }
 
+    if (!hasLegalMove) {
+        if (isInCheck(!AIplaysBlack))
+            std::cout << "AI is in checkmate" << std::endl;
+        else
+            std::cout << "AI is in pat" << std::endl;
+        return;
+        }
+
     // DO THE BEST MOVE
     makeMove(move_);
+
+    std::vector<Move> myPossiblesMoves = AIplaysBlack ? allMovesForWhite() : allMovesForBlack();
+    hasLegalMove = false;
+
+    for (const Move& move : myPossiblesMoves) {
+        bool pawnBecomeQueen = makeMove(move);
+        if (!isInCheck(AIplaysBlack)) {
+            hasLegalMove = true;
+            unMakeMove(pawnBecomeQueen, move);
+            break;
+        }
+        unMakeMove(pawnBecomeQueen, move);
+    }
+
+    if (!hasLegalMove) {
+        if (isInCheck(AIplaysBlack)) 
+            std::cout << "You are in checkmate" << std::endl;
+        else
+            std::cout << "You are in pat" << std::endl;
+
+
+    }
     
 }
 
