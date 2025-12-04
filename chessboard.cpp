@@ -1866,12 +1866,9 @@ bool ChessBoard::makeMove(const Move& move) {
 
         if (isWhite) {
             if (move.castlingType == KINGSIDE) {
-                std::cout << "DEBUG 1" << std::endl;
-                printMove(move);
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 7); // Remove Rook
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 5);
             } else {
-                std::cout << "DEBUG 2" << std::endl;
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 0);
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 3);
             }
@@ -1879,11 +1876,9 @@ bool ChessBoard::makeMove(const Move& move) {
             if (move.castlingType == KINGSIDE) {
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 63); // Remove Rook
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 61);
-                std::cout << "DEBUG 3" << std::endl;
             } else {
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 56);
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 59);
-                std::cout << "DEBUG 3" << std::endl;
             }
 
         }
@@ -1942,21 +1937,17 @@ void ChessBoard::unMakeMove(bool pawnBecomeQueen, const Move& move) {
             if (move.castlingType == KINGSIDE) {
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 7);
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 5);
-                //whiteKingSideCastling = true;
             } else {
                 piece.bitboards[WHITE_ROOK] |= (1ULL << 0);
                 piece.bitboards[WHITE_ROOK] &= ~(1ULL << 3);
-                //whiteQueenSideCastling = true;
             }
         } else {
             if (move.castlingType == KINGSIDE) {
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 63);
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 61);
-                //blackKingSideCastling = true;
             } else {
                 piece.bitboards[BLACK_ROOK] |= (1ULL << 56);
                 piece.bitboards[BLACK_ROOK] &= ~(1ULL << 59);
-                //blackQueenSideCastling = true;
             }
         }
     } else if (move.moveType == EN_PASSANT) {
