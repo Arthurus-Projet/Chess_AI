@@ -556,6 +556,15 @@ int ChessBoard::possibilityWhitePawn(int position, int* moves) {
     if (((position & 7) != 7) && isThereABlackPieceAt(position + 9))
         moves[count++] = position + 9;
 
+    // en Passant
+    // right part of the board
+    if (((position & 7) != 7) && enPassant == (position + 9))
+        moves[count++] = position + 9;
+
+    // left part of the board
+    if (((position & 7) != 0) && enPassant == (position + 7)) 
+        moves[count++] = position + 7;
+
     return count;
  }
 
@@ -578,6 +587,14 @@ int ChessBoard::possibilityBlackPawn(int position, int* moves) {
     // left part of the board
     if (((position & 7) != 0) && isThereAWhitePieceAt(position - 9))
         moves[count++] = position - 9;
+    
+    // en passant
+    // left part of the board
+    if (((position & 7) != 0) && enPassant == (position - 9))
+        moves[count++] = position - 9;
+
+    if (((position & 7) != 7) && enPassant == (position - 7)) 
+        moves[count++] = position - 7;
 
     return count;
  }
@@ -963,12 +980,23 @@ int ChessBoard::mouseToPosition(int x, int y, sf::Vector2u& size) {
     move.to =  to;
     move.piece = pieceType;
     move.moveType = NORMAL_MOVE;        
-    move.castlingType = KINGSIDE;   
-    if (white)
-        move.capturedType = getPieceTypeIfThereIsABlackPieceAt(to);
-    else
-        move.capturedType = getPieceTypeIfThereIsAWhitePieceAt(to);
-    
+    move.castlingType = KINGSIDE;  
+
+    if (pieceType == WHITE_PAWN && to == enPassant) {
+        move.moveType = EN_PASSANT;
+        move.capturedType = BLACK_PAWN;
+    } 
+    else if (pieceType == BLACK_PAWN && to == enPassant) {
+        move.moveType = EN_PASSANT;
+        move.capturedType = WHITE_PAWN;
+    }
+    else {
+        move.moveType = NORMAL_MOVE;
+        if (white)
+            move.capturedType = getPieceTypeIfThereIsABlackPieceAt(to);
+        else
+            move.capturedType = getPieceTypeIfThereIsAWhitePieceAt(to);
+    }
     return move;
  }
 
@@ -1784,6 +1812,9 @@ bool ChessBoard::makeMove(const Move& move) {
     const_cast<Move&>(move).blackKingSideCastlingBefore = blackKingSideCastling;
     const_cast<Move&>(move).blackQueenSideCastlingBefore = blackQueenSideCastling;
 
+    const_cast<Move&>(move).enPassantSquareBefore = enPassant;
+    enPassant = -1;
+
 
     if (move.capturedType != NONE) {
         piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
@@ -1860,6 +1891,22 @@ bool ChessBoard::makeMove(const Move& move) {
         return false;
         }
 
+        if (move.moveType == EN_PASSANT) {
+            piece.bitboards[move.piece] &= ~(1ULL << move.from);
+            piece.bitboards[move.piece] |= (1ULL << move.to);
+
+            if (isWhite) 
+                piece.bitboards[BLACK_PAWN] &= ~(1ULL << (move.to - 8));
+            else 
+                piece.bitboards[WHITE_PAWN] &= ~(1ULL << (move.to + 8));
+            return false;
+        }
+
+
+        if (move.piece == WHITE_PAWN && (move.to - move.from) == 16) 
+            enPassant = move.from + 8;
+        if (move.piece == BLACK_PAWN && (move.from - move.to) == 16) 
+            enPassant = move.from - 8;
 
         // Normal Move
         piece.bitboards[move.piece] &= ~(1ULL << move.from);
@@ -1868,13 +1915,15 @@ bool ChessBoard::makeMove(const Move& move) {
 }
 
 void ChessBoard::unMakeMove(bool pawnBecomeQueen, const Move& move) {
-    if (move.capturedType != NONE) 
+    if (move.capturedType != NONE && move.moveType != EN_PASSANT)  
         piece.bitboards[move.capturedType] |= (1ULL << move.to);
 
     whiteKingSideCastling = move.whiteKingSideCastlingBefore;
     whiteQueenSideCastling = move.whiteQueenSideCastlingBefore;
     blackKingSideCastling = move.blackKingSideCastlingBefore;
     blackQueenSideCastling = move.blackQueenSideCastlingBefore;
+
+    enPassant = move.enPassantSquareBefore;
     
     if (pawnBecomeQueen) {
         piece.bitboards[(move.piece == WHITE_PAWN ? WHITE_QUEEN : BLACK_QUEEN)] &= ~(1ULL << move.to); // Remove the Queen
@@ -1910,6 +1959,15 @@ void ChessBoard::unMakeMove(bool pawnBecomeQueen, const Move& move) {
                 //blackQueenSideCastling = true;
             }
         }
+    } else if (move.moveType == EN_PASSANT) {
+        piece.bitboards[move.piece] |= (1ULL << move.from);
+        piece.bitboards[move.piece] &= ~(1ULL << move.to);
+
+        if (isWhite) 
+            piece.bitboards[BLACK_PAWN] |= (1ULL << (move.to - 8));
+        else 
+            piece.bitboards[WHITE_PAWN] |= (1ULL << (move.to + 8));
+
     }
     
     

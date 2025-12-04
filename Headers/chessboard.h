@@ -39,6 +39,8 @@ struct Move {
     bool whiteQueenSideCastlingBefore = true;
     bool blackKingSideCastlingBefore = true;
     bool blackQueenSideCastlingBefore = true;
+
+    int enPassantSquareBefore = -1;
 };
 
 struct Piece {
@@ -79,6 +81,8 @@ public:
     bool whiteQueenSideCastling = true;
     bool blackKingSideCastling = true;
     bool blackQueenSideCastling = true;
+
+    int enPassant = -1;
     
     Piece piece;
     ChessBoard(int windowWidth, int windowHeight, int size = 8);
