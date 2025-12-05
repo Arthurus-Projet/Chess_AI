@@ -95,7 +95,7 @@ int main()
                             // Add only authorized movements
                             std::vector<Move> moves = board.allMovesForWhite();
 
-                            for (const Move& move : moves) {
+                            for (Move& move : moves) {
                                 bool pawn = board.makeMove(move);
                                 if (board.piece.bitboards[move.piece] == *pieceLeftClick && move.from == position && !board.isInCheck(true))
                                     possibilityMove_ |= (1ULL << move.to);
@@ -112,7 +112,7 @@ int main()
                         std::vector<Move> movesList = board.allMovesForWhite();
 
 
-                        for (const Move& move : movesList) {
+                        for (Move& move : movesList) {
                             //std::cout << "[DEBUG] " << move.moveType << " " << move.to << " " << position2 << " " << board.piece.bitboards[move.piece] << " " <<*pieceLeftClick  <<  std::endl;
                             //std::cout << "[DEBUG] Move.from :"  << move.from << " move.to " << move.to << " mode type " << move.moveType << " castlingType " << move.castlingType << " move piece "<< move.piece <<std::endl;
                             if ((position2 == move.to) && (position == move.from) ) {

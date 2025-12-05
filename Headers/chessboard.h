@@ -149,8 +149,8 @@ public:
     void AI_chess(bool AIplaysBlack);
     bool isInCheck(bool isWhite);
     void moveOrdering(std::vector<Move>* moves);
-    bool makeMove(const Move& move);
-    void unMakeMove(bool pawnBecomeQueen, const Move& move);
+    bool makeMove(Move& move);
+    void unMakeMove(bool pawnBecomeQueen, Move& move);
     bool isAttacked(int position, bool isWhite);
     void possibilityCastle(std::vector<Move>& movesList, bool isWhite);
     void printMove(const Move& move);

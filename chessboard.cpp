@@ -1804,15 +1804,15 @@ void ChessBoard::printMove(const Move& move) {
 
 }
 
-bool ChessBoard::makeMove(const Move& move) {
+bool ChessBoard::makeMove(Move& move) {
 
     // Save before change flags
-    const_cast<Move&>(move).whiteKingSideCastlingBefore = whiteKingSideCastling;
-    const_cast<Move&>(move).whiteQueenSideCastlingBefore = whiteQueenSideCastling;
-    const_cast<Move&>(move).blackKingSideCastlingBefore = blackKingSideCastling;
-    const_cast<Move&>(move).blackQueenSideCastlingBefore = blackQueenSideCastling;
+    move.whiteKingSideCastlingBefore = whiteKingSideCastling;
+    move.whiteQueenSideCastlingBefore = whiteQueenSideCastling;
+    move.blackKingSideCastlingBefore = blackKingSideCastling;
+    move.blackQueenSideCastlingBefore = blackQueenSideCastling;
 
-    const_cast<Move&>(move).enPassantSquareBefore = enPassant;
+    move.enPassantSquareBefore = enPassant;
     enPassant = -1;
 
 
@@ -1909,7 +1909,7 @@ bool ChessBoard::makeMove(const Move& move) {
         return false;
 }
 
-void ChessBoard::unMakeMove(bool pawnBecomeQueen, const Move& move) {
+void ChessBoard::unMakeMove(bool pawnBecomeQueen, Move& move) {
     if (move.capturedType != NONE && move.moveType != EN_PASSANT)  
         piece.bitboards[move.capturedType] |= (1ULL << move.to);
 
@@ -1983,7 +1983,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
         std::vector<Move> moves = allMovesForWhite();
         moveOrdering(&moves);
         
-        for (const Move& move : moves) {
+        for (Move& move : moves) {
             bool pawnBecomeQueen = makeMove(move);
 
             if (!isInCheck(true)) {
@@ -2014,7 +2014,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
         std::vector<Move> moves = allMovesForBlack();
         moveOrdering(&moves);
 
-        for (const Move& move : moves) {
+        for (Move& move : moves) {
             bool pawnBecomeQueen = makeMove(move);
 
             if (!isInCheck(false)) {
@@ -2043,7 +2043,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
 
 
 void ChessBoard::AI_chess(bool AIplaysBlack) {
-    int depth = 3;
+    int depth = 5;
     bool hasLegalMove = false;
     
     std::vector<Move> moves;
@@ -2059,7 +2059,7 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
         }
 
     Move move_;
-    for (const Move& move : moves) {
+    for (Move& move : moves) {
 
         bool pawnBecomeQueen = makeMove(move);
 
@@ -2110,7 +2110,7 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
     std::vector<Move> myPossiblesMoves = AIplaysBlack ? allMovesForWhite() : allMovesForBlack();
     hasLegalMove = false;
 
-    for (const Move& myMove : myPossiblesMoves) {
+    for (Move& myMove : myPossiblesMoves) {
         bool pawnBecomeQueen = makeMove(myMove);
         if (!isInCheck(AIplaysBlack)) {
            hasLegalMove = true;
