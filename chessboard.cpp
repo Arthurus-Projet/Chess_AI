@@ -1786,7 +1786,7 @@ void ChessBoard::moveOrdering(std::vector<Move>* moves) {
 
 
 
-void ChessBoard::printMove(const Move& move) {
+void ChessBoard::printMove(Move& move) {
     std::cout << "                                                 " << std::endl;
     std::cout << "------------------------------------------------" << std::endl;
     std::cout << "Move.from " << move.from << std::endl;
