@@ -4,13 +4,15 @@
 #include <map>
 #include <string>
 
-ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size)
+ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size, sf::RenderWindow& window)
     : windowSize(windowWidth, windowHeight),
       boardSize(size),
       LIGHT_COLOR(223, 227, 185),
-      DARK_COLOR(156, 125, 94) {
+      DARK_COLOR(156, 125, 94),
+      window(window) {
 
     squareSize = windowWidth / boardSize;
+    
 
     loadTextures();
 }
@@ -58,7 +60,7 @@ void ChessBoard::loadTextures() {
     blackQueenSprite.setTexture(textures["reine"]);
 }
 
-void ChessBoard::draw(sf::RenderWindow& window) {
+void ChessBoard::draw() {
     for (int row = 0; row < boardSize; ++row) {
         for (int col = 0; col < boardSize; ++col) {
             sf::RectangleShape square(sf::Vector2f(squareSize, squareSize));
@@ -82,7 +84,7 @@ std::vector<int> ChessBoard::getPositionsPiece(uint64_t piece) {
     return positions;
 }
 
-void ChessBoard::drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::Sprite& sprite) {
+void ChessBoard::drawChessPieces(uint64_t piece, sf::Sprite& sprite) {
 
     std::vector<int> positions = getPositionsPiece(piece);
 
@@ -93,7 +95,7 @@ void ChessBoard::drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::S
 }
 
 
-void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
+void ChessBoard::drawAllPieces() {
     const std::pair<int, sf::Sprite&> pieces[] = {
        {WHITE_PAWN, whitePawnSprite}, 
        {BLACK_PAWN, blackPawnSprite}, 
@@ -111,7 +113,7 @@ void ChessBoard::drawAllPieces(sf::RenderWindow& window) {
     };
 
     for (const auto& [pieceType, sprite] : pieces) {
-        drawChessPieces(window, piece.bitboards[pieceType], sprite);
+        drawChessPieces(piece.bitboards[pieceType], sprite);
     }
 
 }
@@ -2043,7 +2045,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
 
 
 void ChessBoard::AI_chess(bool AIplaysBlack) {
-    int depth = 5;
+    int depth = 4;
     bool hasLegalMove = false;
     
     std::vector<Move> moves;

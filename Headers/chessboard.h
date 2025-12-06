@@ -73,6 +73,7 @@ private:
     sf::Vector2u windowSize; // Window size
     sf::Color LIGHT_COLOR;
     sf::Color DARK_COLOR;
+    sf::RenderWindow& window;
     
 
 
@@ -85,10 +86,10 @@ public:
     int enPassant = -1;
     
     Piece piece;
-    ChessBoard(int windowWidth, int windowHeight, int size = 8);
+    ChessBoard(int windowWidth, int windowHeight, int size, sf::RenderWindow& window);
     void loadTextures();
-    void draw(sf::RenderWindow& window);
-    void drawChessPieces(sf::RenderWindow& window, uint64_t piece, sf::Sprite& sprite);
+    void draw();
+    void drawChessPieces(uint64_t piece, sf::Sprite& sprite);
     std::map<std::string, sf::Texture> textures;
     int squareSize;
     sf::Sprite possibilityMove;
@@ -106,7 +107,7 @@ public:
     sf::Sprite blackQueenSprite;
     uint64_t& whitePieceSelected(int &position);
     uint64_t& PieceSelected(int& position);
-    void drawAllPieces(sf::RenderWindow& window);
+    void drawAllPieces();
 
     inline bool isThereAWhitePieceAt(int position);
     inline bool isThereABlackPieceAt(int position);

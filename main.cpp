@@ -11,7 +11,7 @@ int main()
     const int windowSize = 1000;
     sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), "Chess AI");
 
-    ChessBoard board(windowSize, windowSize);  // creation of the class to display the board
+    ChessBoard board(windowSize, windowSize, 8, window);  // creation of the class to display the board
 
     // AI
     bool AIisBlack = true;
@@ -154,11 +154,11 @@ int main()
 
         window.clear();
 
-        board.draw(window); // draw the chessboard
+        board.draw(); // draw the chessboard
 
-        board.drawChessPieces(window, possibilityMove_, board.possibilityMove);
+        board.drawChessPieces(possibilityMove_, board.possibilityMove);
         
-        board.drawAllPieces(window);
+        board.drawAllPieces();
 
         window.display();
     }
