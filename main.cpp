@@ -8,8 +8,9 @@
 
 int main()
 {
+    std::string name_window = "chess AI";
     const int windowSize = 1000;
-    sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), "Chess AI");
+    sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), name_window);
 
     ChessBoard board(windowSize, windowSize, 8, window);  // creation of the class to display the board
 
@@ -141,16 +142,19 @@ int main()
                         piece = &board.PieceSelected(positionrightClick);
                         *piece &= ~(1ULL << positionrightClick);
                         std::cout << "Right click delete" << std::endl;
+                        window.setTitle("Right click delete");
                     } else {
                         positionrightClick2 = board.mouseToPosition(x, y, size);
                         std::cout << "Put piece here : " << positionrightClick2 << std::endl;
                         *piece |= (1ULL << positionrightClick2);
+                        window.setTitle("Put piece here");
                     }
                      
 
                 }
             }
         }
+
 
         window.clear();
 

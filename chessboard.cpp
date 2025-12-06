@@ -2098,10 +2098,14 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
     }
 
     if (!hasLegalMove) {
-        if (isInCheck(!AIplaysBlack))
+        if (isInCheck(!AIplaysBlack)) {
             std::cout << "AI is in checkmate" << std::endl;
-        else
+            window.setTitle("AI is in checkmate");
+            }
+        else {
             std::cout << "AI is in pat" << std::endl;
+            window.setTitle("AI is in pat");
+            }
         return;
         }
 
@@ -2123,10 +2127,14 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
     }
 
     if (!hasLegalMove) {
-        if (isInCheck(AIplaysBlack)) 
+        if (isInCheck(AIplaysBlack)) {
             std::cout << "You are in checkmate" << std::endl;
-        else
+            window.setTitle("You are in checkmate");
+        }
+        else {
             std::cout << "You are in pat" << std::endl;
+            window.setTitle("You are in pat");
+            }
 
 
     }
