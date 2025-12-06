@@ -9,7 +9,8 @@
 int main()
 {
     std::string name_window = "chess AI";
-    const int windowSize = 1000;
+    int number = 10;
+    int windowSize = 1000;
     sf::RenderWindow window(sf::VideoMode(windowSize, windowSize), name_window);
 
     ChessBoard board(windowSize, windowSize, 8, window);  // creation of the class to display the board
@@ -33,6 +34,7 @@ int main()
     int positionrightClick2;
     uint64_t* piece = nullptr;
 
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -40,6 +42,21 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::P) {
+                    windowSize += number;
+                    window.setSize(sf::Vector2u(windowSize, windowSize));
+                }
+            }
+
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::O) {
+                    windowSize -= number;
+                    window.setSize(sf::Vector2u(windowSize, windowSize));
+                }
+            }
 
             if (event.type == sf::Event::MouseButtonPressed) {
 
@@ -154,6 +171,9 @@ int main()
                 }
             }
         }
+
+     
+    
 
 
         window.clear();
