@@ -1772,7 +1772,7 @@ std::vector<Move> ChessBoard::allMovesForWhite() {
 
     return movesList;
  }
-
+/*
 void ChessBoard::moveOrdering(std::vector<Move>* moves) {
 
     int index = 0;
@@ -1785,7 +1785,30 @@ void ChessBoard::moveOrdering(std::vector<Move>* moves) {
             }
     }
  }
+*/
 
+void ChessBoard::moveOrdering(std::vector<Move>* moves) {
+    // Valeurs des pièces
+    static const int pieceValues[] = {
+        100, 100,   // PAWN
+        500, 500,   // ROOK  
+        300, 300,   // KNIGHT
+        300, 300,   // BISHOP
+        900, 900,   // QUEEN
+        0, 0        // KING
+    };
+
+    std::sort(moves->begin(), moves->end(), [](const Move& a, const Move& b) {
+        int scoreA = 0, scoreB = 0;
+        
+        if (a.capturedType != NONE)
+            scoreA = pieceValues[a.capturedType] * 10 - pieceValues[a.piece];
+        if (b.capturedType != NONE)
+            scoreB = pieceValues[b.capturedType] * 10 - pieceValues[b.piece];
+            
+        return scoreA > scoreB;
+    });
+}
 
 
 void ChessBoard::printMove(Move& move) {
@@ -2045,7 +2068,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
 
 
 void ChessBoard::AI_chess(bool AIplaysBlack) {
-    int depth = 4;
+    int depth = 5;
     bool hasLegalMove = false;
     
     std::vector<Move> moves;
