@@ -31,11 +31,12 @@ ZobristHashing::ZobristHashing(uint64_t seed) {
 
 
 int ZobristHashing::givePositionForCastlingRights(Move& move) {
-    return (move.whiteKingSideCastlingBefore  << 0) |
+    return move.whiteKingSideCastlingBefore |
            (move.whiteQueenSideCastlingBefore << 1) |
            (move.blackKingSideCastlingBefore  << 2) |
            (move.blackQueenSideCastlingBefore << 3);
 }
+
 
 
 uint64_t ZobristHashing::updateHash(uint64_t& hash, Move&  move) {
