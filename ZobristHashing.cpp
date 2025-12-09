@@ -1,4 +1,5 @@
 #include "Headers/ZobristHashing.h"
+#include "Headers/chessboard.h"
 #include <iostream>
 
 
@@ -25,5 +26,23 @@ ZobristHashing::ZobristHashing(uint64_t seed) {
 
     sideToMove = dist(rng);
 
+
+}
+
+
+int ZobristHashing::givePositionForCastlingRights(Move& move) {
+    return (move.whiteKingSideCastlingBefore  << 0) |
+           (move.whiteQueenSideCastlingBefore << 1) |
+           (move.blackKingSideCastlingBefore  << 2) |
+           (move.blackQueenSideCastlingBefore << 3);
+}
+
+
+uint64_t ZobristHashing::updateHash(uint64_t& hash, Move&  move) {
+
+    hash ^= pieceSquare[move.piece][move.to];
+
+
+    return hash;
 
 }

@@ -4,6 +4,7 @@
 #include <random>
 #include <array>
 #include <cstdint>
+#include "Headers/chessboard.h"
 
 
 constexpr int NUM_PIECES = 12;
@@ -18,6 +19,7 @@ class ZobristHashing {
         std::array<uint64_t, NUM_EN_PASSANT> enPassant;
         uint64_t sideToMove;
         ZobristHashing(uint64_t seed);
+        uint64_t updateHash(uint64_t& hash, Move& move);
 
 };
 
