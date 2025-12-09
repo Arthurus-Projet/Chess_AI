@@ -17,6 +17,10 @@ class ZobristHashing {
         std::array<uint64_t, NUM_CASTLING_RIGHTS> castlingRights;
         std::array<uint64_t, NUM_EN_PASSANT> enPassant;
         uint64_t sideToMove;
+        ZobristHashing(uint64_t seed);
 
 };
 
+
+
+#endif
