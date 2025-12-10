@@ -49,9 +49,26 @@ int ZobristHashing::givePositionForCastlingRightsBefore(Move& move) {
 
 uint64_t ZobristHashing::updateHash(uint64_t& hash, Move& move) {
 
-    
+    hash ^= pieceSquare[move.piece][move.from];
+    hash ^= pieceSquare[move.piece][move.to];
+
+    if(move.capturedType != NONE)
+        hash ^= pieceSquare[move.capturedType][move.to];
+
+    int pos = givePositionForCastlingRightsBefore(move);
+    hash ^= castlingRights[pos];
+
+    pos = givePositionForCastlingRights(move);
+    hash ^= castlingRights[pos];
+
+    if (move.enPassantSquareBefore != -1) 
+        hash ^= enPassantNum[(move.enPassantSquareBefore % 8)];
+
+    if (move.enPassantSquareAfter != -1)
+        hash ^= enPassantNum[(move.enPassantSquareAfter % 8)];
+
+    hash ^= sideToMove;
 
     return hash;
-
 }
 
