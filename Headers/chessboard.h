@@ -46,6 +46,7 @@ struct Move {
     bool blackQueenSideCastlingAfter = true;
 
     int enPassantSquareBefore = -1;
+    int enPassantSquareAfter = -1;
 };
 
 struct Piece {
