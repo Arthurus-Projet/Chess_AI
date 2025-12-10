@@ -21,7 +21,7 @@ ZobristHashing::ZobristHashing(uint64_t seed) {
     }
 
     for (int i = 0; i < NUM_EN_PASSANT; ++i) {
-        enPassant[i] = dist(rng);
+        enPassantNum[i] = dist(rng);
     }
 
     sideToMove = dist(rng);
@@ -31,6 +31,13 @@ ZobristHashing::ZobristHashing(uint64_t seed) {
 
 
 int ZobristHashing::givePositionForCastlingRights(Move& move) {
+    return move.whiteKingSideCastlingAfter |
+           (move.whiteQueenSideCastlingAfter << 1) |
+           (move.blackKingSideCastlingAfter  << 2) |
+           (move.blackQueenSideCastlingAfter << 3);
+}
+
+int ZobristHashing::givePositionForCastlingRightsBefore(Move& move) {
     return move.whiteKingSideCastlingBefore |
            (move.whiteQueenSideCastlingBefore << 1) |
            (move.blackKingSideCastlingBefore  << 2) |
@@ -39,11 +46,12 @@ int ZobristHashing::givePositionForCastlingRights(Move& move) {
 
 
 
-uint64_t ZobristHashing::updateHash(uint64_t& hash, Move&  move) {
 
-    hash ^= pieceSquare[move.piece][move.to];
+uint64_t ZobristHashing::updateHash(uint64_t& hash, Move& move) {
 
+    
 
     return hash;
 
 }
+
