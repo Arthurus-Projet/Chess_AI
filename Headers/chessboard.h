@@ -40,6 +40,11 @@ struct Move {
     bool blackKingSideCastlingBefore = true;
     bool blackQueenSideCastlingBefore = true;
 
+    bool whiteKingSideCastlingAfter = true;
+    bool whiteQueenSideCastlingAfter = true;
+    bool blackKingSideCastlingAfter = true;
+    bool blackQueenSideCastlingAfter = true;
+
     int enPassantSquareBefore = -1;
 };
 
