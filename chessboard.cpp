@@ -1845,7 +1845,6 @@ bool ChessBoard::makeMove(Move& move) {
     move.enPassantSquareBefore = enPassant;
     enPassant = -1;
 
-
     if (move.capturedType != NONE) {
         piece.bitboards[move.capturedType] &= ~(1ULL << move.to);
 
@@ -1870,6 +1869,7 @@ bool ChessBoard::makeMove(Move& move) {
     if (((move.piece == WHITE_PAWN) ^ (move.piece == BLACK_PAWN) ) && ((move.to >> 3) == 7) ^ ((move.to >> 3) == 0)) {
        piece.bitboards[move.piece] &= ~(1ULL << move.from); // Delete Pawn
        piece.bitboards[(move.piece == WHITE_PAWN ? WHITE_QUEEN : BLACK_QUEEN)] |= (1ULL << move.to);
+       move.enPassantSquareAfter = enPassant; 
        return true; // Pawn Become Queen
     } 
 
@@ -1936,7 +1936,7 @@ bool ChessBoard::makeMove(Move& move) {
             }
 
         }
-
+        move.enPassantSquareAfter = enPassant; 
         return false;
         }
 
@@ -1948,6 +1948,8 @@ bool ChessBoard::makeMove(Move& move) {
                 piece.bitboards[BLACK_PAWN] &= ~(1ULL << (move.to - 8));
             else 
                 piece.bitboards[WHITE_PAWN] &= ~(1ULL << (move.to + 8));
+
+            move.enPassantSquareAfter = enPassant;
             return false;
         }
 
@@ -1957,6 +1959,7 @@ bool ChessBoard::makeMove(Move& move) {
         if (move.piece == BLACK_PAWN && (move.from - move.to) == 16) 
             enPassant = move.from - 8;
 
+        move.enPassantSquareAfter = enPassant; 
         // Normal Move
         piece.bitboards[move.piece] &= ~(1ULL << move.from);
         piece.bitboards[move.piece] |= (1ULL << move.to);
