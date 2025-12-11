@@ -1837,21 +1837,34 @@ bool ChessBoard::makeMove(Move& move) {
     move.blackKingSideCastlingBefore = blackKingSideCastling;
     move.blackQueenSideCastlingBefore = blackQueenSideCastling;
 
+    move.whiteKingSideCastlingAfter = whiteKingSideCastling;
+    move.whiteQueenSideCastlingAfter = whiteQueenSideCastling;
+    move.blackKingSideCastlingAfter = blackKingSideCastling;
+    move.blackQueenSideCastlingAfter = blackQueenSideCastling;
+
     move.enPassantSquareBefore = enPassant;
     enPassant = -1;
 
 
     if (move.capturedType != NONE) {
-        piece.bitboards[move.capturedType] &= ~( 1ULL << move.to);
+        piece.bitboards[move.capturedType] &= ~(1ULL << move.to);
 
-        if (move.capturedType == WHITE_ROOK && move.to == 7)
+        if (move.capturedType == WHITE_ROOK && move.to == 7) {
             whiteKingSideCastling = false;
-        if (move.capturedType == WHITE_ROOK && move.to == 0)
+            move.whiteKingSideCastlingAfter = false;
+            }
+        if (move.capturedType == WHITE_ROOK && move.to == 0) {
             whiteQueenSideCastling = false;
-        if (move.capturedType == BLACK_ROOK && move.to == 56)
+            move.whiteQueenSideCastlingAfter = false;
+            }
+        if (move.capturedType == BLACK_ROOK && move.to == 56) {
             blackQueenSideCastling = false;
-        if (move.capturedType == BLACK_ROOK && move.to == 63)
+            move.blackKingSideCastlingAfter = false;
+            }
+        if (move.capturedType == BLACK_ROOK && move.to == 63) {
             blackKingSideCastling = false;
+            move.blackQueenSideCastlingAfter = false;
+            }
         }
 
     if (((move.piece == WHITE_PAWN) ^ (move.piece == BLACK_PAWN) ) && ((move.to >> 3) == 7) ^ ((move.to >> 3) == 0)) {
@@ -1865,21 +1878,37 @@ bool ChessBoard::makeMove(Move& move) {
     if (move.piece == WHITE_KING) {
         whiteKingSideCastling = false;
         whiteQueenSideCastling = false;
+        move.whiteKingSideCastlingAfter = false;
+        move.whiteQueenSideCastlingAfter = false;
     }
 
     if (move.piece == BLACK_KING) {
         blackKingSideCastling = false;
         blackQueenSideCastling = false;
+        move.blackKingSideCastlingAfter = false;
+        move.blackQueenSideCastlingAfter = false;
     }
 
     if (move.piece == WHITE_ROOK) {
-        if (move.from == 7) whiteKingSideCastling = false;
-        if (move.from == 0) whiteQueenSideCastling = false;
+        if (move.from == 7) {
+            whiteKingSideCastling = false;
+            move.whiteKingSideCastlingAfter = false;
+        }
+        if (move.from == 0) {
+            whiteQueenSideCastling = false;
+            move.whiteQueenSideCastlingAfter = false;
+        }
     }
 
     if (move.piece == BLACK_ROOK) {
-        if (move.from == 63) blackKingSideCastling = false;
-        if (move.from == 56) blackQueenSideCastling = false;
+        if (move.from == 63) {
+            blackKingSideCastling = false;
+            move.blackKingSideCastlingAfter = false;
+        }
+        if (move.from == 56) {
+            blackQueenSideCastling = false;
+            move.blackQueenSideCastlingAfter = false;
+        }
     }
 
 
