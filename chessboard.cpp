@@ -13,6 +13,7 @@ ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size, sf::RenderWi
       zobrist(0x123456789ABCDEF0ULL),
       currentHash(0ULL),
       transpositionTable(),
+      hashHistory(),
       window(window) {
 
     squareSize = windowWidth / boardSize;
@@ -1834,6 +1835,8 @@ void ChessBoard::printMove(Move& move) {
 }
 
 bool ChessBoard::makeMove(Move& move) {
+
+    hashHistory.push_back(currentHash);
 
     // Save before change flags
     move.whiteKingSideCastlingBefore = whiteKingSideCastling;

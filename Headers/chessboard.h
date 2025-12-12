@@ -68,8 +68,6 @@ struct Piece {
         bitboards[BLACK_ROOK] = 0x8100000000000000ULL;
         bitboards[BLACK_QUEEN] = 0x0800000000000000ULL;
         bitboards[BLACK_KING] = 0x1000000000000000ULL;
-    
-
     }
 };
 
@@ -83,6 +81,7 @@ private:
     sf::RenderWindow& window;
     uint64_t currentHash;
     std::unordered_map<uint64_t, int> transpositionTable;
+    std::vector<uint64_t> hashHistory;
     ZobristHashing zobrist;
     
 
