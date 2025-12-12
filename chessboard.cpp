@@ -1874,6 +1874,7 @@ bool ChessBoard::makeMove(Move& move) {
        piece.bitboards[move.piece] &= ~(1ULL << move.from); // Delete Pawn
        piece.bitboards[(move.piece == WHITE_PAWN ? WHITE_QUEEN : BLACK_QUEEN)] |= (1ULL << move.to);
        move.enPassantSquareAfter = enPassant; 
+       currentHash = zobrist.updateHash(currentHash, move);
        return true; // Pawn Become Queen
     } 
 
@@ -1941,6 +1942,7 @@ bool ChessBoard::makeMove(Move& move) {
 
         }
         move.enPassantSquareAfter = enPassant; 
+        currentHash = zobrist.updateHash(currentHash, move);
         return false;
         }
 
@@ -1954,6 +1956,7 @@ bool ChessBoard::makeMove(Move& move) {
                 piece.bitboards[WHITE_PAWN] &= ~(1ULL << (move.to + 8));
 
             move.enPassantSquareAfter = enPassant;
+            currentHash = zobrist.updateHash(currentHash, move);
             return false;
         }
 
@@ -1967,6 +1970,7 @@ bool ChessBoard::makeMove(Move& move) {
         // Normal Move
         piece.bitboards[move.piece] &= ~(1ULL << move.from);
         piece.bitboards[move.piece] |= (1ULL << move.to);
+        currentHash = zobrist.updateHash(currentHash, move);
         return false;
 }
 
