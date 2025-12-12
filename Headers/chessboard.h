@@ -80,6 +80,7 @@ private:
     sf::Color LIGHT_COLOR;
     sf::Color DARK_COLOR;
     sf::RenderWindow& window;
+    uint64_t currentHash;
     ZobristHashing zobrist;
     
 

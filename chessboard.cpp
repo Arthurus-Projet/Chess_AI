@@ -11,6 +11,7 @@ ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size, sf::RenderWi
       LIGHT_COLOR(223, 227, 185),
       DARK_COLOR(156, 125, 94),
       zobrist(0x123456789ABCDEF0ULL),
+      currentHash(0ULL),
       window(window) {
 
     squareSize = windowWidth / boardSize;
