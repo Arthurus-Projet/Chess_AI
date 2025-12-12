@@ -1,4 +1,5 @@
 #include "Headers/chessboard.h"
+#include "Headers/ZobristHashing.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <map>
@@ -9,6 +10,7 @@ ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size, sf::RenderWi
       boardSize(size),
       LIGHT_COLOR(223, 227, 185),
       DARK_COLOR(156, 125, 94),
+      zobrist(0x123456789ABCDEF0ULL),
       window(window) {
 
     squareSize = windowWidth / boardSize;

@@ -1,6 +1,6 @@
 #ifndef CHESSEBOARD_H
 #include <SFML/Graphics.hpp>
-
+#include "ZobristHashing.h"
 
 enum MoveType {
     NORMAL_MOVE,
@@ -80,6 +80,7 @@ private:
     sf::Color LIGHT_COLOR;
     sf::Color DARK_COLOR;
     sf::RenderWindow& window;
+    ZobristHashing zobrist;
     
 
 
