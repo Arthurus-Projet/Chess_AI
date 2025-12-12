@@ -1,6 +1,7 @@
 #ifndef CHESSEBOARD_H
 #include <SFML/Graphics.hpp>
 #include "ZobristHashing.h"
+#include <unordered_map>
 
 enum MoveType {
     NORMAL_MOVE,
@@ -81,6 +82,7 @@ private:
     sf::Color DARK_COLOR;
     sf::RenderWindow& window;
     uint64_t currentHash;
+    std::unordered_map<uint64_t, int> transpositionTable;
     ZobristHashing zobrist;
     
 
