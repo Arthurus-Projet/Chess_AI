@@ -3,6 +3,11 @@
 #include "ZobristHashing.h"
 #include <unordered_map>
 
+struct TTEntry {
+    int score;
+    int depth;
+};
+
 enum MoveType {
     NORMAL_MOVE,
     PROMOTION, // When a Pawn becomes a Queen
@@ -80,7 +85,7 @@ private:
     sf::Color DARK_COLOR;
     sf::RenderWindow& window;
     uint64_t currentHash;
-    std::unordered_map<uint64_t, int> transpositionTable;
+    std::unordered_map<uint64_t, TTEntry> transpositionTable;
     std::vector<uint64_t> hashHistory;
     ZobristHashing zobrist;
     
@@ -93,9 +98,12 @@ public:
     bool blackQueenSideCastling = true;
 
     int enPassant = -1;
+    int counter_alpha_beta = 0;
+    int counter_same_hash = 0;
     
     Piece piece;
     ChessBoard(int windowWidth, int windowHeight, int size, sf::RenderWindow& window);
+    uint64_t computeInitialHash();
     void loadTextures();
     void draw();
     void drawChessPieces(uint64_t piece, sf::Sprite& sprite);

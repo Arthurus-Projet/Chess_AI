@@ -16,10 +16,35 @@ ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size, sf::RenderWi
       hashHistory(),
       window(window) {
 
-    squareSize = windowWidth / boardSize;
-    
+      
+      squareSize = windowWidth / boardSize;
+      loadTextures();
+      currentHash = computeInitialHash();
+}
 
-    loadTextures();
+
+uint64_t ChessBoard::computeInitialHash() {
+
+    uint64_t hash = 0ULL;
+
+    for (int i = 0; i < 64; ++i) {
+        for (int pieceType = 0; pieceType < 12; ++pieceType) {
+            if ((piece.bitboards[pieceType] >> i) & 1ULL) {
+                hash ^= zobrist.pieceSquare[pieceType][i];
+                break;
+            }
+        }
+    }
+
+    // Castling
+    int num =  whiteKingSideCastling |
+          (whiteQueenSideCastling << 1) |
+          (blackKingSideCastling  << 2) |
+           (blackQueenSideCastling << 3);
+
+    hash ^= zobrist.castlingRights[num];
+
+    return hash;
 }
 
 void ChessBoard::loadTextures() {
@@ -2030,19 +2055,34 @@ void ChessBoard::unMakeMove(bool pawnBecomeQueen, Move& move) {
     }
     
     
-    
     else {
-    piece.bitboards[move.piece] |= (1ULL << move.from);
-    piece.bitboards[move.piece] &= ~(1ULL << move.to);
+        piece.bitboards[move.piece] |= (1ULL << move.from);
+        piece.bitboards[move.piece] &= ~(1ULL << move.to);
     }
-    
+
+    currentHash = hashHistory.back();
+    hashHistory.pop_back();
     
 }
 
 
 int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
-    if (depth == 0)
-        return evaluatePawnPower();
+    counter_alpha_beta++;
+
+    auto it = transpositionTable.find(currentHash);
+    if (it != transpositionTable.end() && it->second.depth >= depth) {
+        counter_same_hash++;
+        return it->second.score;
+    }
+
+    if (depth == 0) {
+        int score = evaluatePawnPower();
+        TTEntry tt;
+        tt.score = score;
+        tt.depth = depth;
+        transpositionTable[currentHash] = tt;  
+        return score;
+    }
 
     bool hasLegalMove = false;
     if (isWhite) {
@@ -2052,6 +2092,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
         moveOrdering(&moves);
         
         for (Move& move : moves) {
+
             bool pawnBecomeQueen = makeMove(move);
 
             if (!isInCheck(true)) {
@@ -2060,6 +2101,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
                 alpha = std::max(alpha, eval);
                 max_ = std::max(max_, eval);
             }
+            
             // Undo
             unMakeMove(pawnBecomeQueen, move);
 
@@ -2073,8 +2115,13 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
                 return -10000 - depth; // Mat
             else
                 return 0; // Pat
+
         }
 
+        TTEntry tt;
+        tt.score = max_;
+        tt.depth = depth;
+        transpositionTable[currentHash] = tt;
         return max_;
     } else {
         int min_ = 1000;
@@ -2091,6 +2138,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
                 min_ = std::min(min_, eval);
                 beta = std::min(beta, eval);   
             }
+            
             // Undo
             unMakeMove(pawnBecomeQueen, move);
 
@@ -2104,7 +2152,10 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
             else
                 return 0; // Pat
         }
-
+        TTEntry tt;
+        tt.score = min_;
+        tt.depth = depth;
+        transpositionTable[currentHash] = tt;
         return min_;
     }
  }
@@ -2160,7 +2211,6 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
 
         // Undo
         unMakeMove(pawnBecomeQueen, move);
-
     }
 
     if (!hasLegalMove) {
@@ -2204,7 +2254,61 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
 
 
     }
+
+    std::cout << "size transpositionTable" << transpositionTable.size() << std::endl;
+    //transpositionTable.clear();
+    std::cout << "size transpositionTable" << transpositionTable.size() << " counter_same_hash "<< counter_same_hash << std::endl;
+    std::cout << "counter_alpha_beta " << counter_alpha_beta << std::endl;
+    std::cout << std::endl;
+    counter_alpha_beta = 0;
+    counter_same_hash = 0;
+
+    std::cout << "=== TEST HASH ===" << std::endl;
     
+    //uint64_t hashInitial = currentHash;
+    //std::cout << "Hash initial: " << hashInitial << std::endl;
+    
+    // Génère tous les coups blancs
+
+    /*
+    moves = allMovesForWhite();
+    
+    if (moves.size() > 0) {
+        Move& testMove = moves[0];
+        
+        // Fait le coup
+        bool pawn = makeMove(testMove);
+        uint64_t hashAfterMove = currentHash;
+        std::cout << "Hash après coup: " << hashAfterMove << std::endl;
+        
+        // Annule le coup
+        unMakeMove(pawn, testMove);
+        uint64_t hashAfterUndo = currentHash;
+        std::cout << "Hash après undo: " << hashAfterUndo << std::endl;
+        
+        // Vérifie
+        if (hashInitial == hashAfterUndo) {
+            std::cout << "✅ HASH CORRECT après undo" << std::endl;
+        } else {
+            std::cout << "❌ HASH FAUX après undo !" << std::endl;
+            std::cout << "Différence: " << (hashInitial - hashAfterUndo) << std::endl;
+        }
+        
+        // Test 2 : Refaire le même coup doit donner le même hash
+        bool pawn2 = makeMove(testMove);
+        uint64_t hashSecondMove = currentHash;
+        
+        if (hashAfterMove == hashSecondMove) {
+            std::cout << "✅ HASH IDENTIQUE pour le même coup" << std::endl;
+        } else {
+            std::cout << "❌ HASH DIFFÉRENT pour le même coup !" << std::endl;
+        }
+        
+        unMakeMove(pawn2, testMove);
+    }
+    
+    std::cout << "=== FIN TEST ===" << std::endl;
+    */
 }
 
 
