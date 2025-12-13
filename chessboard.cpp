@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <chrono>
 
 ChessBoard::ChessBoard(int windowWidth, int windowHeight, int size, sf::RenderWindow& window)
     : windowSize(windowWidth, windowHeight),
@@ -2164,6 +2165,8 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
 void ChessBoard::AI_chess(bool AIplaysBlack) {
     int depth = 5;
     bool hasLegalMove = false;
+    auto start = std::chrono::high_resolution_clock::now();
+    
     
     std::vector<Move> moves;
     int max_;
@@ -2254,11 +2257,14 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
 
 
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     std::cout << "size transpositionTable" << transpositionTable.size() << std::endl;
     //transpositionTable.clear();
-    std::cout << "size transpositionTable" << transpositionTable.size() << " counter_same_hash "<< counter_same_hash << std::endl;
+    std::cout << "size transpositionTable  : " << transpositionTable.size() << " counter_same_hash :"<< counter_same_hash << std::endl;
     std::cout << "counter_alpha_beta " << counter_alpha_beta << std::endl;
+    std::cout << "time : " << duration.count() / 1000.0f << " s" << std::endl;
     std::cout << std::endl;
     counter_alpha_beta = 0;
     counter_same_hash = 0;
