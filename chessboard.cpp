@@ -2069,6 +2069,7 @@ void ChessBoard::unMakeMove(bool pawnBecomeQueen, Move& move) {
 
 int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
     counter_alpha_beta++;
+    bool cutoff = false;
 
     auto it = transpositionTable.find(currentHash);
     if (it != transpositionTable.end() && it->second.depth >= depth) {
@@ -2082,6 +2083,7 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
         tt.score = score;
         tt.depth = depth;
         transpositionTable[currentHash] = tt;  
+        
         return score;
     }
 
@@ -2106,8 +2108,10 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
             // Undo
             unMakeMove(pawnBecomeQueen, move);
 
-            if (beta <= alpha)
-                    break;
+            if (beta <= alpha) {
+                cutoff = true;
+                break;
+            }
 
         }
 
@@ -2118,11 +2122,12 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
                 return 0; // Pat
 
         }
-
-        TTEntry tt;
-        tt.score = max_;
-        tt.depth = depth;
-        transpositionTable[currentHash] = tt;
+        if (!cutoff) {
+            TTEntry tt;
+            tt.score = max_;
+            tt.depth = depth;
+            transpositionTable[currentHash] = tt;
+        }
         return max_;
     } else {
         int min_ = 1000;
@@ -2143,8 +2148,10 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
             // Undo
             unMakeMove(pawnBecomeQueen, move);
 
-            if (beta <= alpha)
-                    break;
+            if (beta <= alpha) {
+                cutoff = true;
+                break;
+            }
         }
 
         if (!hasLegalMove) {
@@ -2153,17 +2160,19 @@ int ChessBoard::alphaBeta(int depth, bool isWhite, int alpha, int beta) {
             else
                 return 0; // Pat
         }
-        TTEntry tt;
-        tt.score = min_;
-        tt.depth = depth;
-        transpositionTable[currentHash] = tt;
+        if (!cutoff) {
+            TTEntry tt;
+            tt.score = min_;
+            tt.depth = depth;
+            transpositionTable[currentHash] = tt;
+        }
         return min_;
     }
  }
 
 
 void ChessBoard::AI_chess(bool AIplaysBlack) {
-    int depth = 5;
+    int depth = 6;
     bool hasLegalMove = false;
     auto start = std::chrono::high_resolution_clock::now();
     
@@ -2260,7 +2269,12 @@ void ChessBoard::AI_chess(bool AIplaysBlack) {
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-    std::cout << "size transpositionTable" << transpositionTable.size() << std::endl;
+    if (transpositionTable.size() > 100000) {
+        transpositionTable.clear();
+        hashHistory.clear();
+    }
+
+    std::cout << "size transpositionTable : " << transpositionTable.size() << std::endl;
     //transpositionTable.clear();
     std::cout << "size transpositionTable  : " << transpositionTable.size() << " counter_same_hash :"<< counter_same_hash << std::endl;
     std::cout << "counter_alpha_beta " << counter_alpha_beta << std::endl;
