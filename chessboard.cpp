@@ -1803,20 +1803,8 @@ std::vector<Move> ChessBoard::allMovesForWhite() {
 
     return movesList;
  }
-/*
-void ChessBoard::moveOrdering(std::vector<Move>* moves) {
 
-    int index = 0;
-    for (int i = 1; i < moves->size(); ++i) {
-        if ((*moves)[i].capturedType != NONE) {
-
-
-            std::swap((*moves)[index], (*moves)[i]);
-            ++index;
-            }
-    }
- }
-*/
+ 
 
 void ChessBoard::moveOrdering(std::vector<Move>* moves) {
     // Valeurs des pièces
